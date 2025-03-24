@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import '../Learner/home.css'
+import "../Learner/home.css";
 import Amico from "../../assets/amico.png";
-import GoogleIcon from '../../assets/googleIcon.png'
-import LinkedinIcon from '../../assets/devicon_linkedin.png'
-// import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-// import {LinkedIn} from 'react-linkedin-login-oauth2';
-import axios from 'axios'
+import GoogleIcon from "../../assets/googleIcon.png";
+import LinkedinIcon from "../../assets/devicon_linkedin.png";
+import axios from "axios";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcCheckmark } from "react-icons/fc";
@@ -23,43 +21,35 @@ const Home = () => {
   const [isPasswordTouched, setIsPasswordTouched] = useState(false);
   const [isConfirmPasswordTouched, setIsConfirmPasswordTouched] =
     useState(false);
- const [checkBoxValid, setCheckBoxValid] = useState(false)
- const [codeMessage, setCodeMessage] = useState("")
- const [authCodeSent, setAuthCodeSent] = useState(false)
+  const [checkBoxValid, setCheckBoxValid] = useState(false);
+  const [codeMessage, setCodeMessage] = useState("");
+  const [authCodeSent, setAuthCodeSent] = useState(false);
 
   const minLength = /.{8,}/;
   const upperCase = /[A-Z]/;
   const lowerCase = /[a-z]/;
   const number = /[0-9]/;
 
-
   const Criteria = [
-  {regex: minLength, label: "Be a minimum of 8 characters" },
-  {regex: lowerCase, label: "Include at least one lowecase letter (a-z)"},
-  {regex: upperCase, label: "Include at least one uppercase letter (A-Z)"},
-  {regex: number, label: "Include at least one number (0-9)"}
+    { regex: minLength, label: "Be a minimum of 8 characters" },
+    { regex: lowerCase, label: "Include at least one lowercase letter (a-z)" },
+    { regex: upperCase, label: "Include at least one uppercase letter (A-Z)" },
+    { regex: number, label: "Include at least one number (0-9)" },
+  ];
 
-]
   const isLengthValid = minLength.test(password);
   const isUpperValid = upperCase.test(password);
   const isLowerValid = lowerCase.test(password);
   const isNumberValid = number.test(password);
- 
 
   const isPasswordWeak =
-    !isLengthValid ||
-    !isUpperValid ||
-    !isLowerValid ||
-    !isNumberValid;
+    !isLengthValid || !isUpperValid || !isLowerValid || !isNumberValid;
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   useEffect(() => {
     const isValid =
-      isLengthValid &&
-      isUpperValid &&
-      isLowerValid &&
-      isNumberValid;
+      isLengthValid && isUpperValid && isLowerValid && isNumberValid;
 
     setIsPasswordValid(isValid);
   }, [password]);
@@ -88,99 +78,91 @@ const Home = () => {
     setEmail(e.target.value);
   };
 
-const handleCheckboxChange = (e) => {
-    setCheckBoxValid(e.target.checked)
-}
+  const handleCheckboxChange = (e) => {
+    setCheckBoxValid(e.target.checked);
+  };
 
-const handleAuthCodeChange = async(e) => {
-    e.preventDefault()
+  const handleAuthCodeChange = async (e) => {
+    e.preventDefault();
 
     try {
-        const response = await axios.post("http://localhost:5000/send-auth-code", {email})
-        if(response.data.success){
-            setCodeMessage("Code successfully sent to your email")
-            setAuthCodeSent(true)
-        } else {
-            setCodeMessage("Error sending authentication code")
-        } 
-    }  catch (error) {
-        setCodeMessage("An error occurred while sending the authentication code.")
-        console.error("Error", error)
+      const response = await axios.post(
+        "http://localhost:5000/send-auth-code",
+        { email }
+      );
+      if (response.data.success) {
+        setCodeMessage("Code successfully sent to your email");
+        setAuthCodeSent(true);
+      } else {
+        setCodeMessage("Error sending authentication code");
+      }
+    } catch (error) {
+      setCodeMessage(
+        "An error occurred while sending the authentication code."
+      );
+      console.error("Error", error);
     }
-}
+  };
 
-//   const handleGoogleAuth = (response) => {
-//     if(response.credentials)
-//     {
-//         console.log('Google Login Successful', response)
-//     } else{
-//         console.error(response.error)
-//         console.log("login Failed")
-//     }
-    
-//   }
-
-//   const handleLinkedInAuth = (data) => {
-//     console.log("Linkedin Login Successful", data)
-//   }
   return (
-    <div className="flex flex-col md:flex-row h-screen sm:p-6 md:overflow-hidden">
-      <div className="flex-1 flex justify-center items-center p-16 hidden md:block ">
+    <div className="flex flex-col md:flex-row h-screen sm:p-6 md:overflow-hidden overflow-hidden">
+      <div className="flex-1 flex justify-center items-center p-6 sm:p-12 md:p-16 hidden md:block ">
         <img
-          className="w-full md:h-full h-full object-scale-down py-2 md:mx-5 "
+          className="w-full h-auto object-contain"
           src={Amico}
           alt="Your Company"
         />
       </div>
 
-      <div className="flex-1 px-6 mb-2 md:mb-4 xl:py-18 2xl:py-96 h-screen overflow-hidden">
-  <div className="w-full max-w-lg mx-auto pt-8 xl:h-screen">
-
-          <h2 className="text-left text-2xl md:text-xl font-bold tracking-tight text-gray-600 mb-4 md:mb-1 xl:text-3xl">
+      <div className="flex-1 px-6 sm:px-8 md:px-12 mb-2 md:mb-4 xl:py-18 2xl:py-96 h-screen overflow-hidden">
+        <div className="w-full max-w-lg mx-auto pt-8 xl:h-screen overflow-hidden">
+          <h2 className="text-left text-2xl sm:text-3xl md:text-xl font-bold tracking-tight text-gray-600 mb-4 md:mb-1 xl:text-3xl">
             Create Account
           </h2>
-          <p className="text-center lg:text-sm text-xs mb-2 md:text-xs md:text-left xl:text-xl m">
+          <p className="text-center lg:text-sm text-xs mb-2 md:text-xs md:text-left xl:text-xl">
             Welcome, create an account and begin your learning Journey
           </p>
-          <form className="space-y-1 md:space-y-0 lg:space-y-5 xl:space-y-1 " action="#" 
-          method="POST" 
-          // onSubmit={handleAuthCodeChange}
+          <form
+            className="space-y-5 md:space-y-0 lg:space-y-5 xl:space-y-1"
+            action="#"
+            method="POST"
           >
             <div>
               <label
                 htmlFor="name"
-                className="text-xs md:text-sm sm:text-xl xl:text-sm font-medium text-gray-600"
+                className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-600"
               >
                 First Name
               </label>
               <input
                 type="text"
                 placeholder="Enter First Name"
-                className="text-xs md:text-xs xl:text-sm block w-full border-black border rounded-md bg-white px-2 sm:px-3 py-1 text-base text-gray-600 outline-1 outline-offset-1 outline-black-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
+                className="block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-600 outline-1 outline-offset-1 outline-black-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
               />
             </div>
+
             <div>
               <label
                 htmlFor="name"
-                className="text-xs md:text-xs xl:text-sm font-medium text-gray-900"
+                className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-900"
               >
                 Last Name
               </label>
               <input
                 type="text"
                 placeholder="Enter Last Name"
-                className="text-xs md:text-xs xl:text-sm  block w-full border-black border rounded-md bg-white px-3 py-1 md:-py-1 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm"
+                className="block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
               />
             </div>
 
             <div>
               <label
                 htmlFor="email"
-                className="text-xs md:text-xs xl:text-sm font-medium text-gray-900"
+                className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-900"
               >
                 Email address
               </label>
-              <div className="">
+              <div>
                 <input
                   type="email"
                   name="email"
@@ -190,16 +172,10 @@ const handleAuthCodeChange = async(e) => {
                   autoComplete="email"
                   placeholder="Enter your Email"
                   required
-                  className={`text-xs md:text-xs xl:text-sm block w-full border-black border 
-                  rounded-md bg-white px-3 py-1 text-base text-gray-900 outline-1 outline-offset-1 
-                  outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600
-                   sm:text-sm 
-                   ${
-                   email && (isEmailValid ? "valid-input" : "invalid-input")
-                }
-                   `}
+                  className={`block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
+                    email && (isEmailValid ? "valid-input" : "invalid-input")
+                  }`}
                 />
-
                 {!isEmailValid && email && (
                   <div className="text-red-600 text-xs mt-1">
                     Please enter a valid email
@@ -211,7 +187,7 @@ const handleAuthCodeChange = async(e) => {
             <div>
               <label
                 htmlFor="password"
-                className="text-xs md:text-xs xl:text-sm font-medium text-gray-900"
+                className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-900"
               >
                 Create Password
               </label>
@@ -225,11 +201,7 @@ const handleAuthCodeChange = async(e) => {
                   placeholder="Enter Password"
                   autoComplete="current-password"
                   required
-                  className={`text-sm md:text-xs  xl:text-sm block w-full border-black border rounded-md bg-white px-3 py-1 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-indigo-600 sm:text-sm ${
-                    isPasswordTouched && password && !isPasswordValid
-                      ? "invalid-input"
-                      : ""
-                  } `}
+                  className={`block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600`}
                 />
                 <button
                   type="button"
@@ -239,19 +211,20 @@ const handleAuthCodeChange = async(e) => {
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
-
               {isPasswordTouched && password && isPasswordWeak && (
                 <div className="mb-1 text-red-600 text-xs">Weak Password</div>
               )}
               {isPasswordTouched && password && !isPasswordWeak && (
-                <div className="mb-1 text-green-600 text-xs">Strong Password</div>
+                <div className="mb-1 text-green-600 text-xs">
+                  Strong Password
+                </div>
               )}
             </div>
 
             <div>
               <label
                 htmlFor="password-confirm"
-                className="text-xs md:text-xs xl:text-sm font-medium text-gray-900"
+                className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-900"
               >
                 Confirm Password
               </label>
@@ -265,17 +238,11 @@ const handleAuthCodeChange = async(e) => {
                   placeholder="Confirm Password"
                   autoComplete="current-password"
                   required
-                  className={`block w-full border-black border rounded-md bg-white px-3 py-1 text-xs md:text-xs xl:text-sm text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 sm:text-sm ${
-                    isConfirmPasswordTouched &&
-                    confirmPassword &&
-                    !isConfirmPasswordValid
-                      ? "invalid-input"
-                      : ""
-                  }`}
+                  className={`block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600`}
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-2 "
+                  className="absolute right-3 top-2"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
@@ -289,61 +256,33 @@ const handleAuthCodeChange = async(e) => {
                   </div>
                 )}
             </div>
-            <div className="text-sm flex max-w-full whitespace-nowrap py-2 ">
+
+            <div className="text-sm flex py-2">
               <input
                 type="checkbox"
                 id="terms"
                 required
                 onClick={handleCheckboxChange}
-                className="mr-2  h-4 w-4 text-indigo-600 border-gray-300 rounded "
+                className="mr-2 h-4 w-4 text-indigo-600 border-gray-300 rounded "
               />
-              <div className=" mb-1 md:mb-1  md:text-xs md:inline inline sm-inline text-xs xl:text-sm xl:mb-2 pr-12">
+              <span className="text-xs sm:text-sm md:text-sm xl:text-sm">
                 I agree to&nbsp;
-                <span className="Terms">
-                  <a href="" >Terms & Conditions</a>
-                  
-                </span>
-                &nbsp;and
-                <span className="Terms">
-                  <a href="">&nbsp;Privacy Policy</a>
-                </span>
-              </div>
+                <a href="#">Terms & Conditions</a>&nbsp;and&nbsp;
+                <a href="#">Privacy Policy</a>
+              </span>
             </div>
-                {password && 
-                <div className="">
-            <ul className="mt-1 list-style-none text-xs sm:text-xs xl:text-sm ">
-                {Criteria.map(({regex, label}, index) => {
-                    const isValid =regex.test(password);
-                    return (
-                        <li key={index}                        >
-                        <span 
-                        className={`inline-block w-3 h-3 mx-2  border ${isValid ? "" : "border-gray-300"}`}>
-                            {isValid && <FcCheckmark />}
-                        </span>
-                        {label}
-                        </li>
-                    )
-                })}
 
-            </ul>
-            </div>
-            }
-      
-
-
-            
-            <div>
+            <div className="text-center py-3">
               <Link to="/successfulReg">
                 <button
                   type="submit"
                   disabled={
-                    !isPasswordValid || !isConfirmPasswordValid || !isEmailValid || !checkBoxValid
+                    !isPasswordValid ||
+                    !isConfirmPasswordValid ||
+                    !isEmailValid ||
+                    !checkBoxValid
                   }
-                  className={`continueBtn w-full flex justify-center rounded-md px-3 ml-2 py- sm:py-3 md:py-1 text-sm xl:text-xl xl:py-2  font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-indigo-600 ${
-                    !isPasswordValid || !isConfirmPasswordValid || !isEmailValid || !checkBoxValid
-                      ? "opacity-50 cursor-not-allowed"
-                      : ""
-                  }`}
+                  className={`w-full rounded-md px-6 py-3 text-white font-semibold bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   Continue
                 </button>
@@ -351,53 +290,29 @@ const handleAuthCodeChange = async(e) => {
             </div>
           </form>
 
-                  {codeMessage && <p>{codeMessage}</p>}
-                  {authCodeSent && <p>Please check your email</p>}
+          {codeMessage && <p>{codeMessage}</p>}
+          {authCodeSent && <p>Please check your email</p>}
 
-          <div className="line-with-text my-2 md:my-1 sm:my-2 text-sm xl:text-sm ">
+          <div className="text-center my-4">
             <span>Or Continue with</span>
           </div>
 
-          {/* Social Login Buttons */}
-          <div className="flex flex-wrap gap-4 items-center justify-center mt-1 xl:mt-1 sm:mt-4 md:mt-0">
-          
-                
-              
-            <button href="#" 
-            //   onClick={handleGoogleAuth}
-            className={`social-btn google-btn `} 
-            >
-                
-              <img className="w-12 h-12 mr-2 border rounded-full border-black" src={GoogleIcon} alt="Google" />
-              
+          <div className="flex justify-center gap-4 mt-4">
+            <button className="flex items-center justify-center w-12 h-12 rounded-full border">
+              <img className="w-10 h-10" src={GoogleIcon} alt="Google" />
             </button>
-            
-           
-           
-      {/* <GoogleLogin 
-        onSuccess={handleGoogleAuth} 
-        onError={() => console.log('Google login failed')}
-        useOneTap={true} 
-        shape="circle"
-        width="50"
-      /> */}
-   
-           
-            <a href="#" className="social-btn linkedin-btn rounded-full border-black border">
-              <img className="w-12 h-12 p-2 " src={LinkedinIcon} alt="LinkedIn" />
+            <a
+              href="#"
+              className="w-12 h-12 rounded-full border flex items-center justify-center"
+            >
+              <img className="w-10 h-10" src={LinkedinIcon} alt="LinkedIn" />
             </a>
-          
-          
-            
           </div>
 
-          <div className="mb-4 md:mb-1 ">
-            <p className="mt-1 sm:mt-4 text-center text-sm xl:text-sm xl:mt-1 xl:pb-2 text-gray-500">
-              Already have an Account? &nbsp;
-              <a
-                href="#"
-                className="font-semibold text-indigo-600 hover:text-indigo-500"
-              >
+          <div className="text-center mt-4 text-sm">
+            <p>
+              Already have an account?&nbsp;
+              <a href="#" className="font-semibold text-indigo-600">
                 Sign in
               </a>
             </p>
