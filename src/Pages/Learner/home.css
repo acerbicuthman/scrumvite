@@ -1,0 +1,75 @@
+.Amico{
+    background-color: #EAEBF2;
+  }
+  @media screen and (max-width: 468px) {
+    h2{
+        justify-self: center;
+    }
+    p{
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+        justify-self: center;
+        padding: auto;
+    }
+    .container{
+        padding: 10px 12px !important;
+        
+    }
+  }
+  .Terms{
+      color: blue;
+  }
+  .continueBtn{
+      background-color: #575D97;
+      border-radius: 5px;
+  }
+  .line-with-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    .line-with-text::before, .line-with-text::after {
+      content: '';
+      flex-grow: 1;
+      border-top: 1px solid black;
+      margin: 0 10px;
+    }
+  
+    .valid{
+      color: green;
+    }
+    .invalid{
+      color: red;
+    }
+  
+  input.valid-input{
+      border-color: green !important; 
+      border-width: 2px;
+  }
+  input.invalid-input{
+      border-color: red !important;
+      box-shadow: 0 0.2px  red;
+      border-width: 2px;
+  }
+  input[type="checkbox"]:checked + .valid{
+      color: green;
+      background-color: white;
+  
+  }
+  input[type="checkbox"]:not(:checked) {
+      background-color: red;
+      border-color: red;     
+  
+    }
+  button.disabled{
+      background-color: grey;
+      cursor: not-allowed;
+  }
+  .weakPassword{
+      display: none;
+  }
+  
+  
+  
