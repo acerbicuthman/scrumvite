@@ -1,16 +1,43 @@
 import React from 'react'
 import { Route, Routes, useMatch } from 'react-router-dom'
-import Home from './Pages/Learner/Home'
+import SignUp from './Pages/Learner/SignUp'
 import SuccessfulReg from './Pages/Learner/SuccesfulRegPage/SuccessfullRegPage'
+import Landing from './Pages/Landing/Landing'
+import CourseList from './Pages/Learner/CourseList'
+import CourseDetails from './Pages/Learner/CourseDetails'
+import MyEnrollment from './Pages/Learner/MyEnrollment'
+import Loading from './Components/student/Loading'
+import Educator from './Pages/Educator/Educator'
+import Dashboard from './Pages/Educator/Dashboard'
+import StudentsEnrolled from './Pages/Educator/StudentsEnrolled'
+import AddCourse from './Pages/Educator/AddCourse'
+import MyCourses from './Pages/Educator/MyCourses'
+import Navbar from './Components/student/Navbar'
+import ScrumLanding from './Pages/Landing/ScrumLanding'
 
 
 const App = () => {
+  const isEducatorRoute = useMatch('/educator/*')
   return (
-    <div>
+    <div className='text-default min-h-screen'>
+      {!isEducatorRoute && <Navbar />}
       <Routes>
-        <Route path='/' element={<Home/>}/>
+      <Route path='/landing' element={<Landing/>}/>
+      <Route path='/' element={<ScrumLanding/>}/>
+        <Route path='/signup' element={<SignUp/>}/>
         <Route path='/successfulReg' element={<SuccessfulReg/>}/>
-
+        <Route path='/course-list' element={<CourseList/>}/>
+        <Route path='/course-list/input' element={<CourseList/>}/>
+        <Route path='/course/:id' element={<CourseDetails/>}/>
+        <Route path='/myenrollment' element={<MyEnrollment/>}/>
+        <Route path='/loading/:path' element={<Loading/>}/>
+        <Route path='/educator' element={<Educator/>}>
+        <Route path='educator' element={<Dashboard/>}/>
+        <Route path='add-course' element={<AddCourse/>}/>
+        <Route path='my-courses' element={<MyCourses/>}/>
+        <Route path='students-enrolled' element={<StudentsEnrolled/>}/>
+      
+    </Route>
     
      
       </Routes>
