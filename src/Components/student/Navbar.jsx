@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { FaHandPointLeft } from "react-icons/fa";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,7 +63,10 @@ const Navbar = () => {
           {/* Desktop Menu */}
           <div className="hidden lg:flex lg:gap-x-12">
             <a href="#home" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
-              Home
+                <Link to='/'>
+                Home
+                </Link>
+              
             </a>
             <a href="#about" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
               About
@@ -137,34 +141,49 @@ const Navbar = () => {
                   <div className="space-y-2 py-6">
                     <a
                       href="#home"
+                      onClick={toggleMenu}
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
                     >
-                      Home
+                     <Link to='/'>
+                Home
+                </Link>
                     </a>
                     <a
                       href="#about"
+                      onClick={toggleMenu}
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
                     >
                       About
                     </a>
                     <a
                       href="#courses"
+                      onClick={toggleMenu}
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
                     >
                       Courses
                     </a>
                     <a
                       href="#become-trainer"
+                      onClick={toggleMenu}
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
                     >
                       Become a Trainer
                     </a>
                     <a
                       href="#contact"
+                      onClick={toggleMenu}
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
                     >
                       Contact
                     </a>
+                    <a href="#contact"  
+                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                    onClick={toggleMenu}>
+            <Link to='/emailverification'>
+                 Verify Email
+                 </Link> 
+            </a>
+           
                   </div>
                   <div className="py-6">
                     <a
