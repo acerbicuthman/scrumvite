@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,11 +24,14 @@ const Navbar = () => {
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Scrum Consult</span>
+              <Link to='/'>
+             
               <img
                 className="h-8 w-auto"
                 src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
                 alt="Logo"
               />
+               </Link>
             </a>
           </div>
           {/* Mobile Menu Toggle */}
@@ -72,6 +76,14 @@ const Navbar = () => {
             <a href="#contact" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
               Contact
             </a>
+            
+            <a href="#contact" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+            <Link to='/emailverification'>
+                 Verify Email
+                 </Link> 
+            </a>
+           
+           
           </div>
           {/* Login Button */}
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">

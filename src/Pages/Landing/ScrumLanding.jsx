@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import welcomeImg from '../../assets/rafiki.png'
+import { Link } from 'react-router-dom';
 
 
 const ScrumLanding = () => {
@@ -47,12 +48,15 @@ const ScrumLanding = () => {
         </p>
       )}
             </div>
+            <Link to='/signup'>
             <button
               type="submit"
               className='w-full py-3 mt-6 bg-indigo-900 text-white text-lg font-medium rounded-md hover:bg-indigo-700 transition duration-300'
             >
               Submit
             </button>
+            </Link>
+           
           </form>
         </div>
       </div>

@@ -14,6 +14,9 @@ import AddCourse from './Pages/Educator/AddCourse'
 import MyCourses from './Pages/Educator/MyCourses'
 import Navbar from './Components/student/Navbar'
 import ScrumLanding from './Pages/Landing/ScrumLanding'
+import EmailVerification from './Pages/Email_verification/EmailVerification'
+import SuccessfulEmailVerification from './Pages/Email_verification/SuccessfulEmailVerification'
+import ExpiredLink from './Pages/Email_verification/ExpiredLink'
 
 
 const App = () => {
@@ -25,6 +28,9 @@ const App = () => {
       <Route path='/landing' element={<Landing/>}/>
       <Route path='/' element={<ScrumLanding/>}/>
         <Route path='/signup' element={<SignUp/>}/>
+        <Route path='/emailverification' element={<EmailVerification/>}/>
+        <Route path='/success_email_verification' element={<SuccessfulEmailVerification/>}/>
+        <Route path='/expired_link_page' element={<ExpiredLink/>}/>
         <Route path='/successfulReg' element={<SuccessfulReg/>}/>
         <Route path='/course-list' element={<CourseList/>}/>
         <Route path='/course-list/input' element={<CourseList/>}/>
