@@ -51,11 +51,13 @@ const ScrumLanding = () => {
             <Link to='/signup'>
             <button
               type="submit"
-              className='w-full py-3 mt-6 bg-indigo-900 text-white text-lg font-medium rounded-md hover:bg-indigo-700 transition duration-300'
+              className='w-full py-3 mt-6 bg-indigo-900 text-white text-lg font-medium rounded-lg hover:bg-indigo-700 transition duration-300'
             >
-              Submit
+              Continue
             </button>
             </Link>
+            <Link>
+            <button className='my-4 text-blue-600 hover:bg-blue-900 rounded-lg p-2 hover:text-white'>Already a member? Log in </button></Link>
            
           </form>
         </div>
