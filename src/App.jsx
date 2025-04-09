@@ -14,9 +14,10 @@ import AddCourse from './Pages/Educator/AddCourse'
 import MyCourses from './Pages/Educator/MyCourses'
 import Navbar from './Components/student/Navbar'
 import ScrumLanding from './Pages/Landing/ScrumLanding'
-import EmailVerification from './Pages/Email_verification/EmailVerification'
-import SuccessfulEmailVerification from './Pages/Email_verification/SuccessfulEmailVerification'
-import ExpiredLink from './Pages/Email_verification/ExpiredLink'
+import EmailVerification from './Pages/Learner/Email_verification/EmailVerification'
+import SuccessfulEmailVerification from './Pages/Learner/Email_verification/SuccessfulEmailVerification'
+import ExpiredLink from './Pages/Learner/Email_verification/ExpiredLink'
+import EmailSet from './Pages/Learner/Email_verification/EmailSet'
 
 
 const App = () => {
@@ -25,18 +26,25 @@ const App = () => {
     <div className='text-default min-h-screen'>
       {!isEducatorRoute && <Navbar />}
       <Routes>
+          {/* Landing Pages */}
       <Route path='/landing' element={<Landing/>}/>
       <Route path='/' element={<ScrumLanding/>}/>
+
+
+        {/* Learner Routes */}
         <Route path='/signup' element={<SignUp/>}/>
         <Route path='/emailverification' element={<EmailVerification/>}/>
         <Route path='/success_email_verification' element={<SuccessfulEmailVerification/>}/>
         <Route path='/expired_link_page' element={<ExpiredLink/>}/>
         <Route path='/successfulReg' element={<SuccessfulReg/>}/>
+        <Route path='/email_set' element={<EmailSet/>}/>
         <Route path='/course-list' element={<CourseList/>}/>
         <Route path='/course-list/input' element={<CourseList/>}/>
         <Route path='/course/:id' element={<CourseDetails/>}/>
         <Route path='/myenrollment' element={<MyEnrollment/>}/>
         <Route path='/loading/:path' element={<Loading/>}/>
+
+         {/* Educator Routes */}
         <Route path='/educator' element={<Educator/>}>
         <Route path='educator' element={<Dashboard/>}/>
         <Route path='add-course' element={<AddCourse/>}/>

@@ -23,17 +23,14 @@ const Navbar = () => {
       <header className="fixed w-full bg-white p-4 inset-x-0 top-0 z-50 shadow-md">
         <nav className="flex items-center justify-between lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5">
+            <Link to="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Scrum Consult</span>
-              <Link to='/'>
-             
               <img
                 className="h-8 w-auto"
                 src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
                 alt="Logo"
               />
-               </Link>
-            </a>
+            </Link>
           </div>
           {/* Mobile Menu Toggle */}
           <div className="flex lg:hidden">
@@ -62,48 +59,39 @@ const Navbar = () => {
           </div>
           {/* Desktop Menu */}
           <div className="hidden lg:flex lg:gap-x-12">
-            <a href="#home" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
-                <Link to='/'>
-                Home
-                </Link>
-              
-            </a>
-            <a href="#about" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+            <Link to="/" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+              Home
+            </Link>
+            <Link to="#about" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
               About
-            </a>
-            <a href="#courses" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+            </Link>
+            <Link to="#courses" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
               Courses
-            </a>
-            <a href="#become-trainer" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+            </Link>
+            <Link to="#become-trainer" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
               Become a Trainer
-            </a>
-            <a href="#contact" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+            </Link>
+            <Link to="#contact" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
               Contact
-            </a>
-            
-            <a href="#contact" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
-            <div className="flex">
+            </Link>
 
-            
-            <Link to='/emailverification'>
-                 Verify Email
-                 </Link> 
-                 <div className="mx-5">
-                 <FaHandPointLeft />
-                 </div>
-                 </div>
-            </a>
-           
-           
+            <Link to="/emailverification" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+              <div className="flex">
+                Verify Email
+                <div className="mx-5">
+                  <FaHandPointLeft />
+                </div>
+              </div>
+            </Link>
           </div>
           {/* Login Button */}
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a
-              href="#login"
+            <Link
+              to="#login"
               className="text-sm font-semibold text-white bg-indigo-600 px-3.5 py-2.5 rounded-md hover:bg-indigo-500"
             >
               Log in
-            </a>
+            </Link>
           </div>
         </nav>
 
@@ -113,14 +101,14 @@ const Navbar = () => {
             <div className="fixed inset-0 z-50" onClick={toggleMenu}></div>
             <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
               <div className="flex items-center justify-between">
-                <a href="#" className="-m-1.5 p-1.5">
+                <Link to="/" className="-m-1.5 p-1.5">
                   <span className="sr-only">Scrum Consult</span>
                   <img
                     className="h-8 w-auto"
                     src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
                     alt="Logo"
                   />
-                </a>
+                </Link>
                 <button
                   type="button"
                   className="-m-2.5 rounded-md p-2.5 text-gray-700"
@@ -146,68 +134,61 @@ const Navbar = () => {
               <div className="mt-6 flow-root">
                 <div className="-my-6 divide-y divide-gray-500/10">
                   <div className="space-y-2 py-6">
-                    <a
-                      href="#home"
+                    <Link
+                      to="/"
                       onClick={toggleMenu}
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
                     >
-                     <Link to='/'>
-                Home
-                </Link>
-               
-
-                    </a>
-                    <a
-                      href="#about"
+                      Home
+                    </Link>
+                    <Link
+                      to="#about"
                       onClick={toggleMenu}
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
                     >
                       About
-                    </a>
-                    <a
-                      href="#courses"
+                    </Link>
+                    <Link
+                      to="#courses"
                       onClick={toggleMenu}
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
                     >
                       Courses
-                    </a>
-                    <a
-                      href="#become-trainer"
+                    </Link>
+                    <Link
+                      to="#become-trainer"
                       onClick={toggleMenu}
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
                     >
                       Become a Trainer
-                    </a>
-                    <a
-                      href="#contact"
+                    </Link>
+                    <Link
+                      to="#contact"
                       onClick={toggleMenu}
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
                     >
                       Contact
-                    </a>
-                    <a href="#contact"  
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                    onClick={toggleMenu}>
-                        <div className="flex">
-                        <Link to='/emailverification'>
-                 Verify Email
-                 
-                 </Link> 
-                 <div className="mx-5">
-                 <FaHandPointLeft />
-                 </div>
+                    </Link>
+                    <Link
+                      to="/emailverification"
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                      onClick={toggleMenu}
+                    >
+                      <div className="flex">
+                        Verify Email
+                        <div className="mx-5">
+                          <FaHandPointLeft />
                         </div>
-         
-            </a>
-           
+                      </div>
+                    </Link>
                   </div>
                   <div className="py-6">
-                    <a
-                      href="#login"
+                    <Link
+                      to="#login"
                       className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
                     >
                       Log in
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>

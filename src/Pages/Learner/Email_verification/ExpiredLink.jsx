@@ -1,5 +1,5 @@
 import React from 'react'
-import ErrorImg from '../../assets/emaillinkexpired.png'
+import ErrorImg from '../../../assets/emaillinkexpired.png'
 import { Link } from 'react-router-dom'
 
 const ExpiredLink = () => {
