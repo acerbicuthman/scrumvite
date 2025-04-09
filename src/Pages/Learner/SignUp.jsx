@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../Learner/signup.css";
 import "./signup.css";
 import Amico from "../../assets/amico.png";
@@ -27,6 +28,9 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [checkBoxValid, setCheckBoxValid] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { selectedOption } = location.state || {};
   const [codeMessage, setCodeMessage] = useState("");
   const [authCodeSent, setAuthCodeSent] = useState(false);
 
@@ -86,10 +90,6 @@ const SignUp = () => {
     setCheckBoxValid(e.target.checked);
   };
 
-  const handleChange = (e) => {
-    setAccount_type(e.target.value);
-  };
-
   const handleAuthCodeChange = async (e) => {
     // Uncomment this line if you want to prevent form submission behavior
     // e.preventDefault();
@@ -110,6 +110,7 @@ const SignUp = () => {
         data
       );
       console.log("Response:", response.data);
+      navigate("/emailverification");
     } catch (error) {
       if (error.response) {
         // Request was made and server responded with a status code other than 2xx
@@ -125,6 +126,13 @@ const SignUp = () => {
       }
     }
   };
+
+  useEffect(() => {
+    // Retrieve `account_type` from the location state (from the previous page)
+    if (location.state && location.state.account_type) {
+      setAccount_type(location.state.account_type);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     console.log(handleAuthCodeChange());
@@ -289,25 +297,17 @@ const SignUp = () => {
                   </div>
                 )}
             </div>
-
-            <div className="flex flex-col">
-              <label
-                htmlFor="account_type"
-                className="text-sm font-medium text-gray-700"
-              >
-                Choose Your Account Type
-              </label>
-              <select
-                id="account_type"
-                value={account_type}
-                onChange={handleChange}
-                name="accountType"
-                className="w-full mt-2 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
-                <option value="">--Please choose an option--</option>
-                <option value="learner">Learner</option>
-                <option value="educator">Educator</option>
-              </select>
+            {/* Account Type (pre-filled and non-editable) */}
+            <label
+              htmlFor="account_type"
+              className="text-sm font-medium text-gray-700"
+            >
+              You Selected:
+            </label>
+            <div className="mt-2 p-3 border-2 border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700">
+              {account_type
+                ? account_type.charAt(0).toUpperCase() + account_type.slice(1)
+                : "No option selected"}
             </div>
 
             <div className="text-sm flex py-2">
@@ -366,7 +366,7 @@ const SignUp = () => {
             </div>
           </form>
 
-          <div className="text-center my-4">
+          {/* <div className="text-center my-4">
             <span>Or Continue with</span>
           </div>
 
@@ -383,7 +383,7 @@ const SignUp = () => {
             >
               <img className="w-9 h-9 p-1" src={LinkedinIcon} alt="LinkedIn" />
             </a>
-          </div>
+          </div> */}
 
           <div className="text-center mt-4 text-sm">
             <p>

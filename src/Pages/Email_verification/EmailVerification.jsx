@@ -5,7 +5,7 @@ import EmailVerify from "../../assets/emailverification.png";
 const EmailVerification = () => {
   return (
     <div className="bg-neutral-200 h-screen mt-10 content-center justify-items-center">
-      <div className="lg:w-2/5 lg:h-3/6 text-center lg:bg-white mx-10 px-6">
+      <div className="lg:w-2/5 lg:h-3/6 text-center lg:bg-white mx-10 px-4">
         <div className="flex justify-center items-center">
           <img
             className="lg:my-4 my-10 lg:h-32 h-42"
@@ -19,7 +19,7 @@ const EmailVerification = () => {
         <p className="text-sm">Hey Dorcas, We just sent you an email </p>
         <p className="text-sm">Just confirm your email to get started!</p>
         <Link to="/success_email_verification">
-          <button className="bg-blue-900 text-white lg:text-sm text-xs my-8 lg:px-20 px-20 py-3  rounded-lg">
+          <button className="bg-blue-900 text-white lg:text-sm text-xs my-8 lg:px-20 px-8 w-full py-3  rounded-lg">
             Verify Email Address
           </button>
         </Link>
