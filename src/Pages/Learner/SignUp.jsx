@@ -1,26 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../Learner/signup.css";
+import "./signup.css";
 import Amico from "../../assets/amico.png";
 import GoogleIcon from "../../assets/googleIcon.png";
 import LinkedinIcon from "../../assets/devicon_linkedin.png";
 import axios from "axios";
+import { base_url } from "../../library/api";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcCheckmark } from "react-icons/fc";
 
 const SignUp = () => {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [first_name, setfirst_name] = useState("");
+  const [last_name, setlast_name] = useState("");
+  const [account_type, setAccount_type] = useState("");
+  const [password1, setpassword1] = useState("");
+  const [password2, setpassword2] = useState("");
+  const [email, setEmail] = useState("");
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [email, setEmail] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordTouched, setIsPasswordTouched] = useState(false);
   const [isConfirmPasswordTouched, setIsConfirmPasswordTouched] =
     useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [checkBoxValid, setCheckBoxValid] = useState(false);
   const [codeMessage, setCodeMessage] = useState("");
   const [authCodeSent, setAuthCodeSent] = useState(false);
@@ -37,10 +42,10 @@ const SignUp = () => {
     { regex: number, label: "Include at least one number (0-9)" },
   ];
 
-  const isLengthValid = minLength.test(password);
-  const isUpperValid = upperCase.test(password);
-  const isLowerValid = lowerCase.test(password);
-  const isNumberValid = number.test(password);
+  const isLengthValid = minLength.test(password1);
+  const isUpperValid = upperCase.test(password1);
+  const isLowerValid = lowerCase.test(password1);
+  const isNumberValid = number.test(password1);
 
   const isPasswordWeak =
     !isLengthValid || !isUpperValid || !isLowerValid || !isNumberValid;
@@ -50,14 +55,13 @@ const SignUp = () => {
   useEffect(() => {
     const isValid =
       isLengthValid && isUpperValid && isLowerValid && isNumberValid;
-
     setIsPasswordValid(isValid);
-  }, [password]);
+  }, [password1]);
 
   useEffect(() => {
-    const isConfirmValid = confirmPassword === password;
+    const isConfirmValid = password2 === password1;
     setIsConfirmPasswordValid(isConfirmValid);
-  }, [confirmPassword, password]);
+  }, [password2, password1]);
 
   useEffect(() => {
     const isEmailValid = emailRegex.test(email);
@@ -65,12 +69,12 @@ const SignUp = () => {
   }, [email]);
 
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+    setpassword1(e.target.value);
     setIsPasswordTouched(true);
   };
 
   const handleConfirmPasswordChange = (e) => {
-    setConfirmPassword(e.target.value);
+    setpassword2(e.target.value);
     setIsConfirmPasswordTouched(true);
   };
 
@@ -82,38 +86,55 @@ const SignUp = () => {
     setCheckBoxValid(e.target.checked);
   };
 
+  const handleChange = (e) => {
+    setAccount_type(e.target.value);
+  };
+
   const handleAuthCodeChange = async (e) => {
-    e.preventDefault();
+    // Uncomment this line if you want to prevent form submission behavior
+    // e.preventDefault();
+
+    const data = {
+      account_type,
+      email,
+      first_name,
+      last_name,
+      password1,
+      password2,
+    };
 
     try {
+      // Use userData instead of data
       const response = await axios.post(
-        "http://localhost:5000/send-auth-code",
-        { email }
+        `${base_url}api/auth/registration/`,
+        data
       );
-      if (response.data.success) {
-        setCodeMessage("Code successfully sent to your email");
-        setAuthCodeSent(true);
-      } else {
-        setCodeMessage("Error sending authentication code");
-      }
+      console.log("Response:", response.data);
     } catch (error) {
-      setCodeMessage(
-        "An error occurred while sending the authentication code."
-      );
-      console.error("Error", error);
+      if (error.response) {
+        // Request was made and server responded with a status code other than 2xx
+        console.error("Error response data:", error.response.data);
+        console.error("Error status:", error.response.status);
+        console.error("Error headers:", error.response.headers);
+      } else if (error.request) {
+        // Request was made but no response was received
+        console.error("Error request:", error.request);
+      } else {
+        // Something else went wrong
+        console.error("Error message:", error.message);
+      }
     }
   };
 
+  useEffect(() => {
+    console.log(handleAuthCodeChange());
+  });
+
   return (
     <div className="flex flex-col md:flex-row h-screen sm:p-6 md:overflow-hidden overflow-x-hidden">
-    <div className="flex-1 justify-center items-center p-6 sm:p-12 md:object-bottom hidden md:block mt-36"> {/* Added mt-12 for margin-top */}
-  <img
-    className="w-full h-auto object-contain"
-    src={Amico}
-    alt="Amico"
-  />
-</div>
-
+      <div className="flex-1 justify-center items-center p-6 sm:p-12 md:object-bottom hidden md:block mt-36">
+        <img className="w-full h-auto object-contain" src={Amico} alt="Amico" />
+      </div>
 
       <div className="flex-1 px-6 sm:px-8 md:px-12 mb-4 md:mb-4 xl:py-18 2xl:py-96 h-screen overflow-x-hidden">
         <div className="w-full max-w-lg mx-auto pt-8 xl:h-screen ">
@@ -125,18 +146,19 @@ const SignUp = () => {
           </p>
           <form
             className="space-y-5 md:space-y-0 lg:space-y-5 xl:space-y-1"
-            action="#"
-            method="POST"
+            onSubmit={handleAuthCodeChange}
           >
             <div>
               <label
-                htmlFor="name"
+                htmlFor="first_name"
                 className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-600"
               >
                 First Name
               </label>
               <input
                 type="text"
+                value={first_name}
+                onChange={(e) => setfirst_name(e.target.value)}
                 placeholder="Enter First Name"
                 className="block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-600 outline-1 outline-offset-1 outline-black-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
               />
@@ -144,13 +166,15 @@ const SignUp = () => {
 
             <div>
               <label
-                htmlFor="name"
+                htmlFor="last_name"
                 className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-900"
               >
                 Last Name
               </label>
               <input
                 type="text"
+                value={last_name}
+                onChange={(e) => setlast_name(e.target.value)}
                 placeholder="Enter Last Name"
                 className="block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
               />
@@ -163,31 +187,29 @@ const SignUp = () => {
               >
                 Email address
               </label>
-              <div>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  value={email}
-                  onChange={handleEmailChange}
-                  autoComplete="email"
-                  placeholder="Enter your Email"
-                  required
-                  className={`block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
-                    email && (isEmailValid ? "valid-input" : "invalid-input")
-                  }`}
-                />
-                {!isEmailValid && email && (
-                  <div className="text-red-600 text-xs mt-1">
-                    Please enter a valid email
-                  </div>
-                )}
-              </div>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                value={email}
+                onChange={handleEmailChange}
+                autoComplete="email"
+                placeholder="Enter your Email"
+                required
+                className={`block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
+                  email && (isEmailValid ? "valid-input" : "invalid-input")
+                }`}
+              />
+              {!isEmailValid && email && (
+                <div className="text-red-600 text-xs mt-1">
+                  Please enter a valid email
+                </div>
+              )}
             </div>
 
             <div>
               <label
-                htmlFor="password"
+                htmlFor="password1"
                 className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-900"
               >
                 Create Password
@@ -195,14 +217,18 @@ const SignUp = () => {
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
-                  name="password"
-                  id="password"
-                  value={password}
+                  name="password1"
+                  id="password1"
+                  value={password1}
                   onChange={handlePasswordChange}
                   placeholder="Enter Password"
-                  autoComplete="current-password"
                   required
-                  className="block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                  className={`block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600
+                  ${
+                    isPasswordTouched && password1 && !isPasswordValid
+                      ? "invalid-input"
+                      : ""
+                  }`}
                 />
                 <button
                   type="button"
@@ -212,10 +238,10 @@ const SignUp = () => {
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
-              {isPasswordTouched && password && isPasswordWeak && (
+              {isPasswordTouched && password1 && isPasswordWeak && (
                 <div className="mb-1 text-red-600 text-xs">Weak Password</div>
               )}
-              {isPasswordTouched && password && !isPasswordWeak && (
+              {isPasswordTouched && password1 && !isPasswordWeak && (
                 <div className="mb-1 text-green-600 text-xs">
                   Strong Password
                 </div>
@@ -224,7 +250,7 @@ const SignUp = () => {
 
             <div>
               <label
-                htmlFor="password-confirm"
+                htmlFor="password2"
                 className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-900"
               >
                 Confirm Password
@@ -232,14 +258,20 @@ const SignUp = () => {
               <div className="relative">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
-                  name="password-confirm"
-                  id="password-confirm"
-                  value={confirmPassword}
+                  name="password2"
+                  id="password2"
+                  value={password2}
                   onChange={handleConfirmPasswordChange}
                   placeholder="Confirm Password"
-                  autoComplete="current-password"
                   required
-                  className="block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                  className={`block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                ${
+                  isConfirmPasswordTouched &&
+                  password2 &&
+                  !isConfirmPasswordValid
+                    ? "invalid-input"
+                    : ""
+                }`}
                 />
                 <button
                   type="button"
@@ -250,12 +282,32 @@ const SignUp = () => {
                 </button>
               </div>
               {isConfirmPasswordTouched &&
-                confirmPassword &&
+                password2 &&
                 !isConfirmPasswordValid && (
                   <div className="text-red-600 text-xs">
                     Passwords do not match
                   </div>
                 )}
+            </div>
+
+            <div className="flex flex-col">
+              <label
+                htmlFor="account_type"
+                className="text-sm font-medium text-gray-700"
+              >
+                Choose Your Account Type
+              </label>
+              <select
+                id="account_type"
+                value={account_type}
+                onChange={handleChange}
+                name="accountType"
+                className="w-full mt-2 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="">--Please choose an option--</option>
+                <option value="learner">Learner</option>
+                <option value="educator">Educator</option>
+              </select>
             </div>
 
             <div className="text-sm flex py-2">
@@ -272,11 +324,11 @@ const SignUp = () => {
                 <a href="#">Privacy Policy</a>
               </span>
             </div>
-            {password && (
+            {password1 && (
               <div className="overflow-hidden px-1 sm:px-1 lg:px-2">
                 <ul className="mt-1 list-none text-xs sm:text-sm md:text-sm xl:text-sm">
                   {Criteria.map(({ regex, label }, index) => {
-                    const isValid = regex.test(password);
+                    const isValid = regex.test(password1);
                     return (
                       <li key={index} className="flex items-center space-x-2">
                         <span
@@ -294,26 +346,25 @@ const SignUp = () => {
               </div>
             )}
 
-            <div className="text-center py-3">
-              <Link to="/successfulReg">
-                <button
-                  type="submit"
-                  disabled={
-                    !isPasswordValid ||
-                    !isConfirmPasswordValid ||
-                    !isEmailValid ||
-                    !checkBoxValid
-                  }
-                  className={`w-full rounded-md px-6 py-3 text-white font-semibold bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed`}
-                >
-                  Continue
-                </button>
-              </Link>
+            <div>
+              <div className="text-center py-3">
+                <Link to="/emailverification">
+                  <button
+                    type="submit"
+                    disabled={
+                      !isPasswordValid ||
+                      !isConfirmPasswordValid ||
+                      !isEmailValid ||
+                      !checkBoxValid
+                    }
+                    className={`w-full rounded-md px-6 py-3 text-white font-semibold bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    Continue
+                  </button>
+                </Link>
+              </div>
             </div>
           </form>
-
-          {codeMessage && <p>{codeMessage}</p>}
-          {authCodeSent && <p>Please check your email</p>}
 
           <div className="text-center my-4">
             <span>Or Continue with</span>
@@ -328,9 +379,9 @@ const SignUp = () => {
             </a>
             <a
               href="#"
-              className="w-12 h-12 rounded-full border flex items-center justify-center  "
+              className="w-12 h-12 rounded-full border flex items-center justify-center"
             >
-              <img className="w-9 h-9  p-1" src={LinkedinIcon} alt="LinkedIn" />
+              <img className="w-9 h-9 p-1" src={LinkedinIcon} alt="LinkedIn" />
             </a>
           </div>
 
