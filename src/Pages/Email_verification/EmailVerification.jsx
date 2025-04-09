@@ -11,7 +11,7 @@ const EmailVerification = () => {
 
         </div>
 <h1 className='font-semibold lg:text-2xl text-xl'>You are just one click away!</h1>
-<p className='text-sm'>Hey Dorcas, We’ve finished setting your Scrum Consult account. </p>
+<p className='text-sm'>Hey Dorcas, We just sent you an email </p>
 <p className='text-sm'>Just confirm your email to get started!</p>
 <Link to='/success_email_verification'>
 <button className='bg-blue-900 text-white lg:text-sm text-xs my-8 lg:px-20 px-20 py-3  rounded-lg'>Verify Email Address</button>
