@@ -348,7 +348,10 @@ const SignUp = () => {
 
             <div>
               <div className="text-center py-3">
-                <Link to="/emailverification">
+                <Link
+                  to="/emailverification"
+                  state={{ first_name: first_name }}
+                >
                   <button
                     type="submit"
                     disabled={
