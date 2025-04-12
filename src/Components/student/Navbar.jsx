@@ -76,24 +76,27 @@ const Navbar = () => {
             <a href="#contact" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
               Contact
             </a>
-            <Link to="/emailverification" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+            {/* <Link to="/emailverification" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
               <div className="flex">
                 Verify Email
                 <div className="mx-5">
                   <FaHandPointLeft />
                 </div>
               </div>
-            </Link>
+            </Link> */}
           </div>
 
           {/* Login Button */}
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+            <Link to='/signin'>
             <a
               href="#login"
               className="text-sm font-semibold text-white bg-indigo-600 px-3.5 py-2.5 rounded-md hover:bg-indigo-500"
             >
               Log in
             </a>
+            </Link>
+           
           </div>
         </nav>
 
@@ -171,7 +174,7 @@ const Navbar = () => {
                     >
                       Contact
                     </a>
-                    <Link
+                    {/* <Link
                       to="/emailverification"
                       className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
                       onClick={toggleMenu}
@@ -182,15 +185,17 @@ const Navbar = () => {
                           <FaHandPointLeft />
                         </div>
                       </div>
-                    </Link>
+                    </Link> */}
                   </div>
                   <div className="py-6">
+                  <Link to='/signin'>
                     <a
                       href="#login"
                       className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
                     >
                       Log in
                     </a>
+                    </Link>
                   </div>
                 </div>
               </div>

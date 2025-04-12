@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../Learner/signup.css";
 import "./signup.css";
-import Amico from "../../assets/amico.png";
+// import Amico from "../../assets/amico.png";
+// import Variant1 from '../../assets/Property 1=Variant2.png'
 import GoogleIcon from "../../assets/googleIcon.png";
 import LinkedinIcon from "../../assets/devicon_linkedin.png";
 import axios from "axios";
@@ -11,6 +12,7 @@ import { base_url } from "../../library/api";
 
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcCheckmark } from "react-icons/fc";
+import ImageSlideShow from "./ImageSlideShow";
 
 const SignUp = () => {
   const [first_name, setfirst_name] = useState("");
@@ -140,16 +142,29 @@ const SignUp = () => {
 
   return (
     <div className="flex flex-col md:flex-row h-screen sm:p-6 md:overflow-hidden overflow-x-hidden">
-      <div className="flex-1 justify-center items-center p-6 sm:p-12 md:object-bottom hidden md:block mt-36">
-        <img className="w-full h-auto object-contain" src={Amico} alt="Amico" />
+      <div className="flex-1 justify-center items-center p-6 sm:p-12 md:object-bottom hidden md:block mt-36 ">
+        {/* <img className="w-full h-auto object-contain" src={Amico} alt="Amico" /> */}
+        <div className="  group overflow-hidden">
+          <ImageSlideShow />
+          {/* <img
+    src={Variant1}
+    className="pt-18 absolute h-screen w-2/4 inset-0 object-cover transition duration-500 ease-in-out transform group-hover:opacity-0 group-hover:scale-105"
+  />
+
+ 
+  <img
+    src={Amico}
+    className="pt-18 absolute h-screen w-2/4  inset-0 object-cover opacity-0 transition duration-500 ease-in-out transform group-hover:opacity-100 group-hover:scale-100"
+  /> */}
+        </div>
       </div>
 
       <div className="flex-1 px-6 sm:px-8 md:px-12 mb-4 md:mb-4 xl:py-18 2xl:py-96 h-screen overflow-x-hidden">
         <div className="w-full max-w-lg mx-auto pt-8 xl:h-screen ">
-          <h2 className="text-left text-2xl sm:text-3xl md:text-xl font-bold tracking-tight text-gray-600 mb-4 md:mb-1 xl:text-3xl">
+          <h2 className="text-left text-xl sm:text-3xl md:text-xl font-bold tracking-tight text-gray-600 mb-4 md:mb-1 xl:text-3xl">
             Create Account
           </h2>
-          <p className="text-center lg:text-sm text-xs mb-2 md:text-xs md:text-left xl:text-xl">
+          <p className="text-center lg:text-xs text-xs mb-4 md:text-xs md:text-left xl:text-base">
             Welcome, create an account and begin your learning Journey
           </p>
           <form

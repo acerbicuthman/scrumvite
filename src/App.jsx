@@ -18,6 +18,7 @@ import EmailVerification from "./Pages/Email_verification/EmailVerification";
 import SuccessfulEmailVerification from "./Pages/Email_verification/SuccessfulEmailVerification";
 import ExpiredLink from "./Pages/Email_verification/ExpiredLink";
 import SignIn from "./Pages/Learner/SignIn";
+import ImageSlideShow from "./Pages/Learner/ImageSlideShow";
 
 const App = () => {
   const isEducatorRoute = useMatch("/educator/*");
