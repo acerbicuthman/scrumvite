@@ -18,18 +18,21 @@ import EmailVerification from "./Pages/Email_verification/EmailVerification";
 import SuccessfulEmailVerification from "./Pages/Email_verification/SuccessfulEmailVerification";
 import ExpiredLink from "./Pages/Email_verification/ExpiredLink";
 import SignIn from "./Pages/Learner/SignIn";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from "@clerk/clerk-react";
 import ImageSlideShow from "./Pages/Learner/ImageSlideShow";
 import Footer from "./Pages/Learner/Footer";
 
 const App = () => {
-
   const isEducatorRoute = useMatch("/educator/*");
   return (
     <div className="text-default h-screen">
       {!isEducatorRoute && <Navbar />}
 
-      
       <Routes>
         <Route path="/landing" element={<Landing />} />
         <Route path="/" element={<ScrumLanding />} />
@@ -54,8 +57,7 @@ const App = () => {
           <Route path="students-enrolled" element={<StudentsEnrolled />} />
         </Route>
       </Routes>
-      {<Footer/>}
-     
+      {<Footer />}
     </div>
   );
 };

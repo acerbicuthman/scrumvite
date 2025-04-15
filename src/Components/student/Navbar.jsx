@@ -1,7 +1,7 @@
 import { React, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 // import {  SignedIn, SignedOut, SignInButton,useClerk, UserButton, useUser } from '@clerk/clerk-react'
-import google from '../../assets/googleIcon.png'
+import google from "../../assets/googleIcon.png";
 import { FaHandPointLeft } from "react-icons/fa";
 
 const Navbar = () => {
@@ -19,13 +19,16 @@ const Navbar = () => {
       setNavbarHeight(navbar.offsetHeight);
     }
   }, []);
-//   const {openSignIn} = useClerk()
-//   const {user} = useUser()
+  //   const {openSignIn} = useClerk()
+  //   const {user} = useUser()
 
   return (
     <div className="from-cyan-100/70 via-blue-200/60 to-purple-300/80 mb-4">
       <header className="fixed w-full bg-white p-2 inset-x-0 top-0 z-50 shadow-md">
-        <nav className="flex items-center justify-between lg:px-8" aria-label="Global">
+        <nav
+          className="flex items-center justify-between lg:px-8"
+          aria-label="Global"
+        >
           <div className="flex lg:flex-1">
             <Link to="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Scrum Consult</span>
@@ -65,19 +68,34 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex lg:gap-x-12">
-            <Link to="/" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+            <Link
+              to="/"
+              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+            >
               Home
             </Link>
-            <a href="#about" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+            <a
+              href="#about"
+              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+            >
               About
             </a>
-            <a href="#courses" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+            <a
+              href="#courses"
+              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+            >
               Courses
             </a>
-            <a href="#become-trainer" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+            <a
+              href="#become-trainer"
+              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+            >
               Become a Trainer
             </a>
-            <a href="#contact" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+            <a
+              href="#contact"
+              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+            >
               Contact
             </a>
             {/* <Link to="/emailverification" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
@@ -92,42 +110,39 @@ const Navbar = () => {
 
           {/* Login Button */}
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <Link to='/signin'
-           
+            <Link
+              to="/signin"
               className="text-sm font-semibold text-white bg-indigo-600 px-3.5 py-2 rounded-md hover:bg-indigo-500"
             >
               Log in
-            
             </Link>
-     
           </div>
-          <div className='hidden lg:block ml-6'>
-       {/* {user ? ( */}
-        <header className="flex justify-center  border-b">
-          {/* <SignedIn>
+          <div className="hidden lg:block ml-6">
+            {/* {user ? ( */}
+            <header className="flex justify-center  border-b">
+              {/* <SignedIn>
             <UserButton />
           </SignedIn> */}
-        </header>
-      {/* ) : ( */}
-        <div className="flex justify-center m border-b">
-          {/* <SignedOut>
+            </header>
+            {/* ) : ( */}
+            <div className="flex justify-center m border-b">
+              {/* <SignedOut>
             <SignInButton mode="modal"> */}
 
-                <button 
-                // onClick={openSignIn}
-                >
-                  <img
-                    src={google}
-                    alt="Sign in with Google"
-                    className="w-10 h-10 object-contain"
-                  />
-                </button>
-            {/* </SignInButton>
+              <button
+              // onClick={openSignIn}
+              >
+                <img
+                  src={google}
+                  alt="Sign in with Google"
+                  className="w-10 h-10 object-contain"
+                />
+              </button>
+              {/* </SignInButton>
           </SignedOut> */}
-        </div>
-      {/* )} */}
-       </div>
-    
+            </div>
+            {/* )} */}
+          </div>
         </nav>
 
         {/* Mobile Menu */}
@@ -218,42 +233,40 @@ const Navbar = () => {
                     </Link> */}
                   </div>
                   <div className="py-6">
-                  <Link to='/signin'
-                  onClick={toggleMenu}
+                    <Link
+                      to="/signin"
+                      onClick={toggleMenu}
                       className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
                     >
                       Log in
-                    
-                    </Link>      
+                    </Link>
                   </div>
                   <div>
-                  {/* {user ? ( */}
-        <header className="flex justify-center p-4 border-b">
-          {/* <SignedIn>
+                    {/* {user ? ( */}
+                    <header className="flex justify-center p-4 border-b">
+                      {/* <SignedIn>
             <UserButton />
           </SignedIn> */}
-        </header>
-      {/* ) : ( */}
-        <div className="flex justify-center p-4 border-b">
-          {/* <SignedOut>
+                    </header>
+                    {/* ) : ( */}
+                    <div className="flex justify-center p-4 border-b">
+                      {/* <SignedOut>
             <SignInButton mode="modal"> */}
 
-                <button 
-                // onClick={openSignIn}
-                >
-                  <img
-                    src={google}
-                    alt="Sign in with Google"
-                    className="w-10 h-10 object-contain"
-                  />
-                </button>
-            {/* </SignInButton>
+                      <button
+                      // onClick={openSignIn}
+                      >
+                        <img
+                          src={google}
+                          alt="Sign in with Google"
+                          className="w-10 h-10 object-contain"
+                        />
+                      </button>
+                      {/* </SignInButton>
           </SignedOut> */}
-        </div>
-      {/* )} */}
+                    </div>
+                    {/* )} */}
                   </div>
-            
-                 
                 </div>
               </div>
             </div>
