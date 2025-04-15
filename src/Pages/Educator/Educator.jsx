@@ -6,7 +6,7 @@ const Educator = () => {
     <div>
       <h1>Educatior Page</h1>
       <div>
-        <Outlet/>
+        {<Outlet/>}
       </div>
     </div>
   )

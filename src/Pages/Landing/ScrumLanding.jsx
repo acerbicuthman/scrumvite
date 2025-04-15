@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import welcomeImg from "../../assets/rafiki.png";
 import { Link, useNavigate } from "react-router-dom";
+import google from '../../assets/googleIcon.png'
+// import {  SignedIn, SignedOut, SignInButton,useClerk, UserButton, useUser } from '@clerk/clerk-react'
 
 const ScrumLanding = () => {
   const [account_type, setAccount_type] = useState("");
@@ -15,7 +17,9 @@ const ScrumLanding = () => {
     // Navigate to signup with selectedOption in the state
     navigate("/signup", { state: { account_type } });
   };
-
+//   const {openSignIn} = useClerk()
+//   const {user} = useUser()
+   
   return (
     <div className="flex flex-col lg:flex-row mt-12 p-4 lg:p-">
       <div className="flex-1 bg-gray-200 p-8 lg:p-12 flex justify-center items-center">
@@ -61,7 +65,38 @@ const ScrumLanding = () => {
                 Already a member? Log in
               </button>
             </Link>
+            
+          
+
+           
           </form>
+          {/* {user ? (
+        <header className="flex justify-center p-4 border-b">
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </header>
+      ) : ( */}
+        <div className="flex justify-center p-4 border-b">
+          {/* <SignedOut>
+            <SignInButton mode="modal"> */}
+              {/* {({ openSignIn }) => ( */}
+                <button 
+                // onClick={openSignIn}
+                >
+                  <img
+                    src={google}
+                    alt="Sign in with Google"
+                    className="w-10 h-10 object-contain"
+                  />
+                </button>
+              {/* )} */}
+            {/* </SignInButton>
+          </SignedOut> */}
+        </div>
+      {/* )} */}
+
+        
         </div>
       </div>
     </div>

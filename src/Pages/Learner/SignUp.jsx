@@ -3,9 +3,15 @@ import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../Learner/signup.css";
 import "./signup.css";
-// import Amico from "../../assets/amico.png";
-// import Variant1 from '../../assets/Property 1=Variant2.png'
-import GoogleIcon from "../../assets/googleIcon.png";
+// import {
+//   SignedIn,
+//   SignedOut,
+//   SignInButton,
+//   useClerk,
+//   UserButton,
+//   useUser,
+// } from "@clerk/clerk-react";
+import google from "../../assets/googleIcon.png";
 import LinkedinIcon from "../../assets/devicon_linkedin.png";
 import axios from "axios";
 import { base_url } from "../../library/api";
@@ -93,8 +99,7 @@ const SignUp = () => {
   };
 
   const handleAuthCodeChange = async (e) => {
-    // Uncomment this line if you want to prevent form submission behavior
-    // e.preventDefault();
+    e.preventDefault()
 
     const data = {
       account_type,
@@ -108,6 +113,7 @@ const SignUp = () => {
     try {
       // Use userData instead of data
       const response = await axios.post(
+        
         `${base_url}api/auth/registration/`,
         data
       );
@@ -118,7 +124,6 @@ const SignUp = () => {
         // Request was made and server responded with a status code other than 2xx
         console.error("Error response data:", error.response.data);
         console.error("Error status:", error.response.status);
-        console.error("Error headers:", error.response.headers);
       } else if (error.request) {
         // Request was made but no response was received
         console.error("Error request:", error.request);
@@ -136,37 +141,109 @@ const SignUp = () => {
     }
   }, [location.state]);
 
-  useEffect(() => {
-    console.log(handleAuthCodeChange());
-  });
+  // useEffect(() => {
+  //   console.log(handleAuthCodeChange());
+  // });
+
+  // const { openSignIn } = useClerk();
+  // const { user } = useUser();
 
   return (
-    <div className="flex flex-col md:flex-row h-screen sm:p-6 md:overflow-hidden overflow-x-hidden">
-      <div className="flex-1 justify-center items-center p-6 sm:p-12 md:object-bottom hidden md:block mt-36 ">
-        {/* <img className="w-full h-auto object-contain" src={Amico} alt="Amico" /> */}
-        <div className="  group overflow-hidden">
-          <ImageSlideShow />
-          {/* <img
-    src={Variant1}
-    className="pt-18 absolute h-screen w-2/4 inset-0 object-cover transition duration-500 ease-in-out transform group-hover:opacity-0 group-hover:scale-105"
-  />
-
- 
-  <img
-    src={Amico}
-    className="pt-18 absolute h-screen w-2/4  inset-0 object-cover opacity-0 transition duration-500 ease-in-out transform group-hover:opacity-100 group-hover:scale-100"
-  /> */}
-        </div>
+    <div className="flex flex-col md:flex-row  min-h-screen overflow-hidden ">
+      <div className="md:flex-1 justify-center items-center sm:p-12 hidden md:flex  ">
+       
+      <div className=" w-full  z-[-1] ">
+  <ImageSlideShow />
+</div>
+        
+      
       </div>
 
-      <div className="flex-1 px-6 sm:px-8 md:px-12 mb-4 md:mb-4 xl:py-18 2xl:py-96 h-screen overflow-x-hidden">
-        <div className="w-full max-w-lg mx-auto pt-8 xl:h-screen ">
-          <h2 className="text-left text-xl sm:text-3xl md:text-xl font-bold tracking-tight text-gray-600 mb-4 md:mb-1 xl:text-3xl">
-            Create Account
+      <div className="flex-1 px-8 sm:px-8 md:px-12 overflow-hidden min-h-screen lg:mt-2">
+
+        <div className="w-full max-w-lg mx-auto mt-6 xl:h-screen pt-2 ">
+          <h2 className="hidden md:block text-center text-xl sm:text-3xl md:text-xl font-medium tracking-tight text-gray-600 mb-3 md:mb-1 xl:text-3xl">
+            Welcome!
           </h2>
-          <p className="text-center lg:text-xs text-xs mb-4 md:text-xs md:text-left xl:text-base">
-            Welcome, create an account and begin your learning Journey
-          </p>
+          <h2 className="text-center text-xl md:hidden font-medium text-gray-600 py-2">Create Account</h2>
+          <div className="text-center md:px-0 px-2 lg:text-base text-sm mb-4 md:text-xs  md:text-nowrap xl:text-base">
+            <p>
+            <span className="md:hidden ">Welcome,</span> Create an account and begin your learning Journey
+          
+            </p>
+            </div>
+            <div className="md:flex flex-row md:justify-center xl:gap-5 gap-5 hidden ">
+            <div className="rounded-xl border-2 p-1 content-center xl:px-8 m">
+            <button className="flex gap-4 md:gap-1 pr-2">
+        <img
+          src={google}
+          alt="Sign in with Google"
+          className="w-8 h-8 object-contain"
+        />
+        <span className="mt-1.5 text-xs text-nowrap md:hidden lg:block md:text-sm ">Sign up with Google</span>
+      </button>
+            {/* {user ? (
+  <></> // Nothing rendered for signed-in users
+) : (
+  
+  <SignedOut>
+   
+    <SignInButton mode="modal" redirectUrl="/landing">
+      
+      <button className="flex gap-4">
+        <img
+          src={google}
+          alt="Sign in with Google"
+          className="w-8 h-8 object-contain"
+        />
+        <span className="mt-1 text-xs text-nowrap md:text-base">Sign up with Google</span>
+      </button>
+    </SignInButton>
+  
+  </SignedOut>
+)} */}
+
+              </div>
+              <div className="rounded-xl border-2 p-1 content-center xl:px-8 m">
+            <button className="flex gap-4 md:gap-1 pr-2">
+                        <img
+                          src={LinkedinIcon}
+                          alt="Sign in with Google"
+                          className="w-8 h-8  object-contain "
+                        />
+                    <span className="mt-1.5 text-xs text-nowrap md:hidden lg:block lg:text-sm">Sign up with LinkedIn</span>
+                      </button>
+            {/* {user ? (
+              <></>
+
+            ) : (
+             
+                  <SignedOut>
+                    <SignInButton mode="modal">
+                      <button className="flex gap-4">
+                        <img
+                          src={LinkedinIcon}
+                          alt="Sign in with Google"
+                          className="w-8 h-8  object-contain "
+                        />
+                    <span className="mt-1">Sign up with LinkedIn</span>
+                      </button>
+                    </SignInButton>
+                  </SignedOut>
+               
+            )} */}
+              </div>
+          </div>
+            <div className="md:flex hidden items-center gap-4 my-1 ">
+              <div className="flex-1">
+                <hr />
+              </div>
+              <div className="text-gray-400">OR</div>
+              <div className="flex-1">
+                <hr />
+              </div>
+            </div>
+            <div className="overflow-y-auto max-h-screen">
           <form
             className="space-y-5 md:space-y-0 lg:space-y-5 xl:space-y-1"
             onSubmit={handleAuthCodeChange}
@@ -183,7 +260,7 @@ const SignUp = () => {
                 value={first_name}
                 onChange={(e) => setfirst_name(e.target.value)}
                 placeholder="Enter First Name"
-                className="block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-600 outline-1 outline-offset-1 outline-black-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                className="block w-full border rounded-md bg-white px-3 py-1 text-base text-gray-600 outline-1 outline-offset-1 outline-black-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
               />
             </div>
 
@@ -199,7 +276,7 @@ const SignUp = () => {
                 value={last_name}
                 onChange={(e) => setlast_name(e.target.value)}
                 placeholder="Enter Last Name"
-                className="block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                className="block w-full border rounded-md bg-white px-3 py-1 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
               />
             </div>
 
@@ -210,19 +287,21 @@ const SignUp = () => {
               >
                 Email address
               </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                value={email}
-                onChange={handleEmailChange}
-                autoComplete="email"
-                placeholder="Enter your Email"
-                required
-                className={`block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
-                  email && (isEmailValid ? "valid-input" : "invalid-input")
-                }`}
-              />
+              <div className="relative">
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  value={email}
+                  onChange={handleEmailChange}
+                  autoComplete="email"
+                  placeholder="Enter your Email"
+                  required
+                  className={`block w-full border rounded-md bg-white px-3 py-1 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
+                    email && (isEmailValid ? "valid-input" : "invalid-input")
+                  }`}
+                />
+              </div>
               {!isEmailValid && email && (
                 <div className="text-red-600 text-xs mt-1">
                   Please enter a valid email
@@ -246,7 +325,7 @@ const SignUp = () => {
                   onChange={handlePasswordChange}
                   placeholder="Enter Password"
                   required
-                  className={`block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600
+                  className={`block w-full border rounded-md bg-white px-3 py-1 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600
                   ${
                     isPasswordTouched && password1 && !isPasswordValid
                       ? "invalid-input"
@@ -269,6 +348,27 @@ const SignUp = () => {
                   Strong Password
                 </div>
               )}
+              {password1 && (
+                <div className="overflow-hidden px-1 sm:px-1 lg:px-2">
+                  <ul className="mt-1 list-none text-xs ">
+                    {Criteria.map(({ regex, label }, index) => {
+                      const isValid = regex.test(password1);
+                      return (
+                        <li key={index} className="flex items-center space-x-2">
+                          <span
+                            className={`inline-block w-3 h-3 border ${
+                              isValid ? "border-green-500" : "border-gray-300"
+                            }`}
+                          >
+                            {isValid && <FcCheckmark />}
+                          </span>
+                          <span className="truncate">{label}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
             </div>
 
             <div>
@@ -287,7 +387,7 @@ const SignUp = () => {
                   onChange={handleConfirmPasswordChange}
                   placeholder="Confirm Password"
                   required
-                  className={`block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                  className={`block w-full border rounded-md bg-white px-3 py-1 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                 ${
                   isConfirmPasswordTouched &&
                   password2 &&
@@ -319,47 +419,26 @@ const SignUp = () => {
             >
               You Selected:
             </label>
-            <div className="mt-2 p-3 border-2 border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700">
+            <div className="mt-2 p-1 border-2 border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700">
               {account_type
                 ? account_type.charAt(0).toUpperCase() + account_type.slice(1)
                 : "No option selected"}
             </div>
 
-            <div className="text-sm flex py-2">
+            <div className="text-sm flex py-2 ">
               <input
                 type="checkbox"
                 id="terms"
                 required
                 onClick={handleCheckboxChange}
-                className="mr-2 h-4 w-4 text-indigo-600 border-gray-300 rounded "
+                className="mr-2 h-4 w-4 text-indigo-600 border-gray-300 rounded  "
               />
-              <span className="text-xs sm:text-sm md:text-sm xl:text-sm">
+              <span className="text-xs lg:text-sm  md:font-normal ">
                 I agree to&nbsp;
-                <a href="#">Terms & Conditions</a>&nbsp;and&nbsp;
-                <a href="#">Privacy Policy</a>
+                <a href="#" className="text-blue-600">Terms & Conditions</a>&nbsp;and&nbsp;
+                <a href="#" className="text-blue-600">Privacy Policy</a>
               </span>
             </div>
-            {password1 && (
-              <div className="overflow-hidden px-1 sm:px-1 lg:px-2">
-                <ul className="mt-1 list-none text-xs sm:text-sm md:text-sm xl:text-sm">
-                  {Criteria.map(({ regex, label }, index) => {
-                    const isValid = regex.test(password1);
-                    return (
-                      <li key={index} className="flex items-center space-x-2">
-                        <span
-                          className={`inline-block w-3 h-3 border ${
-                            isValid ? "border-green-500" : "border-gray-300"
-                          }`}
-                        >
-                          {isValid && <FcCheckmark />}
-                        </span>
-                        <span className="truncate">{label}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            )}
 
             <div>
               <div className="text-center py-3">
@@ -375,7 +454,7 @@ const SignUp = () => {
                       !isEmailValid ||
                       !checkBoxValid
                     }
-                    className={`w-full rounded-md px-6 py-3 text-white font-semibold bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed`}
+                    className={`w-full rounded-md px-4 py-3 text-white font-semibold bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed`}
                   >
                     Continue
                   </button>
@@ -383,27 +462,42 @@ const SignUp = () => {
               </div>
             </div>
           </form>
+          </div>
+          <div className="flex items-center gap-4 my-2 md:hidden">
+              <div className="flex-1">
+                <hr />
+              </div>
+              <div className="text-gray-400">OR Continue With</div>
+              <div className="flex-1">
+                <hr />
+              </div>
+            </div>
+          
+          <div className="flex flex-row my-3 gap-5 justify-center md:hidden ">
+           
+              <div  className="mt-1 rounded-full border-2 border-black">
 
-          {/* <div className="text-center my-4">
-            <span>Or Continue with</span>
+        
+                  {/* <SignedOut>
+                    <SignInButton mode="modal" redirectUrl="/landing"> */}
+                      <button className="flex ">
+                        <img
+                          src={google}
+                          alt="Sign in with Google"
+                          className=" "
+                        />
+                        {/* <span className="my-2">Create Account</span> */}
+                      </button>
+                    {/* </SignInButton>
+                  </SignedOut> */}
+                  </div>
+                  <div className="mt-1 rounded-full border-2 border-black">
+                    <img  className="p-3" src={LinkedinIcon} alt="" />
+                  </div>
+            
           </div>
 
-          <div className="flex justify-center gap-4 mt-4">
-            <a
-              href="#"
-              className="w-12 h-12 rounded-full border flex items-center justify-center"
-            >
-              <img className="w-10 h-10" src={GoogleIcon} alt="Google" />
-            </a>
-            <a
-              href="#"
-              className="w-12 h-12 rounded-full border flex items-center justify-center"
-            >
-              <img className="w-9 h-9 p-1" src={LinkedinIcon} alt="LinkedIn" />
-            </a>
-          </div> */}
-
-          <div className="text-center mt-4 text-sm">
+          <div className="text-center text-sm">
             <p>
               Already have an account?&nbsp;
               <Link to="/signin">
