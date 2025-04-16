@@ -18,13 +18,13 @@ import EmailVerification from "./Pages/Email_verification/EmailVerification";
 import SuccessfulEmailVerification from "./Pages/Email_verification/SuccessfulEmailVerification";
 import ExpiredLink from "./Pages/Email_verification/ExpiredLink";
 import SignIn from "./Pages/Learner/SignIn";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/clerk-react";
-import ImageSlideShow from "./Pages/Learner/ImageSlideShow";
+// import {
+//   SignedIn,
+//   SignedOut,
+//   SignInButton,
+//   UserButton,
+// } from "@clerk/clerk-react";
+// import ImageSlideShow from "./Pages/Learner/ImageSlideShow";
 import Footer from "./Pages/Learner/Footer";
 
 const App = () => {
@@ -37,7 +37,7 @@ const App = () => {
         <Route path="/landing" element={<Landing />} />
         <Route path="/" element={<ScrumLanding />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="signin" element={<SignIn />} />
+        <Route path="/signin" element={<SignIn />} />
         <Route path="/emailverification" element={<EmailVerification />} />
         <Route
           path="/success_email_verification"
