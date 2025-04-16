@@ -452,7 +452,8 @@ const SignUp = () => {
               <div>
                 <div className="text-center py-3">
                 <button
-  type="button"
+  type="submit"
+  state={{ first_name: first_name }}
   onClick={() => setIsModalOpen(true)} 
   disabled={
     !isPasswordValid ||
