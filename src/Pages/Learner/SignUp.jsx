@@ -528,10 +528,10 @@ const SignUp = () => {
           Verify Email Address
         </button>
         </EmailVerification>
-        <SuccessfulReg
+        {/* <SuccessfulReg
 isOpen={isSecondModalOpen}
   onClose={() => setIsSecondModalOpen(false)}
-/>
+/> */}
      
      
     </div>
