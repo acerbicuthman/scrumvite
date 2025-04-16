@@ -50,7 +50,7 @@ const SignIn = () => {
         </div>
       </div>
 
-      <div className="flex-1 mt-12 px-12 sm:px-8 md:px-12 mb-4 md:mb-1 xl:py-18 h-screen overflow-x-hidden xl:mb-1 lg:mb- lg:min-h-screen lg:overflow-hidden bg-gradient-to-r from-blue-300 to-pink-200">
+      <div className="flex-1 mt-10  px-12 sm:px-8 md:px-12 mb-4 md:mb-1 xl:py-18 h-screen overflow-x-hidden xl:mb-1 lg:mb- lg:min-h-screen lg:overflow-hidden ">
         <div className="w-full max-w-lg mx-auto pt-8  ">
           <h2 className="hidden md:block text-center text-xl sm:text-3xl md:text-xl font-medium tracking-tight text-gray-600 mb-4 md:mb-1 xl:text-3xl">
             Welcome Back!

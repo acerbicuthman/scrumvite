@@ -18,31 +18,22 @@ import EmailVerification from "./Pages/Email_verification/EmailVerification";
 import SuccessfulEmailVerification from "./Pages/Email_verification/SuccessfulEmailVerification";
 import ExpiredLink from "./Pages/Email_verification/ExpiredLink";
 import SignIn from "./Pages/Learner/SignIn";
-// import {
-//   SignedIn,
-//   SignedOut,
-//   SignInButton,
-//   UserButton,
-// } from "@clerk/clerk-react";
-// import ImageSlideShow from "./Pages/Learner/ImageSlideShow";
 import Footer from "./Pages/Learner/Footer";
 
 const App = () => {
   const isEducatorRoute = useMatch("/educator/*");
+
   return (
     <div className="text-default h-screen">
       {!isEducatorRoute && <Navbar />}
 
       <Routes>
-        <Route path="/landing" element={<Landing />} />
         <Route path="/" element={<ScrumLanding />} />
+        <Route path="/landing" element={<Landing />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/emailverification" element={<EmailVerification />} />
-        <Route
-          path="/success_email_verification"
-          element={<SuccessfulEmailVerification />}
-        />
+        <Route path="/success_email_verification" element={<SuccessfulEmailVerification />} />
         <Route path="/expired_link_page" element={<ExpiredLink />} />
         <Route path="/successfulReg" element={<SuccessfulReg />} />
         <Route path="/course-list" element={<CourseList />} />
@@ -50,14 +41,16 @@ const App = () => {
         <Route path="/course/:id" element={<CourseDetails />} />
         <Route path="/myenrollment" element={<MyEnrollment />} />
         <Route path="/loading/:path" element={<Loading />} />
+        
         <Route path="/educator" element={<Educator />}>
-          <Route path="educator" element={<Dashboard />} />
+          <Route index element={<Dashboard />} />
           <Route path="add-course" element={<AddCourse />} />
           <Route path="my-courses" element={<MyCourses />} />
           <Route path="students-enrolled" element={<StudentsEnrolled />} />
         </Route>
       </Routes>
-      {<Footer />}
+
+      <Footer />
     </div>
   );
 };

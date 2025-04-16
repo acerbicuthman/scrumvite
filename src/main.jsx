@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, useNavigate } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 // import {ClerkProvider, RedirectToSignIn} from '@clerk/clerk-react'
@@ -30,13 +30,9 @@ import App from "./App.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      {/* <GoogleOAuthProvider> */}
-      {/* <ClerkWithRouter/> */}
+  
       <App />
-      {/* <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl='/landing' > */}
-
-      {/* </ClerkProvider> */}
-      {/* </GoogleOAuthProvider> */}
+    
     </BrowserRouter>
   </StrictMode>
 );
