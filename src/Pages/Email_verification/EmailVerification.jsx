@@ -18,7 +18,7 @@ const EmailVerification = ({ isOpen, onClose, children})=> {
     <div className="w-full max-w-lg h-auto px-6 py-8 bg-transparent">
             <div className="flex justify-center items-center m-auto">
             <button
-          className="absolute top-48 right-1/3 text-gray-600 hover:text-black text-3xl"
+          className="absolute top-2 right-4 text-gray-600 hover:text-black text-3xl"
           onClick={onClose}
         >
           ✕

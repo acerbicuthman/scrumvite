@@ -22,7 +22,7 @@ const SuccessfulReg = ({isOpen, onClose, children}) => {
 
   </div>
   <button
-          className="absolute top-48 right-1/3 text-gray-600 hover:text-black text-3xl"
+          className="absolute top-2 right-4 text-gray-600 hover:text-black text-4xl bg-inherit"
           onClick={onClose}
         >
           ✕
