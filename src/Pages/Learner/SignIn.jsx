@@ -50,7 +50,7 @@ const SignIn = () => {
         </div>
       </div>
 
-      <div className="flex-1 md:mt-12 px-4 sm:px-8 md:px-12 mb-4 md:mb-1 xl:py-18 h-screen overflow-x-hidden xl:mb-1 lg:mb- lg:min-h-screen lg:overflow-hidden">
+      <div className="flex-1 mt-12 px-10 sm:px-8 md:px-12 mb-4 md:mb-1 xl:py-18 h-screen overflow-x-hidden xl:mb-1 lg:mb- lg:min-h-screen lg:overflow-hidden">
         <div className="w-full max-w-lg mx-auto pt-8  ">
           <h2 className="hidden md:block text-center text-xl sm:text-3xl md:text-xl font-medium tracking-tight text-gray-600 mb-4 md:mb-1 xl:text-3xl">
             Welcome Back!
@@ -118,7 +118,7 @@ const SignIn = () => {
                   autoComplete="email"
                   placeholder="Enter your Email"
                   required
-                  className="block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 "
+                  className="block w-full border rounded-md bg-white px-2 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 "
                   //   className={`block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
                   //     email && (isEmailValid ? "valid-input" : "invalid-input")
                   //   }`}
@@ -180,10 +180,10 @@ const SignIn = () => {
               <div className="text-blue-600">Forgot password</div>
             </div>
             <div className="flex justify-center py-5">
-              <div className="w-2/3 text-center">
+              <div className="w-full md:w-2/3 text-center">
                 <button
                   type="submit"
-                  className="bg-blue-800 w-full py-2 rounded-lg"
+                  className="bg-blue-800 w-full rounded-md px-2 py-3 text-white"
                 >
                   Continue
                 </button>
