@@ -50,13 +50,13 @@ const SignIn = () => {
         </div>
       </div>
 
-      <div className="flex-1 mt-12 px-14 sm:px-8 md:px-12 mb-4 md:mb-1 xl:py-18 h-screen overflow-x-hidden xl:mb-1 lg:mb- lg:min-h-screen lg:overflow-hidden">
+      <div className="flex-1 mt-12 px-12 sm:px-8 md:px-12 mb-4 md:mb-1 xl:py-18 h-screen overflow-x-hidden xl:mb-1 lg:mb- lg:min-h-screen lg:overflow-hidden bg-gradient-to-r from-blue-300 to-pink-200">
         <div className="w-full max-w-lg mx-auto pt-8  ">
           <h2 className="hidden md:block text-center text-xl sm:text-3xl md:text-xl font-medium tracking-tight text-gray-600 mb-4 md:mb-1 xl:text-3xl">
             Welcome Back!
           </h2>
           {/* <h2 className="text-center text-xl md:hidden font-medium text-gray-600 py-3">Create Account</h2> */}
-          <div className="text-center md:px-0 px-2 lg:text-lg text-2xl mb-4 md:text-lg  md:text-nowrap xl:text-base">
+          <div className="text-center md:px-0 px-2 lg:text-lg text-base mb-4 md:text-lg  md:text-nowrap xl:text-base">
             <p>
               <span className="md:hidden ">Welcome,</span> Login back in to and
               continue your learning journey
@@ -165,7 +165,7 @@ const SignIn = () => {
               </div>
             </div>
 
-            <div className="flex md:text-sm lg:text-base">
+            <div className="flex md:text-sm text-sm lg:text-base">
               <div className="flex-1">
                 <label htmlFor="remember">
                   <input
