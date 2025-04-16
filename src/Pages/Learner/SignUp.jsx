@@ -19,6 +19,8 @@ import { base_url } from "../../library/api";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcCheckmark } from "react-icons/fc";
 import ImageSlideShow from "./ImageSlideShow";
+import EmailVerification from "../Email_verification/EmailVerification";
+import SuccessfulReg from "./SuccesfulRegPage/SuccessfullRegPage";
 
 const SignUp = () => {
   const [first_name, setfirst_name] = useState("");
@@ -38,9 +40,7 @@ const SignUp = () => {
   const [checkBoxValid, setCheckBoxValid] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { selectedOption } = location.state || {};
-  const [codeMessage, setCodeMessage] = useState("");
-  const [authCodeSent, setAuthCodeSent] = useState(false);
+ 
 
   const minLength = /.{8,}/;
   const upperCase = /[A-Z]/;
@@ -146,9 +146,10 @@ const SignUp = () => {
 
   // const { openSignIn } = useClerk();
   // const { user } = useUser();
-
+ const [isModalOpen, setIsModalOpen] = useState(false)
+ const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   return (
-    <div className="flex flex-col md:flex-row  min-h-screen overflow-hidden ">
+    <div className={`flex flex-col md:flex-row  min-h-screen overflow-hidden`} >
       <div className="md:flex-1 justify-center items-center sm:p-12 hidden md:flex  ">
         <div className=" w-full  z-[-1] ">
           <ImageSlideShow />
@@ -156,8 +157,8 @@ const SignUp = () => {
       </div>
 
       <div className="flex-1 px-8 sm:px-8 md:px-12 overflow-hidden min-h-screen lg:mt-2">
-        <div className="w-full max-w-lg mx-auto mt-6 xl:h-screen pt-2 ">
-          <h2 className="hidden md:block text-center text-xl sm:text-3xl md:text-xl font-medium tracking-tight text-gray-600 mb-3 md:mb-1 xl:text-3xl">
+        <div className="w-full max-w-lg mx-auto mt-6 xl:h-screen pt-4 ">
+          <h2 className="mt-2 hidden md:block text-center text-xl sm:text-3xl md:text-xl font-medium tracking-tight text-gray-600 mb-3 md:mb-1 xl:text-3xl">
             Welcome!
           </h2>
           <h2 className="text-center text-xl md:hidden font-medium text-gray-600 py-2">
@@ -450,23 +451,24 @@ const SignUp = () => {
 
               <div>
                 <div className="text-center py-3">
-                  <Link
+                <button
+  type="button"
+  onClick={() => setIsModalOpen(true)} 
+  disabled={
+    !isPasswordValid ||
+    !isConfirmPasswordValid ||
+    !isEmailValid ||
+    !checkBoxValid
+  }
+  className={`w-full rounded-md px-4 py-3 text-white font-semibold bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed`}
+>
+  Continue
+</button>
+
+                  {/* <Link
                     to="/emailverification"
                     state={{ first_name: first_name }}
-                  >
-                    <button
-                      type="submit"
-                      disabled={
-                        !isPasswordValid ||
-                        !isConfirmPasswordValid ||
-                        !isEmailValid ||
-                        !checkBoxValid
-                      }
-                      className={`w-full rounded-md px-4 py-3 text-white font-semibold bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed`}
-                    >
-                      Continue
-                    </button>
-                  </Link>
+                  > </Link> */}
                 </div>
               </div>
             </form>
@@ -500,15 +502,37 @@ const SignUp = () => {
           <div className="text-center text-sm">
             <p>
               Already have an account?&nbsp;
-              <Link to="/signin">
-                <button href="#" className="font-semibold text-indigo-600">
+              <button
+  className="font-semibold text-indigo-600"
+  // onClick={handleSignInClick}
+>
+  Sign in
+</button>
+
+              {/* <Link to="/signin">
+                <button className="font-semibold text-indigo-600">
                   Sign in
                 </button>
-              </Link>
+              </Link> */}
             </p>
           </div>
         </div>
       </div>
+      <EmailVerification isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+         <button 
+         onClick={() => {
+          setIsModalOpen(false)
+          setIsSecondModalOpen(true)}}
+        className="bg-blue-900 text-white lg:text-sm text-xs my-8 lg:px-20 px-8 w-full py-3 rounded-lg">
+          Verify Email Address
+        </button>
+        </EmailVerification>
+        <SuccessfulReg
+isOpen={isSecondModalOpen}
+  onClose={() => setIsSecondModalOpen(false)}
+/>
+     
+     
     </div>
   );
 };

@@ -1,27 +1,37 @@
 import React from 'react'
-
 import Congrats from '../../../assets/congratulations.gif'
 
-const SuccessfulReg = () => {
+
+const SuccessfulReg = ({isOpen, onClose, children}) => {
+  if(!isOpen) return null
   return (
-    <div>
-<main className="grid min-h-full place-items-center bg-white px-2 md:px-8 py-32 sm:py-32 lg:px-8">
-  <div className="text-center">
-    <img src={Congrats} className="mt-4 h-60 md:h-48 h-48"></img>
-    <p className="my-4 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">Congratulations!</p>
-  </div>
-  <div className='md:text-center md:w-2/3 md:justify-center w-100 text-sm px-4 md:px-8 py-4 lg:px-32 xl:px-48 2xl:max-w-4xl'>
+    <div className="fixed inset-0 z-50  flex items-center justify-center bg-black bg-opacity-50  ">
+    <div className="md:w-2/5 w-full items-center justify-center rounded-xl p-2 m-10  md:m-1 overflow-hidden bg-transparent border-2 border-white ">
+          <div className='flex flex-col  m-1 justify-center items-center text-center rounded-xl bg-white '>
+    <div className="w-full max-w-lg h-auto px-10 py-8 bg-transparent">
+            <div className="flex justify-center items-center m-auto">
+    <img src={Congrats} className="mt-4 h-60 md:h-48 object-contain"></img>
+    </div>
+    <h1 className="font-semibold lg:text-2xl text-x my-4" >Congratulations!</h1>
+  
+  <div className='text-sm sm:text-xs'>
   <p>Your account has been successfully created. Welcome to Scrum Consult LMS! Start learning, growing, and achieving your goals today</p>
   </div>
   <div className='mt-6'>
-  <button type="submit" className='w-full md:justify-center rounded-md md:px-32 px-24  py-3 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-indigo-600 bg-blue-900'>Start Learning</button>
-
- 
+  <button type="submit" className='w-full md:justify-center rounded-md lg:px-32 px-4  py-3 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-indigo-600 bg-blue-900'>Start Learning</button>
 
   </div>
-
-</main>
-    </div>
+  <button
+          className="absolute top-48 right-1/3 text-gray-600 hover:text-black text-3xl"
+          onClick={onClose}
+        >
+          ✕
+        </button>
+  </div>
+</div>
+</div>
+</div>
+   
   )
 }
 

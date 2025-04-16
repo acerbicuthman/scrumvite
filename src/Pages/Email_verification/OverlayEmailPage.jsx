@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import EmailVerify from "../../assets/emailverification.png";
 
-const OverlayEmailPage = () => {
+const OverlayEmailPage = ({onClose}) => {
     const location = useLocation();
   const first_name = location.state?.first_name;
   return (
@@ -22,11 +22,13 @@ const OverlayEmailPage = () => {
         Hey <span>{first_name}</span> we just sent you an email.
       </p>
       <p className="text-sm">Just confirm your email to get started!</p>
-      <Link to="/success_email_verification">
-        <button className="bg-blue-900 text-white lg:text-sm text-xs my-8 lg:px-20 px-8 w-full py-3 rounded-lg">
+      {/* <Link to="/success_email_verification"> */}
+        <button 
+         onClick={onClose}
+        className="bg-blue-900 text-white lg:text-sm text-xs my-8 lg:px-20 px-8 w-full py-3 rounded-lg">
           Verify Email Address
         </button>
-      </Link>
+      {/* </Link> */}
       <div className="py-3">
         <button type="button" className="text-blue-700">
           Resend Email Verification Code
