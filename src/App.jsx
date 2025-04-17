@@ -35,7 +35,7 @@ const App = () => {
         <Route path="/emailverification" element={<EmailVerification />} />
         <Route path="/success_email_verification" element={<SuccessfulEmailVerification />} />
         <Route path="/expired_link_page" element={<ExpiredLink />} />
-        <Route path="/successfulReg" element={<SuccessfulReg />} />
+        <Route path="/verify" element={<SuccessfulReg />} />
         <Route path="/course-list" element={<CourseList />} />
         <Route path="/course-list/input" element={<CourseList />} />
         <Route path="/course/:id" element={<CourseDetails />} />
