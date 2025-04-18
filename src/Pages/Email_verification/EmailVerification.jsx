@@ -36,10 +36,10 @@ const EmailVerification = ({ isOpen, onClose, children})=> {
         Hey <span>{first_name}</span> we just sent you an email.
       </p>
       <p className="text-sm">Just confirm your email to get started!</p>
-      <Link to="/success_email_verification">
+      {/* <Link to="/success_email_verification">
      
         </Link>
-   
+    */}
        
         {children}
       {/* </Link> */}

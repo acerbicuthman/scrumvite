@@ -60,7 +60,7 @@ const ScrumLanding = () => {
             >
               Continue
             </button>
-            <Link to="/login">
+            <Link to="/signin">
               <button className="my-4 text-blue-600 hover:bg-blue-900 rounded-lg p-2 hover:text-white">
                 Already a member? Log in
               </button>

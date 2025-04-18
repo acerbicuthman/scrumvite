@@ -6,6 +6,7 @@ import LinkedinIcon from "../../assets/devicon_linkedin.png";
 import { base_url } from "../../library/api";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { Link } from "react-router";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -58,8 +59,7 @@ const SignIn = () => {
           {/* <h2 className="text-center text-xl md:hidden font-medium text-gray-600 py-3">Create Account</h2> */}
           <div className="text-center md:px-0 px-2 lg:text-lg text-base mb-4 md:text-lg  md:text-nowrap xl:text-base">
             <p>
-              <span className="md:hidden ">Welcome,</span> Login back in to and
-              continue your learning journey
+              <span className="md:hidden ">Welcome,</span> Log back in to continue your learning journey
             </p>
           </div>
           <div className="md:flex flex-row md:justify-center xl:gap-5 gap-5 hidden py-2 ">
@@ -177,7 +177,10 @@ const SignIn = () => {
                   Remember Me
                 </label>
               </div>
-              <div className="text-blue-600">Forgot password</div>
+              <Link to='/forgetpassword'>
+            
+              <button className="text-blue-600">Forgot password</button>
+              </Link>
             </div>
             <div className="flex justify-center py-5">
               <div className="w-full md:w-2/3 text-center">

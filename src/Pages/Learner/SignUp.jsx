@@ -156,7 +156,7 @@ const SignUp = () => {
         </div>
       </div>
 
-      <div className="flex-1 px-8 sm:px-8 md:px-12 overflow-hidden min-h-screen lg:mt-2">
+      <div className="flex-1 px-8 sm:px-8 md:px-12 overflow-hidden min-h-screen lg:mt-2 py-5">
         <div className="w-full max-w-lg mx-auto mt-6 xl:h-screen pt-4 ">
           <h2 className="mt-2 hidden md:block text-center text-xl sm:text-3xl md:text-xl font-medium tracking-tight text-gray-600 mb-3 md:mb-1 xl:text-3xl">
             Welcome!
@@ -429,7 +429,7 @@ const SignUp = () => {
                   : "No option selected"}
               </div>
 
-              <div className="text-sm flex py-2 ">
+              <div className="text-sm flex py-1 ">
                 <input
                   type="checkbox"
                   id="terms"
@@ -450,7 +450,7 @@ const SignUp = () => {
               </div>
 
               <div>
-                <div className="text-center py-3">
+                <div className="text-center py-2">
                 <button
   type="submit"
   state={{ first_name: first_name }}
@@ -500,38 +500,30 @@ const SignUp = () => {
             </div>
           </div>
 
-          <div className="text-center text-sm">
+          <div className="text-center text-sm pb-4 ">
             <p>
               Already have an account?&nbsp;
-              <button
-  className="font-semibold text-indigo-600"
-  // onClick={handleSignInClick}
->
-  Sign in
-</button>
 
-              {/* <Link to="/signin">
+              <Link to="/signin">
                 <button className="font-semibold text-indigo-600">
                   Sign in
                 </button>
-              </Link> */}
+              </Link>
             </p>
           </div>
         </div>
       </div>
       <EmailVerification isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-         <button 
+        <h2 className="bg-blue-800 text-white rounded-lg my-3 p-2">Check your Email for the Verifiation Link</h2>
+         {/* <button 
          onClick={() => {
           setIsModalOpen(false)
           setIsSecondModalOpen(true)}}
         className="bg-blue-900 text-white lg:text-sm text-xs my-8 lg:px-20 px-8 w-full py-3 rounded-lg">
           Verify Email Address
-        </button>
+        </button> */}
         </EmailVerification>
-        {/* <SuccessfulReg
-isOpen={isSecondModalOpen}
-  onClose={() => setIsSecondModalOpen(false)}
-/> */}
+      
      
      
     </div>
