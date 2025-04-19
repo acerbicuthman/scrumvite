@@ -1,5 +1,7 @@
 import React from "react";
-import { Route, Routes, useMatch } from "react-router-dom";
+import { Route, Routes, useMatch, Navigate, Outlet } from "react-router-dom";
+import { AuthContext, AuthProvider } from "./context/Authcontext";
+
 import SignUp from "./Pages/Learner/SignUp";
 import SuccessfulReg from "./Pages/Learner/SuccesfulRegPage/SuccessfullRegPage";
 import Landing from "./Pages/Landing/Landing";
@@ -19,43 +21,70 @@ import SuccessfulEmailVerification from "./Pages/Email_verification/SuccessfulEm
 import ExpiredLink from "./Pages/Email_verification/ExpiredLink";
 import SignIn from "./Pages/Learner/SignIn";
 import Footer from "./Pages/Learner/Footer";
-import ForgetPassword from "./Pages/Learner/ForgetPassword";
+import ForgetPassword from "./Pages/Learner/password/ForgetPassword";
 import NotFound from "./Pages/NotFound";
-import ResetPassword from "./Pages/Learner/ResetPassword";
+import ResetPassword from "./Pages/Learner/password/ResetPassword";
+import CheckYourEmail from "./Pages/Learner/CheckYourEmail";
+import StudentDashboard from "./Pages/Learner/StudentDashboard";
+
+// Protected Route
+const ProtectedRoute = ({ children }) => {
+  const { user } = React.useContext(AuthContext);
+  return user ? children : <Navigate to="/signin" />;
+};
+
+// Layout to conditionally render Navbar/Footer
+const Layout = () => {
+  const isEducatorRoute = useMatch("/educator/*");
+  return (
+    <>
+      {!isEducatorRoute && <Navbar />}
+      <Outlet />
+      <Footer />
+    </>
+  );
+};
 
 const App = () => {
-  const isEducatorRoute = useMatch("/educator/*");
-
   return (
-    <div className="text-default h-screen">
-      {!isEducatorRoute && <Navbar />}
+    <div className="text-default min-h-screen">
+      <AuthProvider>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<ScrumLanding />} />
+            <Route path="/landing" element={<Landing />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/success_email_verification" element={<SuccessfulEmailVerification />} />
+            <Route path="/check-your-email" element={<CheckYourEmail />} />
+            <Route path="/expired_link_page" element={<ExpiredLink />} />
+            <Route path="/verify" element={<SuccessfulReg />} />
+            <Route path="/forgetpassword" element={<ForgetPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/course-list" element={<CourseList />} />
+            <Route path="/course-list/input" element={<CourseList />} />
+            <Route path="/course/:id" element={<CourseDetails />} />
+            <Route path="/myenrollment" element={<MyEnrollment />} />
+            <Route path="/loading/:path" element={<Loading />} />
+            <Route
+              path="/student-dashboard"
+              element={
+                <ProtectedRoute>
+                  <StudentDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Route>
 
-      <Routes>
-        <Route path="/" element={<ScrumLanding />} />
-        <Route path="/landing" element={<Landing />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/emailverification" element={<EmailVerification />} />
-        <Route path="/success_email_verification" element={<SuccessfulEmailVerification />} />
-        <Route path="/expired_link_page" element={<ExpiredLink />} />
-        <Route path="/verify" element={<SuccessfulReg />} />
-        <Route path="/forgetpassword" element={<ForgetPassword/>}/>
-        <Route path='/reset-password' element={<ResetPassword/>}/>
-        <Route path="/course-list" element={<CourseList />} />
-        <Route path="/course-list/input" element={<CourseList />} />
-        <Route path="/course/:id" element={<CourseDetails />} />
-        <Route path="/myenrollment" element={<MyEnrollment />} />
-        <Route path="/loading/:path" element={<Loading />} />
-        <Route path="*" element={<NotFound/>}/>
-        <Route path="/educator" element={<Educator />}>
-          <Route index element={<Dashboard />} />
-          <Route path="add-course" element={<AddCourse />} />
-          <Route path="my-courses" element={<MyCourses />} />
-          <Route path="students-enrolled" element={<StudentsEnrolled />} />
-        </Route>
-      </Routes>
-
-      <Footer />
+          <Route path="/educator" element={<Educator />}>
+            <Route index element={<Dashboard />} />
+            <Route path="add-course" element={<AddCourse />} />
+            <Route path="my-courses" element={<MyCourses />} />
+            <Route path="students-enrolled" element={<StudentsEnrolled />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </div>
   );
 };

@@ -44,9 +44,10 @@ const SignIn = () => {
     }
   };
   return (
-    <div className="flex flex-col md:flex-row  sm:p-6 md:overflow-hidden min-h-screen overflow-x-hidden md:-mb-32 ">
-      <div className="md:flex-1 h-full justify-center items-center sm:p-12 hidden md:flex  ">
-        <div className="  w-full z-[-1] mt-8 ">
+    <div className="flex flex-col md:flex-row min-h-screen w-full">
+    {/* Left - Image SlideShow */}
+    <div className="hidden md:flex w-1/2 items-center justify-center bg-gray-100">
+      <div className="w-full h-full min-h-screen overflow-hidden">
           <ImageSlideShow />
         </div>
       </div>

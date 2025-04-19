@@ -21,11 +21,11 @@ const ScrumLanding = () => {
   //   const {user} = useUser()
 
   return (
-    <div className="flex flex-col lg:flex-row mt-12 p-4 lg:p-">
-      <div className="flex-1 bg-gray-200 p-8 lg:p-12 flex justify-center items-center">
-        <img src={welcomeImg} alt="Welcome" className="max-w-full h-auto" />
+    <div className="flex flex-col lg:flex-row mt-12  lg:p-">
+      <div className="flex-1 hidden md:flex bg-gray-200 justify-center items-center">
+        <img src={welcomeImg} alt="Welcome" className=" h-auto" />
       </div>
-      <div className="flex-1 p-12 lg:p-6 flex flex-col justify-center text-center">
+      <div className="flex-1 p-20 mx-20 lg:p-6 flex flex-col justify-center text-center">
         <h1 className="text-3xl lg:text-3xl font-semibold text-gray-800 mb-4">
           Create Your Account on Scrum Consult
         </h1>
@@ -36,23 +36,39 @@ const ScrumLanding = () => {
         <div className="w-full max-w-md mx-auto">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="flex flex-col">
-              <label
-                htmlFor="dropdown"
-                className="text-sm font-medium text-gray-700"
-              >
-                Choose Your Account Type
-              </label>
-              <select
-                id="dropdown"
-                value={account_type}
-                onChange={handleChange}
-                name="accountType"
-                className="w-full mt-2 p-3 border-2 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              >
-                <option value="">--Please choose an option--</option>
-                <option value="learner">Learner</option>
-                <option value="educator">Educator</option>
-              </select>
+            <label
+    htmlFor="dropdown"
+    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+  >
+    Select Account Type
+  </label>
+  <select
+    id="dropdown"
+    name="accountType"
+    value={account_type}
+    onChange={handleChange}
+    className="w-full appearance-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-3 pr-10 border-2 border-gray-300 dark:border-gray-600 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
+  >
+    <option value="" disabled hidden>
+      -- Please choose an option --
+    </option>
+    <option value="learner">👩‍🎓 Learner</option>
+    <option value="educator">👨‍🏫 Educator</option>
+  </select>
+  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400 dark:text-gray-500">
+    <svg
+      className="h-5 w-5"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fillRule="evenodd"
+        d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.23 8.27a.75.75 0 01.02-1.06z"
+        clipRule="evenodd"
+      />
+    </svg>
+  </div>
             </div>
             <button
               type="submit"
@@ -60,12 +76,13 @@ const ScrumLanding = () => {
             >
               Continue
             </button>
-            <Link to="/signin">
+           
+          </form>
+          <Link to="/signin">
               <button className="my-4 text-blue-600 hover:bg-blue-900 rounded-lg p-2 hover:text-white">
                 Already a member? Log in
               </button>
             </Link>
-          </form>
           {/* {user ? (
         <header className="flex justify-center p-4 border-b">
           <SignedIn>

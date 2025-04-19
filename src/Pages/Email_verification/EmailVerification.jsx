@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import EmailVerify from '../../assets/emailverification.png'
 import SuccessfulReg from '../Learner/SuccesfulRegPage/SuccessfullRegPage';
 
 
 const EmailVerification = ({ isOpen, onClose, children})=> {
-  if (!isOpen) return null
+  if (!isOpen)
+  return null
+  const navigate = useNavigate()
   const location = useLocation();
   const first_name = location.state?.first_name;
 
 
-
+ 
+  
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50  ">
     <div className="md:w-2/5 w-full items-center justify-center rounded-xl p-2 m-10 md:m-1 overflow-hidden bg-transparent border-2 border-white">
@@ -44,6 +47,21 @@ const EmailVerification = ({ isOpen, onClose, children})=> {
         {children}
       {/* </Link> */}
     
+      {/* <div className="flex flex-col gap-3">
+      <button
+        onClick={() => navigate("/check-your-email", { state: { email } })}
+        className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-500 text-sm"
+      >
+        Continue
+      </button>
+
+      <button
+        onClick={() => window.open("https://mail.google.com", "_blank")}
+        className="text-blue-600 text-sm hover:underline"
+      >
+        Open Gmail
+      </button>
+    </div> */}
       <div className="py-3">
         <button type="button" className="text-blue-700">
           Resend Email Verification Code
