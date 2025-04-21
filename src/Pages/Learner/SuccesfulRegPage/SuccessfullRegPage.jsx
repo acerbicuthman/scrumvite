@@ -9,13 +9,13 @@ const SuccessfulReg = () => {
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const token = new URLSearchParams(location.search).get('token');
+  const verificationKey = new URLSearchParams(location.search).get('key');
 
   useEffect(() => {
     const verifyEmail = async () => {
       setIsLoading(true);
       try {
-        await axios.post(`${base_url}api/auth/registration/verify-email/`, { key: token });
+        await axios.post(`${base_url}api/auth/registration/verify-email/`, { key: verificationKey });
         setMessage('Your Email has been successfully verified.');
         // Optionally redirect after a few seconds
         setTimeout(() => {
@@ -34,12 +34,12 @@ const SuccessfulReg = () => {
       
     };
 
-    if (token) {
+    if (verificationKey) {
       verifyEmail();
     } else {
       setMessage('No verification token provided.');
     }
-  }, [token, navigate]);
+  }, [verificationKey, navigate]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-black bg-opacity-50 px-4">
