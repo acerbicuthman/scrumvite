@@ -22,10 +22,10 @@ const ScrumLanding = () => {
 
   return (
     <div className="flex flex-col lg:flex-row mt-12  lg:p-">
-      <div className="flex-1 hidden md:flex bg-gray-200 justify-center items-center">
+      <div className="flex-1 px-12 py-10 hidden md:flex bg-gray-200 justify-center items-center">
         <img src={welcomeImg} alt="Welcome" className=" h-auto" />
       </div>
-      <div className="flex-1 p-20 mx-20 lg:p-6 flex flex-col justify-center text-center">
+      <div className="flex-1  mx-12 my-6 lg:p-6 flex flex-col justify-center text-center">
         <h1 className="text-3xl lg:text-3xl font-semibold text-gray-800 mb-4">
           Create Your Account on Scrum Consult
         </h1>

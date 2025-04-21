@@ -7,21 +7,25 @@ import { base_url } from "../../library/api";
 const CheckYourEmail = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const email = location.state?.email || "your email address";
+  const { email, first_name } = location.state || {};
 
   const handleResend = async (e) => {
-    // Ideally: Make an API call to resend verification
-    e.preventDefault()
-    try{
-
-    
-    const req = await axios.post(`${base_url}api/auth/registration/resend-email/`, {email})
-    console.log("Response", req.email)
-    alert("Verification email resent!");}
-    catch(error){
-      console.error("Error", error.req.email)
+    e.preventDefault();
+    if (!email) {
+      alert("Email not found. Please return and try again.");
+      return;
+    }
+  
+    try {
+      const req = await axios.post(`${base_url}api/auth/registration/resend-email/`, { email });
+      console.log("Response", req.data);
+      alert("Verification email resent!");
+    } catch (error) {
+      console.error("Error:", error?.response?.data || error.message);
+      alert("Failed to resend verification email. Please try again.");
     }
   };
+  
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50 px-4">
