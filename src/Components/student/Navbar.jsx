@@ -72,7 +72,41 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden lg:flex lg:gap-x-12">
+          {user !== null && user !== undefined ?
+          (<div className="hidden lg:flex lg:gap-x-12">
+            <Link
+              to="/"
+              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+            >
+              Home
+            </Link>
+            <Link
+      to="/student-dashboard"
+      className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+    >
+      Dashboard
+    </Link>
+            <a
+              href="#courses"
+              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+            >
+              My Courses
+            </a>
+            <a
+              href="#become-trainer"
+              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+            >
+              Reports
+            </a>
+            <a
+              href="#contact"
+              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+            >
+             Settings
+            </a>
+          </div>)
+          :
+         ( <div className="hidden lg:flex lg:gap-x-12">
             <Link
               to="/"
               className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
@@ -103,23 +137,18 @@ const Navbar = () => {
             >
               Contact
             </a>
-          </div>
-          
+          </div>)
+}
 
           {/* Login Button */}
           
           {user !== null && user !== undefined  ? (
   <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center space-x-4">
-    <Link
-      to="/student-dashboard"
-      className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
-    >
-      Dashboard
-    </Link>
-    <Link 
+  
+    {/* <Link 
      className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
     Change Password
-    </Link>
+    </Link> */}
     <button
       onClick={logout}
       className="text-sm font-semibold text-white bg-red-500 px-3.5 py-2 rounded-md hover:bg-red-400"
@@ -138,6 +167,9 @@ const Navbar = () => {
   </div>
 )}
 
+
+
+
           
           <div className="hidden lg:block ml-6">
             {/* {user ? ( */}
@@ -154,11 +186,11 @@ const Navbar = () => {
               <button
               // onClick={openSignIn}
               >
-                <img
+                {/* <img
                   src={google}
                   alt="Sign in with Google"
                   className="w-10 h-10 object-contain"
-                />
+                /> */}
               </button>
               {/* </SignInButton>
           </SignedOut> */}
@@ -204,6 +236,49 @@ const Navbar = () => {
                 </button>
               </div>
               <div className="mt-6 flow-root">
+              {user !== null && user !== undefined ?
+              (
+                <div className="-my-6 divide-y divide-gray-500/10">
+                  <div className="space-y-2 py-6">
+                    <Link
+                      to="/student-dashboard"
+                      onClick={toggleMenu}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                    >
+                      Home
+                    </Link>
+                    <a
+                      href="#about"
+                      onClick={toggleMenu}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                    >
+                      Dashboard
+                    </a>
+                    <a
+                      href="#courses"
+                      onClick={toggleMenu}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                    >
+                      My Courses
+                    </a>
+                    <a
+                      href="#become-trainer"
+                      onClick={toggleMenu}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                    >
+                      Schedule
+                    </a>
+                    <a
+                      href="#contact"
+                      onClick={toggleMenu}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                    >
+                      Settings
+                    </a>
+                  </div>
+                  </div>)
+                  :
+             ( 
                 <div className="-my-6 divide-y divide-gray-500/10">
                   <div className="space-y-2 py-6">
                     <Link
@@ -242,7 +317,11 @@ const Navbar = () => {
                       Contact
                     </a>
                   </div>
+                  </div>
+                  )
+}
                   
+              
                   {user  !== null && user !== undefined  ?(
                   <div className="py-6">
                   <Link
@@ -283,11 +362,11 @@ const Navbar = () => {
                       <button
                       // onClick={openSignIn}
                       >
-                        <img
+                        {/* <img
                           src={google}
                           alt="Sign in with Google"
                           className="w-10 h-10 object-contain"
-                        />
+                        /> */}
                       </button>
                       {/* </SignInButton>
           </SignedOut> */}
@@ -297,7 +376,7 @@ const Navbar = () => {
                 </div>
               </div>
             </div>
-          </div>
+          
         )}
       </header>
 

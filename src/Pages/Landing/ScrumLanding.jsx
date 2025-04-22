@@ -97,11 +97,11 @@ const ScrumLanding = () => {
             <button
             // onClick={openSignIn}
             >
-              <img
+              {/* <img
                 src={google}
                 alt="Sign in with Google"
                 className="w-10 h-10 object-contain"
-              />
+              /> */}
             </button>
             {/* )} */}
             {/* </SignInButton>

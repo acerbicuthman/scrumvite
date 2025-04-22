@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import './signin.css'
+import image from '../../assets/Frame 1984078024.png'
 
 const SignIn = () => {
   const { login, isLoading, loggedIn } = useContext(AuthContext);
@@ -78,7 +79,8 @@ const SignIn = () => {
       {/* Left - Image SlideShow */}
       <div className="hidden md:flex w-1/2 items-center justify-center bg-gray-100">
         <div className="w-full h-full min-h-screen overflow-hidden">
-          <ImageSlideShow />
+          {/* <ImageSlideShow /> */}
+          <img src={image} alt="" />
         </div>
       </div>
 
@@ -204,11 +206,11 @@ const SignIn = () => {
               </Link>
             </div>
 
-            <div className="flex justify-center py-5">
-              <div className="w-full md:w-2/3 text-center">
+            <div className="flex justify-center py-7">
+              <div className="w-full md: text-center">
                 <button
                   type="submit"
-                  className="bg-blue-800 w-full rounded-md px-2 py-3 text-white"
+                  className="bg-blue-900 w-full rounded-md p py-3 text-white"
                 >
                   Continue
                 </button>
