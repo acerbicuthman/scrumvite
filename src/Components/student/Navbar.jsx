@@ -1,12 +1,17 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 // import {  SignedIn, SignedOut, SignInButton,useClerk, UserButton, useUser } from '@clerk/clerk-react'
 import google from "../../assets/googleIcon.png";
-import { FaHandPointLeft } from "react-icons/fa";
+import { AuthContext } from "../../context/Authcontext";
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [navbarHeight, setNavbarHeight] = useState(0);
+  const { user, logout, isLoading } = useContext(AuthContext);
+
+  console.log("user in Navbar:", user); 
+  
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -21,7 +26,7 @@ const Navbar = () => {
   }, []);
   //   const {openSignIn} = useClerk()
   //   const {user} = useUser()
-
+  if (isLoading) return null; 
   return (
     <div className="from-cyan-100/70 via-blue-200/60 to-purple-300/80 mb-4">
       <header className="fixed w-full bg-white p-2 inset-x-0 top-0 z-50 shadow-md">
@@ -98,25 +103,42 @@ const Navbar = () => {
             >
               Contact
             </a>
-            {/* <Link to="/emailverification" className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
-              <div className="flex">
-                Verify Email
-                <div className="mx-5">
-                  <FaHandPointLeft />
-                </div>
-              </div>
-            </Link> */}
           </div>
+          
 
           {/* Login Button */}
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <Link
-              to="/signin"
-              className="text-sm font-semibold text-white bg-indigo-600 px-3.5 py-2 rounded-md hover:bg-indigo-500"
-            >
-              Log in
-            </Link>
-          </div>
+          
+          {user !== null && user !== undefined  ? (
+  <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center space-x-4">
+    <Link
+      to="/student-dashboard"
+      className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+    >
+      Dashboard
+    </Link>
+    <Link 
+     className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
+    Change Password
+    </Link>
+    <button
+      onClick={logout}
+      className="text-sm font-semibold text-white bg-red-500 px-3.5 py-2 rounded-md hover:bg-red-400"
+    >
+      Log Out
+    </button>
+  </div>
+) : (
+  <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+    <Link
+      to="/signin"
+      className="text-sm font-semibold text-white bg-indigo-600 px-3.5 py-2 rounded-md hover:bg-indigo-500"
+    >
+      Log in
+    </Link>
+  </div>
+)}
+
+          
           <div className="hidden lg:block ml-6">
             {/* {user ? ( */}
             <header className="flex justify-center  border-b">
@@ -219,20 +241,23 @@ const Navbar = () => {
                     >
                       Contact
                     </a>
-                    {/* <Link
-                      to="/emailverification"
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                      onClick={toggleMenu}
-                    >
-                      <div className="flex">
-                        Verify Email
-                        <div className="mx-5">
-                          <FaHandPointLeft />
-                        </div>
-                      </div>
-                    </Link> */}
                   </div>
+                  
+                  {user  !== null && user !== undefined  ?(
                   <div className="py-6">
+                  <Link
+                    to="/signin"
+                    onClick={logout}
+                    className="-mx-3 block rounded-l px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
+                  >
+                    <button className="p-2 bg-red-700 text-white">
+                    Log Out
+                    </button>
+                  
+                  </Link> 
+                  </div>)
+                  :
+                 ( <div className="py-6">
                     <Link
                       to="/signin"
                       onClick={toggleMenu}
@@ -240,8 +265,10 @@ const Navbar = () => {
                     >
                       Log in
                     </Link>
-                  </div>
+                  </div>)
+}
                   <div>
+                
                     {/* {user ? ( */}
                     <header className="flex justify-center p-4 border-b">
                       {/* <SignedIn>

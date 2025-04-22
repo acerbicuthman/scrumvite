@@ -29,7 +29,10 @@ import StudentDashboard from "./Pages/Learner/StudentDashboard";
 
 // Protected Route
 const ProtectedRoute = ({ children }) => {
-  const { user } = React.useContext(AuthContext);
+  const { user, isLoading } = React.useContext(AuthContext);
+  if (isLoading) {
+    return <div>Loading...</div> ;
+  }
   return user ? children : <Navigate to="/signin" />;
 };
 
@@ -71,7 +74,7 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <StudentDashboard />
-                </ProtectedRoute>
+                 </ProtectedRoute>
               }
             />
             <Route path="*" element={<NotFound />} />

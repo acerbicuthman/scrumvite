@@ -72,7 +72,7 @@ const ScrumLanding = () => {
             </div>
             <button
               type="submit"
-              className="w-full py-3 mt-6 bg-indigo-900 text-white text-lg font-medium rounded-lg hover:bg-indigo-700 transition duration-300"
+              className="w-full py-3 mt-6 bg-blue-900 text-white text-lg font-medium rounded-lg hover:bg-blue-700 transition duration-300"
             >
               Continue
             </button>

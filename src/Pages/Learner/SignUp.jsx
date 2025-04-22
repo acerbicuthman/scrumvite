@@ -20,6 +20,9 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcCheckmark } from "react-icons/fc";
 import ImageSlideShow from "./ImageSlideShow";
 import EmailVerification from "../Email_verification/EmailVerification";
+import ClipLoader from "react-spinners/ClipLoader";
+import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+import LinkedInLogin from "../Educator/SocialMediaLogIn/Linkedin";
 import SuccessfulReg from "./SuccesfulRegPage/SuccessfullRegPage";
 
 const SignUp = () => {
@@ -40,6 +43,8 @@ const SignUp = () => {
   const [checkBoxValid, setCheckBoxValid] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const [localLoading, setLocalLoading] = useState(false);
+  const [userData, setUserData] = useState(null)
  
 
   const minLength = /.{8,}/;
@@ -100,6 +105,7 @@ const SignUp = () => {
 
   const handleAuthCodeChange = async (e) => {
     e.preventDefault();
+    setLocalLoading(true)
 
     const data = {
       account_type,
@@ -134,7 +140,12 @@ const SignUp = () => {
         // Something else went wrong
         console.error("Error message:", error.message);
       }
+    }finally {
+      setLocalLoading(false); // 👈 THIS ENSURES LOADER STOPS
     }
+    localStorage.setItem('registered_email', email);
+    localStorage.setItem('registered_password', password1);
+
     setfirst_name("");
     setlast_name("");
     setEmail("");
@@ -158,6 +169,49 @@ const SignUp = () => {
   // const { user } = useUser();
  const [isModalOpen, setIsModalOpen] = useState(false)
  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+
+const handleSuccess = async (response) => {
+  const {access_token, code, id_token } = response
+  const login = useGoogleLogin({
+    onSuccess: handleSuccess,
+    onError: handleFailure,
+  });
+
+  const data = {
+    access_token,
+    code,
+    id_token
+  };
+  try{
+    const backendResponse = await axios.fetch(`${base_url}api/auth/google`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    if (backendResponse.status === 200){
+      setUserData(backendResponse.data)
+    } else {
+      console.log("backend authentication failed")
+    }
+  } catch (error){
+    console.error("Error in the Backend", error)
+  }
+}
+const handleFailure = (error) => {
+  console.error("Google Sign-In Error", error)
+}
+
+
+
+ if (localLoading){
+  return (
+    <div className="spinner-container">
+<ClipLoader color="#00008B" size={100} />
+</div>
+
+  )
+ }
+
   return (
 <div className="flex flex-col md:flex-row min-h-screen w-full">
 {/* Left - Image SlideShow */}
@@ -166,17 +220,14 @@ const SignUp = () => {
       <ImageSlideShow />
     </div>
   </div>
-  <div className="w-full px-4 sm:px-6 md:px-4 lg:px-4 py-10 ">
-    <div className="w-full max-w-md mx-auto mt-6 overflow-y-auto">
-      <h2 className="mt-2 hidden md:block text-center text-xl sm:text-3xl md:text-xl font-medium tracking-tight text-gray-600 mb-3 md:mb-1 xl:text-3xl">
-        Welcome!
-      </h2>
-      <h2 className="text-center text-xl md:hidden font-medium text-gray-600 py-2">
+  <div className="w-full px-2 sm:px-6 py-10 ">
+    <div className="w-full max-w-md mx-auto mt-10 overflow-y-auto">
+      <h2 className="text-center md:text-left text-4xl md font-semibold text-gray-800 p-2">
         Create Account
       </h2>
-      <div className="text-center md:px-0 px-2 lg:text-base text-sm mb-4 md:text-xs xl:text-base">
+      <div className="text-center  text-sm font-medium mb-4  ">
         <p>
-          <span className="md:hidden">Welcome,</span> Create an account and begin
+         Welcome, Create an account and begin
           your learning Journey
         </p>
       </div>
@@ -184,7 +235,7 @@ const SignUp = () => {
         <div>
           <label
             htmlFor="first_name"
-            className="text-sm sm:text-base font-medium text-gray-600"
+            className="text-base sm:text-base font-medium text-gray-600"
           >
             First Name
           </label>
@@ -193,14 +244,14 @@ const SignUp = () => {
             value={first_name}
             onChange={(e) => setfirst_name(e.target.value)}
             placeholder="Enter First Name"
-            className="block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-600 outline-1 outline-offset-1 outline-black-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+            className="block w-full border rounded-md mt-2  bg-white px-3 py-2 text-sm text-gray-600 outline-1 outline-offset-1 outline-black-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
           />
         </div>
         {/* Other form fields with similar fixes */}
         <div>
               <label
                   htmlFor="last_name"
-                  className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-900"
+                  className="text-base sm:text-base font-medium text-gray-600"
                 >
                   Last Name
                 </label>
@@ -209,14 +260,13 @@ const SignUp = () => {
                   value={last_name}
                   onChange={(e) => setlast_name(e.target.value)}
                   placeholder="Enter Last Name"
-                  className="block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                  className="block w-full border mt-2  rounded-md bg-white px-3 py-2 text-sm text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                 />
               </div>
 
               <div>
                 <label
-                  htmlFor="email"
-                  className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-900"
+                  htmlFor="text-base sm:text-base font-medium text-gray-600"
                 >
                   Email address
                 </label>
@@ -230,7 +280,7 @@ const SignUp = () => {
                     autoComplete="email"
                     placeholder="Enter your Email"
                     required
-                    className={`block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
+                    className={`block w-full mt-2  border rounded-md bg-white px-3 py-2 text-sm text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
                       email && (isEmailValid ? "valid-input" : "invalid-input")
                     }`}
                   />
@@ -244,7 +294,7 @@ const SignUp = () => {
         <div>
           <label
             htmlFor="password1"
-            className="text-sm sm:text-base font-medium text-gray-900"
+            className="text-base sm:text-base font-medium text-gray-600"
           >
             Create Password
           </label>
@@ -257,7 +307,7 @@ const SignUp = () => {
               onChange={handlePasswordChange}
               placeholder="Enter Password"
               required
-              className={`block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
+              className={`block w-full border mt-2  rounded-md bg-white px-3 py-2 text-sm text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
                 isPasswordTouched && password1 && !isPasswordValid
                   ? "invalid-input"
                   : ""
@@ -296,7 +346,7 @@ const SignUp = () => {
         <div>
                  <label
                   htmlFor="password2"
-                  className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-900"
+                  className="text-base sm:text-base font-medium text-gray-600"
                 >
                   Confirm Password
                 </label>
@@ -309,7 +359,7 @@ const SignUp = () => {
                     onChange={handleConfirmPasswordChange}
                     placeholder="Confirm Password"
                     required
-                    className={`block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                    className={`block w-full border mt-2 rounded-md bg-white px-3 py-2 text-sm text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                 ${
                   isConfirmPasswordTouched &&
                   password2 &&
@@ -335,16 +385,18 @@ const SignUp = () => {
                   )}
               </div>
               {/* Account Type (pre-filled and non-editable) */}
+              <div>
               <label
                 htmlFor="account_type"
-                className="text-sm font-medium text-gray-700"
+                className="text-base sm:text-base font-medium text-gray-600"
               >
                 You Selected:
               </label>
-              <div className="mt-2 p-1 border-2 border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700">
+              <div className="mt-2 py-2 px-1 border-2 text-sm  border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700">
                 {account_type
                   ? account_type.charAt(0).toUpperCase() + account_type.slice(1)
                   : "No option selected"}
+              </div>
               </div>
 
               <div className="text-sm flex py-1 ">
@@ -379,28 +431,76 @@ const SignUp = () => {
               !isEmailValid ||
               !checkBoxValid
             }
-            className="w-full rounded-md px-4 py-3 text-white font-semibold bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full rounded-md px-4 py-3 text-white font-semibold bg-blue-900 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Continue
           </button>
         </div>
       </form>
+      <div className="flex items-center my-2" >
+      <div className="flex-grow "><hr className="border-t-2 border-black ml-4 border-opacity-30" /></div>
+      <div className="mx-1">OR</div>
+      <div className="flex-grow"><hr className="border-t-2 border-black mr-4 border-opacity-30"/></div>
     </div>
-    <div className="flex flex-row my-3 gap-5 justify-center md:hidden ">
-             <div className="mt-1 rounded-full border-2 border-black">
+    <div className="gap-4 justify-center items-center my-6 md:flex hidden">
+    
+    <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+  <div className="App flex justify-center items-center ">
+    <div className="text-center my-2 rounded-lg">
+      <GoogleLogin
+        onSuccess={handleSuccess}
+        onError={handleFailure}
+      />
+    
+    </div>
+        {userData && (
+          <div>
+            <h2>Welcome {userData.userName}</h2>
+            <p>User ID: {userData.userId}</p>
+          </div>
+        )}
+      </div>
+    </GoogleOAuthProvider>
+    <div className="App flex justify-center items-center ">
+    <div className="text-center my-2 rounded-lg">
+    
+      <LinkedInLogin label="Sign in with LinkedIn"/>
+          
+  
+   
+      </div>
+    </div>
+    </div>
+    </div>
+   
+    <div className="md:hidden flex-row my-3 gap-5 justify-center flex">
             
-               <button className="flex ">
-                 <img src={google} alt="Sign in with Google" className=" " />
-               
-               </button>
+            
+             <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
              
-             </div>
-             <div className="mt-1 rounded-full border-2 border-black">
-               <img className="p-3" src={LinkedinIcon} alt="" />
-             </div>
+        <button
+          onClick={() => login()}
+          className=" rounded-full hover:bg-gray-100 transition"
+        >
+          <img
+            src={google}
+            alt="Google"
+            className="w-12 h-12 mr-2 border-2 rounded-full border-black"
+          />
+        </button>
+   
+    </GoogleOAuthProvider>
+             
+          
+  <div className="md:hidden flex rounded-full hover:bg-gray-100 transition border-2 border-black ">
+             
+    <LinkedInLogin />
+        
+    </div>
            </div>
+        
 
-           <div className="text-center text-sm pb-4 ">
+           <div className="text-center text-base pb-4 ">
              <p>
               Already have an account?&nbsp;
 

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Congrats from '../../../assets/congratulations.gif';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { base_url } from '../../../library/api';
+import { AuthContext } from '../../../context/Authcontext';
 
 const SuccessfulReg = () => {
   const [message, setMessage] = useState('');
@@ -10,36 +11,76 @@ const SuccessfulReg = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const verificationKey = new URLSearchParams(location.search).get('key');
+  const { login} = useContext(AuthContext)
 
+  const handleAutoLogin = async () => {
+    const email = localStorage.getItem("registered_email");
+    const password = localStorage.getItem("registered_password");
+  
+    if (!email || !password) {
+      setMessage("Verification succeeded, but login credentials were not found.");
+      return;
+    }
+  
+    try {
+      const loginRes = await axios.post(`${base_url}api/auth/login/`, {
+        email,
+        password,
+      });
+  
+      const { token: accessToken, refresh: refreshToken, user } = loginRes.data;
+
+      await login(accessToken, refreshToken, user);
+      
+      console.log(user)
+      localStorage.removeItem("registered_email");
+      localStorage.removeItem("registered_password");
+  
+      setMessage("Email verified. Logging you in...");
+      
+      console.log("Login success. Redirecting in 3 seconds...");
+        console.log("Redirecting now.");
+        navigate("/student-dashboard");
+        console.log("Working now")
+      
+    } catch (loginError) {
+      console.error("Auto-login failed:", loginError.response?.data || loginError.message);
+      setMessage("Email is verified, but login failed. Please login manually.");
+    }
+  };
+  
+
+ 
   useEffect(() => {
     const verifyEmail = async () => {
       setIsLoading(true);
       try {
-        await axios.post(`${base_url}api/auth/registration/verify-email/`, { key: verificationKey });
-        setMessage('Your Email has been successfully verified.');
-        // Optionally redirect after a few seconds
-        setTimeout(() => {
-          navigate('/student-dashboard');
-        }, 3000);
+        await axios.post(`${base_url}api/auth/registration/verify-email/`, {
+          key: verificationKey,
+        });
+        console.log("Verification key:", verificationKey);
+        setMessage("Your Email has been successfully verified.");
+        await handleAutoLogin(); 
       } catch (err) {
-        console.error('Verification failed:', err);
+        console.error("Verification failed:", err);
         if (err.response?.status === 400) {
-          setMessage('Verification link is invalid or expired.');
+          setMessage("Verification link is invalid or expired.");
         } else {
-          setMessage('An error occurred during verification. Please try again later.');
+          console.log("An error occurred during verification. Please try again later.", err);
         }
       } finally {
         setIsLoading(false);
       }
-      
     };
 
     if (verificationKey) {
       verifyEmail();
     } else {
-      setMessage('No verification token provided.');
+      setMessage("No verification token provided.");
     }
   }, [verificationKey, navigate]);
+
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-black bg-opacity-50 px-4">

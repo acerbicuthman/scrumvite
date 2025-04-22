@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
+import { AuthContext } from '../../context/Authcontext';
 import Carousel from '../Learner/Carousel';
 
 const Landing = () => {
   const [isOpen, setIsOpen] = useState(false);
+  // const {login, logout, }
+  const [loggedIn, setLoggedIn] = useState(false); // Replace this with real auth check
+
 
 
 
   return (
 <div className='from-cyan-100/70 via-blue-200/60 to-purple-300/80'>
       {/* Hero Section */}
+        {/* {!loggedIn ? ( */}
       <div className="relative isolate px-6 pt-14 lg:px-8 bg-gradient-to-b">
         <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56 text-center">
           <h1 className="text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">Empower Your Learning Journey</h1>

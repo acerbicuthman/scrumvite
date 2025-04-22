@@ -5,7 +5,7 @@ import Variant3 from "../../assets/Property 1=Variant3.png";
 import Variant4 from "../../assets/Frame 1984078024.png";
 
 const ImageSlideShow = () => {
-  const images = [Variant1, Variant2, Variant3, Variant4];
+  const images = [Variant1, Variant2, Variant3];
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {

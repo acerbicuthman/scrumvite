@@ -22,7 +22,7 @@ const ResetPassword = () => {
 
     try {
       const res = await axios.post(
-        `${base_url}api/auth/password/reset/confirm`,
+        `${base_url}api/auth/password/reset/confirm/`,
         {
           uid,
           token,
@@ -30,6 +30,7 @@ const ResetPassword = () => {
           new_password2,
         }
       );
+      console.log(res.data)
       setMessage(res.data.message);
     } catch (err) {
       setMessage("Failed to reset password.");
