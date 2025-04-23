@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 import ScrollToTop from "./Pages/Learner/ScrollToTop";
-import { ClipLoader } from "react-spinners";
+import { RingLoader } from "react-spinners";
 
 function Root() {
   const [isLoading, setIsLoading] = useState(true); // 🛠 Fixed: useState capital "S"
@@ -23,7 +23,7 @@ function Root() {
         <ScrollToTop />
         {isLoading ? (
           <div className="spinner-container">
-            <ClipLoader size={50} color="#36d7b7" loading={isLoading} />
+            <RingLoader size={150} color="#575D97" loading={isLoading} />
           </div>
         ) : (
           <App />

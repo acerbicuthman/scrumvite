@@ -34,8 +34,8 @@ const ForgetPassword = () => {
     setSubmitted(true)
   };
   return (
-    <div className="h-screen flex items-center justify-center text-center">
-      <div className="flex flex-col md:w-full w-1/2 h-1/2 ">
+    <div className="h-screen flex items-center justify-center text-center px-5">
+      <div className="flex flex-col w-full   h-1/2 ">
         <h2 className="text-xl font-bold mt-20 mb-4">Forgot Password</h2>
         <form onSubmit={handleSubmit} action="">
           <input
@@ -61,8 +61,10 @@ const ForgetPassword = () => {
             </button>
           </div>
         </form>
-        {message && <p className="mt-4 text-base font-bold text-gray-900 px-24 text-center justify-center items-center">{message}</p>}
+        {message && <p className="mt-4 text-base font-bold text-gray-900 px-4 text-center justify-center items-center">{message}</p>}
+
       </div>
+
     </div>
   );
 };

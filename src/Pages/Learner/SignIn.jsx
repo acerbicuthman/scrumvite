@@ -8,9 +8,9 @@ import axios from "axios";
 import { AuthContext } from "../../context/Authcontext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import ClipLoader from "react-spinners/ClipLoader";
 import './signin.css'
 import image from '../../assets/Frame 1984078024.png'
+import {BeatLoader} from 'react-spinners'
 
 const SignIn = () => {
   const { login, isLoading, loggedIn } = useContext(AuthContext);
@@ -18,6 +18,7 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
+  const [message, setMessage] = useState("")
   
 
   
@@ -35,6 +36,7 @@ const SignIn = () => {
   const handleLogInSubmit = async (e) => {
     e.preventDefault();
     setLocalLoading(true)
+    setMessage("")
     console.log("Button clicked!"); 
     const data = { email, password };
     try {
@@ -62,18 +64,26 @@ const SignIn = () => {
       // Navigate to landing page
       navigate("/student-dashboard");
     } catch (error) {
-      console.error("Login failed:", error); // Log any errors that occur
+      console.error("Login failed:", error);
+      setLocalLoading(false);
+      if (error.response && error.response.data && error.response.data.detail) {
+        setMessage(error.response.data.detail);
+      } else if (error.response && error.response.status === 400) {
+        setMessage("Incorrect Email or Password!");
+      } else {
+        setMessage("An error occurred during login. Please try again.");
+      }
+      return;
     }
+  
+    setLocalLoading(false);
   };
 
-  if (localLoading){
-    return (
-      <div className="spinner-container">
-  <ClipLoader color="#00008B" size={100} />
-</div>
 
-    )
-  }
+  
+
+    
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen w-full">
       {/* Left - Image SlideShow */}
@@ -212,13 +222,20 @@ const SignIn = () => {
                   type="submit"
                   className="bg-blue-900 w-full rounded-md p py-3 text-white"
                 >
-                  Continue
+                      {localLoading ? 
+              (<BeatLoader
+                color="white" size={12} />
+              ) :  
+              "Continue"}
+                  
                 </button>
               </div>
             </div>
           </form>
         </div>
+        <div className="text-base font-bold text-center text-red-600 mt-2">{message}</div>
       </div>
+     
     </div>
   );
 };

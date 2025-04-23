@@ -20,7 +20,6 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcCheckmark } from "react-icons/fc";
 import ImageSlideShow from "./ImageSlideShow";
 import EmailVerification from "../Email_verification/EmailVerification";
-import ClipLoader from "react-spinners/ClipLoader";
 import {
   GoogleOAuthProvider,
   GoogleLogin,
@@ -28,6 +27,7 @@ import {
 } from "@react-oauth/google";
 import LinkedInLogin from "../Educator/SocialMediaLogIn/Linkedin";
 import SuccessfulReg from "./SuccesfulRegPage/SuccessfullRegPage";
+import {BeatLoader} from 'react-spinners'
 
 const SignUp = () => {
   const [first_name, setfirst_name] = useState("");
@@ -205,13 +205,6 @@ const SignUp = () => {
     console.error("Google Sign-In Error", error);
   };
 
-  if (localLoading) {
-    return (
-      <div className="spinner-container">
-        <ClipLoader color="#00008B" size={100} />
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col md:flex-row h-screen w-full overflow-hidden px-4 md:px-0">
@@ -424,11 +417,14 @@ const SignUp = () => {
                   !isPasswordValid ||
                   !isConfirmPasswordValid ||
                   !isEmailValid ||
-                  !checkBoxValid
+                  !checkBoxValid 
                 }
                 className="w-full rounded-md px-4 py-3 text-white font-semibold bg-blue-900 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Continue
+                {localLoading ? <BeatLoader/>
+                : "Continue"}
+                
+                
               </button>
             </div>
           </form>

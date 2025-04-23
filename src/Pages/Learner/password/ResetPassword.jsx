@@ -22,6 +22,7 @@ const ResetPassword = () => {
     setLoading(true)
     if (new_password1 !== new_password2) {
       setMessage("Passwords do not match.");
+      setLoading(false); 
       return;
     }
 
@@ -53,13 +54,16 @@ const ResetPassword = () => {
         console.error("Unexpected error:", err);
         setMessage("Something went wrong.");
       }
-    }
-    setLoading(false)
+     
+  } finally {
+    setLoading(false); 
+  }
+    
   };
 
   return (
     <div className="h-screen flex items-center justify-center text-center">
-      <div className="flex flex-col w-1/2 h-1/2 ">
+      <div className="flex flex-col w-full md:w-1/2 h-1/2 px-10 md:px-1">
         <h2 className="text-xl font-bold">Reset Password</h2>
         <form onSubmit={handleSubmit}>
           <input
@@ -79,7 +83,7 @@ const ResetPassword = () => {
             required
           />
           <button
-            className="bg-blue-800 text-white mt-4 px-4 py-2 rounded-lg"
+            className="bg-blue-800 text-white w-full mt-4 px-4 py-2 rounded-lg"
             type="submit"
             disabled={loading}
           >
@@ -90,7 +94,7 @@ const ResetPassword = () => {
             }
           </button>
         </form>
-        {message && <p className="mt-4 text-base font-bold">{message}</p>}
+        {message && <p className="mt-4 text-base font-bold text-red-600">{message}</p>}
       </div>
     </div>
   );
