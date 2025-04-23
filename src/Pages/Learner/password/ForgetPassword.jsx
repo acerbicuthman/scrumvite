@@ -1,22 +1,27 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 import axios from "axios";
 import { base_url } from "../../../library/api";
+import { BeatLoader } from "react-spinners";
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const navigate = useNavigate()
+  const [loading, setLoading] =  useState(false)
+  const [submitted, setSubmitted] = useState(false)
+ 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     try {
       const req = await axios.post(`${base_url}api/auth/password/reset`, {
         email,
       });
       console.log("object:", req)
       setMessage(req.data.message);
-      navigate("/reset-password")
+      setMessage("We’ve sent a secure link to your registered email address, Please check your inbox and follow the instructions to reset your password.")
+     
     } catch (err) {
       console.error("Error:", err);
       if (err.response && err.response.data) {
@@ -25,6 +30,8 @@ const ForgetPassword = () => {
         setMessage("An unexpected error occurred.");
       }
     }
+    setLoading(false)
+    setSubmitted(true)
   };
   return (
     <div className="h-screen flex items-center justify-center text-center">
@@ -42,13 +49,19 @@ const ForgetPassword = () => {
           <div>
             <button
               type="submit"
+              disabled={loading}
               className="bg-blue-800 w-full md:w-1/3 mt-4 px-2 py-2 rounded-lg text-white"
             >
-              Send Reset Link
+              {loading ? 
+              (<BeatLoader
+                color="white" size={12} />
+              ) : submitted ?("Link Sent"
+              ): 
+              "Send Reset Link"}
             </button>
           </div>
         </form>
-        {message && <p className="mt-4 text-sm">{message}</p>}
+        {message && <p className="mt-4 text-base font-bold text-gray-900 px-24 text-center justify-center items-center">{message}</p>}
       </div>
     </div>
   );

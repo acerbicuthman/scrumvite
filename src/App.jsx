@@ -26,6 +26,8 @@ import NotFound from "./Pages/NotFound";
 import ResetPassword from "./Pages/Learner/password/ResetPassword";
 import CheckYourEmail from "./Pages/Learner/CheckYourEmail";
 import StudentDashboard from "./Pages/Learner/StudentDashboard";
+import ChangePassword from "./Pages/Learner/password/ChangePassword";
+
 
 // Protected Route
 const ProtectedRoute = ({ children }) => {
@@ -64,6 +66,7 @@ const App = () => {
             <Route path="/verify" element={<SuccessfulReg />} />
             <Route path="/forgetpassword" element={<ForgetPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/change-password" element={<ChangePassword/>}/>
             <Route path="/course-list" element={<CourseList />} />
             <Route path="/course-list/input" element={<CourseList />} />
             <Route path="/course/:id" element={<CourseDetails />} />

@@ -3,19 +3,24 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { base_url } from "../../../library/api";
+import Loading from "../../../Components/student/Loading";
+import {BeatLoader} from 'react-spinners'
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const uid = searchParams.get("uid");
 
-  const [new_password, setPassword] = useState("");
+  const [new_password1, setPassword] = useState("");
   const [new_password2, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false)
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (new_password !== new_password2) {
+    setLoading(true)
+    if (new_password1 !== new_password2) {
       setMessage("Passwords do not match.");
       return;
     }
@@ -24,17 +29,32 @@ const ResetPassword = () => {
       const res = await axios.post(
         `${base_url}api/auth/password/reset/confirm/`,
         {
+          new_password1,
+          new_password2,
           uid,
           token,
-          new_password,
-          new_password2,
+          
         }
       );
+      console.log("UID:", uid);
+    console.log("Token:", token);
       console.log(res.data)
-      setMessage(res.data.message);
+      setMessage(res.data.message)
+      setMessage("Password Successfully Changed! ");
     } catch (err) {
-      setMessage("Failed to reset password.");
+      if (err.response && err.response.data) {
+        console.error("Reset error:", err.response.data);
+        const errorMsg =
+          err.response.data.detail ||
+          Object.values(err.response.data).flat().join(" ") ||
+          "Failed to reset password.";
+        setMessage(errorMsg);
+      } else {
+        console.error("Unexpected error:", err);
+        setMessage("Something went wrong.");
+      }
     }
+    setLoading(false)
   };
 
   return (
@@ -46,7 +66,7 @@ const ResetPassword = () => {
             className="border p-2 w-full mt-4"
             type="password"
             placeholder="New password"
-            value={new_password}
+            value={new_password1}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
@@ -61,11 +81,16 @@ const ResetPassword = () => {
           <button
             className="bg-blue-800 text-white mt-4 px-4 py-2 rounded-lg"
             type="submit"
+            disabled={loading}
           >
-            Reset Password
+            {loading ? 
+            <BeatLoader color="white" />
+          : 
+           " Reset Password"
+            }
           </button>
         </form>
-        {message && <p className="mt-4 text-sm">{message}</p>}
+        {message && <p className="mt-4 text-base font-bold">{message}</p>}
       </div>
     </div>
   );

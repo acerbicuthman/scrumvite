@@ -60,7 +60,7 @@ const SignIn = () => {
       localStorage.setItem("user", JSON.stringify(user));
 
       // Navigate to landing page
-      navigate("/landing");
+      navigate("/student-dashboard");
     } catch (error) {
       console.error("Login failed:", error); // Log any errors that occur
     }
