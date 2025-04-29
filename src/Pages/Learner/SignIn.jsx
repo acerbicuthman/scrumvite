@@ -35,56 +35,80 @@ const SignIn = () => {
 
   const handleLogInSubmit = async (e) => {
     e.preventDefault();
-    setLocalLoading(true)
-    setMessage("")
-    console.log("Button clicked!"); 
+    setLocalLoading(true);
+    console.log(localLoading);
     const data = { email, password };
+  
     try {
       const response = await axios.post(`${base_url}api/auth/login/`, data);
-      console.log("object")
       console.log("API Response:", response); 
       console.log("Response Data:", response.data); // Log response data for debugging
-
+  
       // Check for valid token and user
       const { access, refresh, user } = response.data;
       if (!access || !refresh || !user) {
         console.error("Missing access token, refresh token, or user in response.");
-      alert("Login failed. Please check your credentials.");
-      return;
+        alert("Login failed. Please check your credentials.");
+        return;
       }
-
+  
       // Call login from AuthContext
       login(access, refresh, user);
-
+  
       // Store in sessionStorage
       localStorage.setItem("accessToken", access);
       localStorage.setItem("refreshToken", refresh);
       localStorage.setItem("user", JSON.stringify(user));
-
+  
       // Navigate to landing page
       navigate("/student-dashboard");
+  
     } catch (error) {
       console.error("Login failed:", error);
+  
+      // Set loading state to false when error occurs
       setLocalLoading(false);
-      if (error.response && error.response.data && error.response.data.detail) {
-        setMessage(error.response.data.detail);
-      } else if (error.response && error.response.status === 400) {
-        setMessage("Incorrect Email or Password!");
+  
+      // Handle different error types
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        console.error("Error Response:", error.response);
+        if (error.response.data && error.response.data.detail) {
+          setMessage(`Error: ${error.response.data.detail}`);
+        } else if (error.response.status === 400) {
+          setMessage("Incorrect Email or Password!");
+        } else if (error.response.status === 401) {
+          setMessage("Unauthorized. Please check your credentials.");
+        } else if (error.response.status === 500) {
+          setMessage("Server error. Please try again later.");
+        } else {
+          setMessage(`Unexpected error: ${error.response.status}`);
+        }
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error("Error Request:", error.request);
+        setMessage("Network error. Please check your connection.");
       } else {
-        setMessage("An error occurred during login. Please try again.");
+        // Something happened in setting up the request
+        console.error("Error Message:", error.message);
+        setMessage(`Error: ${error.message}`);
       }
       return;
     }
   
+    // Reset the loading state
     setLocalLoading(false);
   };
-
+  
 
   
 
-    
-
   return (
+    isLoading ? (
+      <div className="loading-spinner">
+        <BeatLoader color="white" size={12} />
+      </div>
+    ) : (
     <div className="flex flex-col md:flex-row min-h-screen w-full">
       {/* Left - Image SlideShow */}
       <div className="hidden md:flex w-1/2 items-center justify-center bg-gray-100">
@@ -237,7 +261,10 @@ const SignIn = () => {
       </div>
      
     </div>
+    )
   );
+  
 };
+
 
 export default SignIn;
