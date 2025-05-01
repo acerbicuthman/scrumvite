@@ -8,6 +8,7 @@ export default {
     extend: {
       colors: {
         'custom-blue': '#575D97',
+        'custom-periwinkle': '#F2F3FF',
       },
     },
   },

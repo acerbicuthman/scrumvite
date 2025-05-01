@@ -2,113 +2,106 @@ import React, { useState } from "react";
 import welcomeImg from "../../assets/rafiki.png";
 import { Link, useNavigate } from "react-router-dom";
 import google from "../../assets/googleIcon.png";
-// import {  SignedIn, SignedOut, SignInButton,useClerk, UserButton, useUser } from '@clerk/clerk-react'
+import jubilation from "../../assets/Property 1=Default.png";
+import ImageSlideShow from "../Learner/ImageSlideShow";
+import studentIcon from "../../assets/student icon.png";
+import tutorIcon from "../../assets/tutor icon.png";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 const ScrumLanding = () => {
   const [account_type, setAccount_type] = useState("");
-  const navigate = useNavigate(); // React Router v6 hook for navigation
-
-  const handleChange = (e) => {
-    setAccount_type(e.target.value);
-  };
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Navigate to signup with selectedOption in the state
+
+    if (!account_type) {
+      alert("Please select an account type before continuing.");
+      return;
+    }
+
     navigate("/signup", { state: { account_type } });
   };
-  //   const {openSignIn} = useClerk()
-  //   const {user} = useUser()
 
   return (
-    <div className="flex flex-col lg:flex-row mt-12  lg:p-">
-      <div className="flex-1 px-12 py-10 hidden md:flex bg-gray-200 justify-center items-center">
-        <img src={welcomeImg} alt="Welcome" className=" h-auto" />
+    <div className="flex flex-col lg:flex-row mt-12 h-screen">
+      {/* Left side with slideshow */}
+      <div className="flex-1 hidden md:flex bg-gray-200 items-center">
+        <ImageSlideShow />
       </div>
-      <div className="flex-1  mx-12 my-6 lg:p-6 flex flex-col justify-center text-center">
-        <h1 className="text-3xl lg:text-3xl font-semibold text-gray-800 mb-4">
+
+      {/* Right side with form */}
+      <div className="flex-1 mx-4 my-6 lg:p-6 flex mt-20 flex-col">
+        <h1 className="text-3xl lg:text-3xl  font-semibold text-black text-center md:text-left mb-4">
           Create Your Account on Scrum Consult
         </h1>
-        <p className="text-lg text-gray-600 mb-6">
-          Welcome to Scrum Consult! Join as a Learner or Tutor and start Your
-          Journey today.
+        <p className="text-lg text-gray-600">
+          Welcome to Scrum Consult!
         </p>
-        <div className="w-full max-w-md mx-auto">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <div className="flex flex-col">
-            <label
-    htmlFor="dropdown"
-    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-  >
-    Select Account Type
-  </label>
-  <select
-    id="dropdown"
-    name="accountType"
-    value={account_type}
-    onChange={handleChange}
-    className="w-full appearance-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-3 pr-10 border-2 border-gray-300 dark:border-gray-600 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-300 ease-in-out"
-  >
-    <option value="" disabled hidden>
-      -- Please choose an option --
-    </option>
-    <option value="learner">👩‍🎓 Learner</option>
-    <option value="educator">👨‍🏫 Educator</option>
-  </select>
-  <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400 dark:text-gray-500">
-    <svg
-      className="h-5 w-5"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 20 20"
-      fill="currentColor"
-    >
-      <path
-        fillRule="evenodd"
-        d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.23 8.27a.75.75 0 01.02-1.06z"
-        clipRule="evenodd"
-      />
-    </svg>
-  </div>
+        <p className="text-lg text-gray-600 mb-6">
+          Join as a Learner or Tutor and start Your Journey today.
+        </p>
+
+      
+        <div className="space-y-4 mb-6">
+          {/* Tutor Card */}
+          <div
+            onClick={() => setAccount_type("educator")}
+            className={`w-full max-w-[540px] h-[130px] cursor-pointer border-2 rounded-lg py-4 px-4 flex items-center transition duration-200 ${
+              account_type === "educator"
+                ? "border-purple-700 bg-custom-periwinkle <FaArrowRightLong />"
+                : "border-gray-300 hover:border-purple-500 shadow-xl"
+            }`}
+          >
+            <img src={tutorIcon} alt="Tutor Icon" className="w-12 h-12 mr-4" />
+            <div className="px-4 md:p-0">
+              <p className="text-lg font-semibold">Tutor</p>
+              <p className="text-sm ">Upload your course videos and details.</p>
             </div>
+            <div className="flex md:ml-24">
+            {account_type === "educator" ? <FaArrowRightLong className="text-black text-xl "/> : ""}
+            </div>
+          </div>
+
+          {/* Learner Card */}
+          <div
+            onClick={() => setAccount_type("learner")}
+            className={`w-full max-w-[540px] h-[130px]  cursor-pointer border-2 rounded-lg py-4 px-4 flex items-center transition duration-200 ${
+              account_type === "learner"
+                ? "border-purple-700 bg-custom-periwinkle"
+                : "border-gray-300 hover:border-purple-500 shadow-xl"
+            }`}
+          >
+            <img src={studentIcon} alt="Learner Icon" className="w-12 h-12 mr-4" />
+            <div className="px-4 md:p-0">
+              <p className="text-lg font-semibold">Learner</p>
+              <p className="text-sm ">Take courses tailored to your learning needs.</p>
+            </div>
+            <div className="flex md:ml-16">
+            {account_type === "learner"  ? <FaArrowRightLong className="text-black text-xl "/> : ""}
+            </div>
+          </div>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
             <button
               type="submit"
-              className="w-full py-3 mt-6 bg-blue-900 text-white text-lg font-medium rounded-lg hover:bg-blue-700 transition duration-300"
+              className="md:w-2/5 w-full py-3 mt-6 bg-blue-900 text-white text-base font-medium rounded-lg hover:bg-blue-700 transition duration-300"
             >
-              Continue
+              Next Step
             </button>
-           
           </form>
-          <Link to="/signin">
-              <button className="my-4 text-blue-600 hover:bg-blue-900 rounded-lg p-2 hover:text-white">
-                Already a member? Log in
-              </button>
-            </Link>
-          {/* {user ? (
-        <header className="flex justify-center p-4 border-b">
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-        </header>
-      ) : ( */}
-          <div className="flex justify-center p-4 border-b">
-            {/* <SignedOut>
-            <SignInButton mode="modal"> */}
-            {/* {({ openSignIn }) => ( */}
-            <button
-            // onClick={openSignIn}
-            >
-              {/* <img
-                src={google}
-                alt="Sign in with Google"
-                className="w-10 h-10 object-contain"
-              /> */}
-            </button>
-            {/* )} */}
-            {/* </SignInButton>
-          </SignedOut> */}
-          </div>
-          {/* )} */}
         </div>
+
+    
+        {/* <div className="w-full max-w-md mx-auto">
+          
+
+          <Link to="/signin">
+            <button className="my-4 text-blue-600 hover:custom-periwinkle  rounded-lg p-2 hover:text-white">
+              Already a member? Log in
+            </button>
+          </Link>
+        </div> */}
       </div>
     </div>
   );

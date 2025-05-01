@@ -1,10 +1,10 @@
-// Pages/Learner/ResetPassword.jsx
 import React, { useState } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { base_url } from "../../../library/api";
-import Loading from "../../../Components/student/Loading";
-import {BeatLoader} from 'react-spinners'
+import { BeatLoader } from 'react-spinners';
+import key from '../../../assets/forgetpassword-key.png';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
@@ -14,15 +14,19 @@ const ResetPassword = () => {
   const [new_password1, setPassword] = useState("");
   const [new_password2, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false)
-
+  const [loading, setLoading] = useState(false);
+  const [showPassword1, setShowPassword1] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
+  const [showError, setShowError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
+    setShowError(""); // Reset error message before submitting
+
     if (new_password1 !== new_password2) {
-      setMessage("Passwords do not match.");
-      setLoading(false); 
+      setShowError("Passwords do not match.");
+      setLoading(false);
       return;
     }
 
@@ -34,14 +38,10 @@ const ResetPassword = () => {
           new_password2,
           uid,
           token,
-          
         }
       );
-      console.log("UID:", uid);
-    console.log("Token:", token);
-      console.log(res.data)
-      setMessage(res.data.message)
-      setMessage("Password Successfully Changed! ");
+
+      setMessage("Password successfully changed!");
     } catch (err) {
       if (err.response && err.response.data) {
         console.error("Reset error:", err.response.data);
@@ -49,52 +49,83 @@ const ResetPassword = () => {
           err.response.data.detail ||
           Object.values(err.response.data).flat().join(" ") ||
           "Failed to reset password.";
-        setMessage(errorMsg);
+        setShowError(errorMsg);
       } else {
         console.error("Unexpected error:", err);
-        setMessage("Something went wrong.");
+        setShowError("Something went wrong.");
       }
-     
-  } finally {
-    setLoading(false); 
-  }
-    
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="h-screen flex items-center justify-center text-center">
-      <div className="flex flex-col w-full md:w-1/2 h-1/2 px-10 md:px-1">
-        <h2 className="text-xl font-bold">Reset Password</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            className="border p-2 w-full mt-4"
-            type="password"
-            placeholder="New password"
-            value={new_password1}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <input
-            className="border p-2 w-full mt-2"
-            type="password"
-            placeholder="Confirm password"
-            value={new_password2}
-            onChange={(e) => setNewPassword(e.target.value)}
-            required
-          />
+    <div className="h-screen flex items-center justify-center px-5">
+      <div className="w-full max-w-md mx-auto text-center space-y-6">
+        <div>
+          <div className="flex justify-center my-4">
+            <img src={key} alt="Password Icon" className="w-15 h-15" />
+          </div>
+          <h2 className="text-xl font-semibold mb-2">Reset Your Password</h2>
+          <p className="text-gray-600">
+            Your new password must be different from previously used passwords.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="relative">
+            <input
+              className="w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              type={showPassword1 ? "text" : "password"}
+              placeholder="New password"
+              value={new_password1}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className="absolute right-3 top-3"
+              onClick={() => setShowPassword1(!showPassword1)}
+            >
+              {showPassword1 ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+
+          <div className="relative">
+            <input
+              className="w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              type={showPassword2 ? "text" : "password"}
+              placeholder="Confirm password"
+              value={new_password2}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className="absolute right-3 top-3"
+              onClick={() => setShowPassword2(!showPassword2)}
+            >
+              {showPassword2 ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+
           <button
-            className="bg-blue-800 text-white w-full mt-4 px-4 py-2 rounded-lg"
+            className="bg-blue-800 text-white w-full px-4 py-2 rounded-lg"
             type="submit"
             disabled={loading}
           >
-            {loading ? 
-            <BeatLoader color="white" />
-          : 
-           " Reset Password"
-            }
+            {loading ? <BeatLoader color="white" /> : "Reset Password"}
           </button>
+
+          <div className="my-5 mx-auto">
+            <Link to="/signin" className="text-blue-900 underline hover:text-blue-700">
+              Back to login
+            </Link>
+          </div>
         </form>
-        {message && <p className="mt-4 text-base font-bold text-red-600">{message}</p>}
+
+        {message && <p className="text-base text-blue-900">{message}</p>}
+        {showError && <p className="text-base font-bold text-red-600">{showError}</p>}
       </div>
     </div>
   );

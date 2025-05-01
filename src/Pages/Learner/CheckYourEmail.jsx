@@ -28,29 +28,21 @@ const CheckYourEmail = () => {
   
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50 px-4">
-      <div className="max-w-md w-full text-center p-8 bg-white rounded-xl shadow-lg">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-50 px-4 ">
+      <div className="max-w-md w-full text-center p-8 bg-white rounded-xl shadow-xl border-4 border-blue-900">
         <h1 className="text-2xl font-semibold text-indigo-700 mb-4">
           Confirm Your Email
         </h1>
 
         <p className="text-gray-700 mb-4">
           We've sent a verification link to:
-          <br />
-          <strong>{email}</strong>
         </p>
-
+    <p className="my-5"> <strong className="bg-blue-900 rounded-sm text-white p-3">{email}</strong></p>
         <p className="text-sm text-gray-500 mb-6">
           Please check your inbox (and spam folder) to verify your account before signing in.
         </p>
 
-        <button
-          onClick={() => window.open("https://mail.google.com", "_blank")}
-          className="w-full mb-3 bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-500"
-        >
-          Open Gmail
-        </button>
-
+      
         <button
           onClick={handleResend}
           className="w-full mb-3 text-indigo-600 text-sm underline"
@@ -60,7 +52,7 @@ const CheckYourEmail = () => {
 
         <button
           onClick={() => navigate("/signin")}
-          className="w-full mt-3 border border-indigo-600 text-indigo-700 py-2 rounded-md hover:bg-indigo-50"
+          className="w-full mt-3 border bg-blue-900 border-indigo-600 text-white py-2 rounded-md hover:bg-indigo-50"
         >
           Return to Login
         </button>

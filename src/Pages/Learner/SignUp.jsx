@@ -1,32 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../Learner/signup.css";
 import "./signup.css";
-// import {
-//   SignedIn,
-//   SignedOut,
-//   SignInButton,
-//   useClerk,
-//   UserButton,
-//   useUser,
-// } from "@clerk/clerk-react";
-import google from "../../assets/googleIcon.png";
-import LinkedinIcon from "../../assets/devicon_linkedin.png";
 import axios from "axios";
 import { base_url } from "../../library/api";
-
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcCheckmark } from "react-icons/fc";
 import ImageSlideShow from "./ImageSlideShow";
 import EmailVerification from "../Email_verification/EmailVerification";
-import {
-  GoogleOAuthProvider,
-  GoogleLogin,
-  useGoogleLogin,
-} from "@react-oauth/google";
 import LinkedInLogin from "../SocialMediaLogIn/Linkedin";
-import SuccessfulReg from "./SuccesfulRegPage/SuccessfullRegPage";
 import { BeatLoader } from "react-spinners";
 import { AuthContext } from "../../context/Authcontext";
 import GoogleAuth from "../GoogleAuth";
@@ -93,11 +76,23 @@ const SignUp = () => {
   const handlePasswordChange = (e) => {
     setpassword1(e.target.value);
     setIsPasswordTouched(true);
+    if (
+      password1.toLowerCase().includes(firstName.toLowerCase()) ||
+      password1.toLowerCase().includes(lastName.toLowerCase()) ||
+      password1.toLowerCase().includes(email.split('@')[0].toLowerCase())
+    ) {
+      setMessage("Password should not contain your name or email.");
+      return;
+    }else {
+      setMessage("");
+    }
+    
   };
 
   const handleConfirmPasswordChange = (e) => {
     setpassword2(e.target.value);
     setIsConfirmPasswordTouched(true);
+
   };
 
   const handleEmailChange = (e) => {
@@ -495,12 +490,7 @@ const SignUp = () => {
             Continue
           </button>
 
-          <button
-            onClick={() => window.open("https://mail.google.com", "_blank")}
-            className="text-blue-600 text-sm hover:underline"
-          >
-            Open Gmail
-          </button>
+         
         </div>
       </EmailVerification>
     </div>

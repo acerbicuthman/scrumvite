@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-// import { useNavigate } from "react-router";
 import axios from "axios";
 import { base_url } from "../../../library/api";
 import { BeatLoader } from "react-spinners";
+import passwordkey from '../../../assets/forgetpassword-key.png'
+import { Link } from "react-router";
+
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState("");
@@ -10,6 +12,7 @@ const ForgetPassword = () => {
   const [isError, setIsError] = useState("")
   const [loading, setLoading] =  useState(false)
   const [submitted, setSubmitted] = useState(false)
+
  
 
   const handleSubmit = async (e) => {
@@ -76,10 +79,22 @@ const ForgetPassword = () => {
   };
   
   return (
-    <div className="h-screen flex items-center justify-center text-center px-5">
-      <div className="flex flex-col w-full   h-1/2 ">
-        <h2 className="text-xl font-bold mt-20 mb-4">Forgot Password</h2>
+    <div className="h-screen flex items-center justify-center text-center px-5 ">
+      <div className="flex flex-col w-full  h-1/2 ">
+      <div className="flex justify-center">
+  <img src={passwordkey} alt="Password Icon" className="w-15 h-15" />
+</div>
+
+        <div className="my-2">
+        <h2 className="text-xl font-bold my-3 ">Forgot Password?</h2>
+        <p className="text-sm ">No Worries, we will send you reset instruction</p>
+
+        </div>
+
         <form onSubmit={handleSubmit} action="">
+        <div className=" w-full md:w-1/3 mt-5 mx-auto text-left">
+          <label htmlFor="enter-email" className="">Email Address</label></div>
+
           <input
             type="email"
             className="w-full md:w-1/3 px-3 border-2"
@@ -92,21 +107,29 @@ const ForgetPassword = () => {
             <button
               type="submit"
               disabled={loading}
-              className="bg-blue-800 w-full md:w-1/3 mt-4 px-2 py-2 rounded-lg text-white"
+              className="bg-blue-900 w-full md:w-1/3 mt-5 px-2 py-2 rounded-lg text-white"
             >
               {loading ? 
               (<BeatLoader
                 color="white" size={12} />
               ) : submitted ?("Link Sent"
               ): 
-              "Send Reset Link"}
+              "Continue"}
             </button>
           </div>
+          <div className="my-5 mx-auto">
+          <Link to="/signin" className="text-blue-900 underline hover:text-blue-700">
+  Back to login
+  </Link>
+               </div>
         </form>
+        <div className="md:w-3/6 w-full justify-center mx-auto">
         {message && <p className="mt-4 text-base font-bold text-gray-900 px-4 text-center justify-center items-center">{message}</p>}
                 <div className="text-red-600 mt-2 ">{isError}</div>
-      </div>
+        </div>
 
+      </div>
+              
     </div>
   );
 };
