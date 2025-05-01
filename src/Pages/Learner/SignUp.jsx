@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../Learner/signup.css";
@@ -25,9 +25,11 @@ import {
   GoogleLogin,
   useGoogleLogin,
 } from "@react-oauth/google";
-import LinkedInLogin from "../Educator/SocialMediaLogIn/Linkedin";
+import LinkedInLogin from "../SocialMediaLogIn/Linkedin";
 import SuccessfulReg from "./SuccesfulRegPage/SuccessfullRegPage";
-import {BeatLoader} from 'react-spinners'
+import { BeatLoader } from "react-spinners";
+import { AuthContext } from "../../context/Authcontext";
+import GoogleAuth from "../GoogleAuth";
 
 const SignUp = () => {
   const [first_name, setfirst_name] = useState("");
@@ -165,46 +167,50 @@ const SignUp = () => {
   //   console.log(handleAuthCodeChange());
   // });
 
-  // const { openSignIn } = useClerk();
-  // const { user } = useUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
 
-  const handleSuccess = async (response) => {
-    const { access_token, code, id_token } = response;
-    const login = useGoogleLogin({
-      onSuccess: handleSuccess,
-      onError: handleFailure,
-    });
+  // const { login } = useContext(AuthContext);
+  // const loginWithGoogle = useGoogleLogin({
+  //   onSuccess: async (response) => {
+  //     try {
+  //       // Extract the access_token from the response
+  //       const { access_token } = response;
 
-    const data = {
-      access_token,
-      code,
-      id_token,
-    };
-    try {
-      const backendResponse = await axios.fetch(
-        `${base_url}api/auth/google`,
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (backendResponse.status === 200) {
-        setUserData(backendResponse.data);
-      } else {
-        console.log("backend authentication failed");
-      }
-    } catch (error) {
-      console.error("Error in the Backend", error);
-    }
-  };
-  const handleFailure = (error) => {
-    console.error("Google Sign-In Error", error);
-  };
+  //       if (!access_token) {
+  //         throw new Error("Access token is missing.");
+  //       }
 
+  //       // Pass the access_token to the backend to fetch user data
+  //       const res = await fetch(`${base_url}api/auth/google/`, {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           access_token: access_token, // Send access_token to backend
+  //         }),
+  //       });
+
+  //       const data = await res.json(); // Parse response as JSON
+
+  //       if (res.ok && data.access && data.user) {
+  //         // Successfully logged in, now update the context with the user data
+  //         await login(data.access, data.refresh, data.user);
+
+  //         // Redirect user to the dashboard
+  //         navigate("/student-dashboard"); // Redirect to student dashboard
+  //       } else {
+  //         throw new Error("Failed to authenticate user.");
+  //       }
+  //     } catch (err) {
+  //       console.error("Error logging in:", err);
+  //     }
+  //   },
+  //   onError: (err) => {
+  //     console.error("Google Login Failed", err);
+  //   },
+  // });
 
   return (
     <div className="flex flex-col md:flex-row h-screen w-full overflow-hidden px-4 md:px-0">
@@ -417,14 +423,11 @@ const SignUp = () => {
                   !isPasswordValid ||
                   !isConfirmPasswordValid ||
                   !isEmailValid ||
-                  !checkBoxValid 
+                  !checkBoxValid
                 }
                 className="w-full rounded-md px-4 py-3 text-white font-semibold bg-blue-900 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {localLoading ? <BeatLoader/>
-                : "Continue"}
-                
-                
+                {localLoading ? <BeatLoader /> : "Continue"}
               </button>
             </div>
           </form>
@@ -437,23 +440,13 @@ const SignUp = () => {
               <hr className="border-t-2 border-black mr-4 border-opacity-30" />
             </div>
           </div>
-          <div className="gap-3 justify-center items-center py-6 md:mx-4 md:flex hidden">
-            <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
-              <div className="App flex justify-center items-center ">
-                <div className="text-center my-2 rounded-lg">
-                  <GoogleLogin
-                    onSuccess={handleSuccess}
-                    onError={handleFailure}
-                  />
-                </div>
-                {userData && (
-                  <div>
-                    <h2>Welcome {userData.userName}</h2>
-                    <p>User ID: {userData.userId}</p>
-                  </div>
-                )}
+          <div className=" justify-center items-center py-6 md:mx-4 md:flex hidden">
+            <div className="App flex justify-center items-center ">
+              <div className="text-center my-2 rounded-lg">
+                <GoogleAuth buttonText="Sign up with Google" />
               </div>
-            </GoogleOAuthProvider>
+            </div>
+
             <div className="App flex justify-center items-center ">
               <div className="text-center my-2 rounded-lg">
                 <LinkedInLogin label="Sign in with LinkedIn" />
@@ -463,20 +456,9 @@ const SignUp = () => {
         </div>
 
         <div className="md:hidden flex-row my-3 gap-5 justify-center flex">
-          <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
-            <button
-              onClick={() => login()}
-              className=" rounded-full hover:bg-gray-100 transition"
-            >
-              <img
-                src={google}
-                alt="Google"
-                className="w-12 h-12 mr-2 border-2 rounded-full border-black"
-              />
-            </button>
-          </GoogleOAuthProvider>
+          <GoogleAuth />
 
-          <div className="md:hidden flex rounded-full hover:bg-gray-100 transition border-2 border-black ">
+          <div className="md:hidden flex rounded-full">
             <LinkedInLogin />
           </div>
         </div>

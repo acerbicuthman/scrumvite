@@ -5,20 +5,31 @@ import "./index.css";
 import App from "./App.jsx";
 import ScrollToTop from "./Pages/Learner/ScrollToTop";
 import { RingLoader } from "react-spinners";
+import {
+  GoogleOAuthProvider,
+  GoogleLogin,
+  useGoogleLogin,
+} from "@react-oauth/google";
 
 function Root() {
-  const [isLoading, setIsLoading] = useState(true); // 🛠 Fixed: useState capital "S"
+  const [isLoading, setIsLoading] = useState(true); 
+  const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  console.log("Google Client ID:", CLIENT_ID);
+
+
+  
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
 
-    return () => clearTimeout(timeout); // 🛠 Fixed: timeout name
+    return () => clearTimeout(timeout); 
   }, []);
 
   return (
     <StrictMode>
+      <GoogleOAuthProvider clientId={CLIENT_ID}>
       <BrowserRouter>
         <ScrollToTop />
         {isLoading ? (
@@ -29,9 +40,10 @@ function Root() {
           <App />
         )}
       </BrowserRouter>
+    </GoogleOAuthProvider>
     </StrictMode>
   );
 }
 
-// ✅ Still rendering Root here, like you originally wanted
+
 createRoot(document.getElementById("root")).render(<Root />);

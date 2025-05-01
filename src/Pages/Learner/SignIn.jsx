@@ -8,9 +8,16 @@ import axios from "axios";
 import { AuthContext } from "../../context/Authcontext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import './signin.css'
-import image from '../../assets/Frame 1984078024.png'
-import {BeatLoader} from 'react-spinners'
+import "./signin.css";
+import image from "../../assets/Frame 1984078024.png";
+import { BeatLoader } from "react-spinners";
+import {
+  GoogleOAuthProvider,
+  GoogleLogin,
+  useGoogleLogin,
+} from "@react-oauth/google";
+import LinkedInLogin from "../SocialMediaLogIn/Linkedin";
+import GoogleAuth from "../GoogleAuth";
 
 const SignIn = () => {
   const { login, isLoading, loggedIn } = useContext(AuthContext);
@@ -18,10 +25,8 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
-  const [message, setMessage] = useState("")
-  
-
-  
+  const [message, setMessage] = useState("");
+  const [userData, setUserData] = useState(null);
 
   const navigate = useNavigate();
 
@@ -38,37 +43,38 @@ const SignIn = () => {
     setLocalLoading(true);
     console.log(localLoading);
     const data = { email, password };
-  
+
     try {
       const response = await axios.post(`${base_url}api/auth/login/`, data);
-      console.log("API Response:", response); 
+      console.log("API Response:", response);
       console.log("Response Data:", response.data); // Log response data for debugging
-  
+
       // Check for valid token and user
       const { access, refresh, user } = response.data;
       if (!access || !refresh || !user) {
-        console.error("Missing access token, refresh token, or user in response.");
+        console.error(
+          "Missing access token, refresh token, or user in response."
+        );
         alert("Login failed. Please check your credentials.");
         return;
       }
-  
+
       // Call login from AuthContext
       login(access, refresh, user);
-  
+
       // Store in sessionStorage
       localStorage.setItem("accessToken", access);
       localStorage.setItem("refreshToken", refresh);
       localStorage.setItem("user", JSON.stringify(user));
-  
+
       // Navigate to landing page
       navigate("/student-dashboard");
-  
     } catch (error) {
       console.error("Login failed:", error);
-  
+
       // Set loading state to false when error occurs
       setLocalLoading(false);
-  
+
       // Handle different error types
       if (error.response) {
         // The request was made and the server responded with a status code
@@ -95,20 +101,51 @@ const SignIn = () => {
       }
       return;
     }
-  
+
     // Reset the loading state
     setLocalLoading(false);
   };
-  
 
-  
+  const handleSuccess = async (response) => {
+    const { access_token, code, id_token } = response;
+    const login = useGoogleLogin({
+      onSuccess: handleSuccess,
+      onError: handleFailure,
+    });
 
-  return (
-    isLoading ? (
-      <div className="loading-spinner">
-        <BeatLoader color="white" size={12} />
-      </div>
-    ) : (
+    const data = {
+      access_token,
+      code,
+      id_token,
+    };
+    try {
+      const backendResponse = await axios.fetch(
+        `${base_url}api/auth/google`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (backendResponse.status === 200) {
+        setUserData(backendResponse.data);
+      } else {
+        console.log("backend authentication failed");
+      }
+    } catch (error) {
+      console.error("Error in the Backend", error);
+    }
+  };
+  const handleFailure = (error) => {
+    console.error("Google Sign-In Error", error);
+  };
+
+  return isLoading ? (
+    <div className="loading-spinner">
+      <BeatLoader color="white" size={12} />
+    </div>
+  ) : (
     <div className="flex flex-col md:flex-row min-h-screen w-full">
       {/* Left - Image SlideShow */}
       <div className="hidden md:flex w-1/2 items-center justify-center bg-gray-100">
@@ -126,35 +163,30 @@ const SignIn = () => {
           </h2>
           <div className="text-center md:px-0 px-2 lg:text-lg text-base mb-4 md:text-lg md:text-nowrap xl:text-base">
             <p>
-              <span className="md:hidden">Welcome,</span> Log back in to continue your learning journey
+              <span className="md:hidden">Welcome,</span> Log back in to
+              continue your learning journey
             </p>
           </div>
 
-          {/* Social SignIn Buttons */}
-          <div className="md:flex flex-row md:justify-center xl:gap-5 gap-5 hidden py-2 ">
-            <div className="rounded-xl border-2 p-2 content-center xl:px-8 md:px-1">
-              <button className="flex gap-4 md:gap-1">
-                <img
-                  src={google}
-                  alt="Sign in with Google"
-                  className="w-8 h-8 object-contain"
-                />
-                <span className="mt-2 text-sm text-nowrap md:hidden lg:block lg:text-sm">
-                  Sign up with Google
-                </span>
-              </button>
+          <div className=" justify-center items-center py-6 md:mx-4 md:flex hidden md:px-5">
+            <div className="App flex justify-center items-center ">
+              <div className="text-center my-2 rounded-lg">
+                <GoogleAuth buttonText="Sign up with Google" />
+              </div>
             </div>
-            <div className="rounded-xl border-2 p-2 ">
-              <button className="flex gap-4 md:gap-1">
-                <img
-                  src={LinkedinIcon}
-                  alt="Sign in with LinkedIn"
-                  className="w-8 h-8 object-contain"
-                />
-                <span className="mt-2 text-sm text-nowrap md:hidden lg:block lg:text-sm">
-                  Sign up with LinkedIn
-                </span>
-              </button>
+
+            <div className="App flex justify-center items-center ">
+              <div className="text-center my-2 rounded-lg ">
+                <LinkedInLogin label="Sign in with LinkedIn" />
+              </div>
+            </div>
+          </div>
+
+          <div className="md:hidden gap-3 flex-row my-3 justify-center flex">
+            <GoogleAuth />
+
+            <div className="md:hidden flex  ">
+              <LinkedInLogin />
             </div>
           </div>
 
@@ -246,25 +278,22 @@ const SignIn = () => {
                   type="submit"
                   className="bg-blue-900 w-full rounded-md p py-3 text-white"
                 >
-                      {localLoading ? 
-              (<BeatLoader
-                color="white" size={12} />
-              ) :  
-              "Continue"}
-                  
+                  {localLoading ? (
+                    <BeatLoader color="white" size={12} />
+                  ) : (
+                    "Continue"
+                  )}
                 </button>
               </div>
             </div>
           </form>
         </div>
-        <div className="text-base font-bold text-center text-red-600 mt-2">{message}</div>
+        <div className="text-base font-bold text-center text-red-600 mt-2">
+          {message}
+        </div>
       </div>
-     
     </div>
-    )
   );
-  
 };
-
 
 export default SignIn;

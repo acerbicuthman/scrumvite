@@ -27,6 +27,7 @@ import ResetPassword from "./Pages/Learner/password/ResetPassword";
 import CheckYourEmail from "./Pages/Learner/CheckYourEmail";
 import StudentDashboard from "./Pages/Learner/StudentDashboard";
 import ChangePassword from "./Pages/Learner/password/ChangePassword";
+import OAuthSuccess from "./Pages/OAuthSuccess";
 
 
 // Protected Route
@@ -72,6 +73,7 @@ const App = () => {
             <Route path="/course/:id" element={<CourseDetails />} />
             <Route path="/myenrollment" element={<MyEnrollment />} />
             <Route path="/loading/:path" element={<Loading />} />
+            <Route path="/oauth-success" element={<OAuthSuccess />} />
             <Route
               path="/student-dashboard"
               element={
