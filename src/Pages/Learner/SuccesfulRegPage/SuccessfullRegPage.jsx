@@ -31,7 +31,7 @@ const SuccessfulReg = () => {
       return;
     }
   
-    setAutoLoggingIn(true); // 👈 Show loader
+    setAutoLoggingIn(true); 
   
     try {
       const res = await axios.post(`${base_url}api/auth/login/`, {
@@ -46,7 +46,6 @@ const SuccessfulReg = () => {
   
       // setMessage("Email verified. Logging you in...");
   
-      // 👇 Redirect after a short delay
       setTimeout(() => {
         navigate("/student-dashboard");
       }, 1000);
@@ -55,7 +54,7 @@ const SuccessfulReg = () => {
       setMessage("Email verified, but login failed. Please log in manually.");
       setErrorType("login-failed");
     } finally {
-      setAutoLoggingIn(false); // 👈 Hide loader
+      setAutoLoggingIn(false); 
     }
   };
   
