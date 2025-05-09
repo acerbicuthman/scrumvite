@@ -175,7 +175,7 @@ const TutorSignUp = () => {
   <img
   src={TutorProfileImg}
   alt="Tutor Profile"
-  className="w-full  object-contain h-screen "
+  className="w-full  object-cover h-screen "
 />
 
   </div>
