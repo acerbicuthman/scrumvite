@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Variant1 from "../../assets/Property 1=Default.png";
 import Variant2 from "../../assets/Property 1=Variant2.png";
 import Variant3 from "../../assets/Property 1=Variant3.png";
-import Variant4 from "../../assets/Frame 1984078024.png";
 
 const ImageSlideShow = () => {
   const images = [Variant1, Variant2, Variant3];

@@ -2,19 +2,21 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../Learner/signup.css";
-import "./signup.css";
+import "../../Pages/Learner/signup.css";
 import axios from "axios";
 import { base_url } from "../../library/api";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcCheckmark } from "react-icons/fc";
-import ImageSlideShow from "./ImageSlideShow";
+import ImageSlideShow from "../../Pages/Learner/ImageSlideShow";
 import EmailVerification from "../Email_verification/EmailVerification";
 import LinkedInLogin from "../SocialMediaLogIn/Linkedin";
 import { BeatLoader } from "react-spinners";
 import { AuthContext } from "../../context/Authcontext";
 import GoogleAuth from "../SocialMediaLogIn/GoogleAuth";
+import TutorProfileImg from '../Educator/Tutor-images/Frame 1984078029.png'
 
-const SignUp = () => {
+
+const TutorSignUp = () => {
   const [first_name, setfirst_name] = useState("");
   const [last_name, setlast_name] = useState("");
   const [account_type, setAccount_type] = useState("");
@@ -163,63 +165,29 @@ const SignUp = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
 
-  // const { login } = useContext(AuthContext);
-  // const loginWithGoogle = useGoogleLogin({
-  //   onSuccess: async (response) => {
-  //     try {
-  //       // Extract the access_token from the response
-  //       const { access_token } = response;
-
-  //       if (!access_token) {
-  //         throw new Error("Access token is missing.");
-  //       }
-
-  //       // Pass the access_token to the backend to fetch user data
-  //       const res = await fetch(`${base_url}api/auth/google/`, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           access_token: access_token, // Send access_token to backend
-  //         }),
-  //       });
-
-  //       const data = await res.json(); // Parse response as JSON
-
-  //       if (res.ok && data.access && data.user) {
-  //         // Successfully logged in, now update the context with the user data
-  //         await login(data.access, data.refresh, data.user);
-
-  //         // Redirect user to the dashboard
-  //         navigate("/student-dashboard"); // Redirect to student dashboard
-  //       } else {
-  //         throw new Error("Failed to authenticate user.");
-  //       }
-  //     } catch (err) {
-  //       console.error("Error logging in:", err);
-  //     }
-  //   },
-  //   onError: (err) => {
-  //     console.error("Google Login Failed", err);
-  //   },
-  // });
 
   return (
-    <div className="flex flex-col md:flex-row h-screen w-full overflow-hidden px-4 md:px-0">
-      {/* Left - Image SlideShow */}
-      <div className="hidden md:flex image-slide-show">
-        <div className="w-full  overflow-y-hidden">
-          <ImageSlideShow />
-        </div>
-      </div>
+    <div>
+          <div className="flex flex-col md:flex-row h-screen w-full overflow-hidden px-4 md:px-0">
+      
+      <div className="hidden md:flex w-full relative">
+  <div className="w-full  h-screen">
+  <img
+  src={TutorProfileImg}
+  alt="Tutor Profile"
+  className="w-full  object-contain h-screen "
+/>
+
+  </div>
+</div>
+
       <div className="w-full px-2 sm:px-6 pt-4 py-10  min-h-screen  overflow-scroll">
         <div className="w-full max-w-md mx-auto mt-10 ">
-          <h2 className="text-center md:text-left text-4xl md font-semibold text-gray-800 p-2">
-            Create Account
+          <h2 className="text-center md:text-cdnter text-4xl md font-semibold text-gray-800 p-2">
+          Welcome
           </h2>
           <div className="text-center  text-sm font-medium mb-4  ">
-            <p>Welcome, Create an account and begin your learning Journey</p>
+            <p> Create an account and Start tutoring .</p>
           </div>
           <form className="space-y-5" onSubmit={handleAuthCodeChange}>
             <div>
@@ -373,7 +341,7 @@ const SignUp = () => {
                 )}
             </div>
             {/* Account Type (pre-filled and non-editable) */}
-            <div>
+            {/* <div>
               <label
                 htmlFor="account_type"
                 className="text-base sm:text-base font-medium text-gray-600"
@@ -385,7 +353,7 @@ const SignUp = () => {
                   ? account_type.charAt(0).toUpperCase() + account_type.slice(1)
                   : "No option selected"}
               </div>
-            </div>
+            </div> */}
 
             <div className="text-sm flex py-1 ">
               <input
@@ -490,7 +458,8 @@ const SignUp = () => {
         </div>
       </EmailVerification>
     </div>
-  );
-};
+    </div>
+  )
+}
 
-export default SignUp;
+export default TutorSignUp

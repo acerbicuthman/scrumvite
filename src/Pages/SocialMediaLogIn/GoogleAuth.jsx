@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/Authcontext';
-import { base_url } from '../library/api';
-import { useGoogleLogin } from '@react-oauth/google';
-import google from '../assets/googleIcon.png';
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/Authcontext";
+import { base_url } from "../../library/api";
+import { useGoogleLogin } from "@react-oauth/google";
+import google from "../../assets/googleIcon.png";
 
 const GoogleAuth = ({ buttonText = "Continue with Google" }) => {
   const { login } = useContext(AuthContext);
@@ -50,7 +50,11 @@ const GoogleAuth = ({ buttonText = "Continue with Google" }) => {
           onClick={loginWithGoogle}
           className="flex items-center border-opacity-10 md:px-6 lg:px-8 py-3 rounded-lg border-black border-2  hover:bg-gray-100 transition"
         >
-          <img src={google} alt="Google" className="w-5 h-5 mr-2 lg:-ml-5 md:-ml-3" />
+          <img
+            src={google}
+            alt="Google"
+            className="w-5 h-5 mr-2 lg:-ml-5 md:-ml-3"
+          />
           <span className="text-sm text-nowrap">Sign in with Google</span>
         </button>
       </div>

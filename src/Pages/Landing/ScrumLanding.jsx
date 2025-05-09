@@ -20,7 +20,14 @@ const ScrumLanding = () => {
       return;
     }
 
-    navigate("/signup", { state: { account_type } });
+    if(account_type === "learner"){
+      navigate("/signup", { state: { account_type } });
+    } 
+    if (account_type === "educator"){
+      navigate("/educator/tutorSignUp", {state: {account_type}})
+    }
+
+
   };
 
   return (

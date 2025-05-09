@@ -28,6 +28,11 @@ import CheckYourEmail from "./Pages/Learner/CheckYourEmail";
 import StudentDashboard from "./Pages/Learner/StudentDashboard";
 import ChangePassword from "./Pages/Learner/password/ChangePassword";
 import OAuthSuccess from "./Pages/OAuthSuccess";
+import TutorSignUp from "./Pages/Educator/TutorSignUp";
+import LinkedInCallback from "./Pages/SocialMediaLogIn/LinkedInCallback";
+import LinkedInLogin from "./Pages/SocialMediaLogIn/Linkedin";
+import LinkedInProfile from "./Pages/SocialMediaLogIn/Linkedin";
+
 
 
 // Protected Route
@@ -73,6 +78,9 @@ const App = () => {
             <Route path="/course/:id" element={<CourseDetails />} />
             <Route path="/myenrollment" element={<MyEnrollment />} />
             <Route path="/loading/:path" element={<Loading />} />
+            {/* <Route path="/" element={<LinkedInLogin />} /> */}
+            <Route path="/linkedin/callback" element={<LinkedInCallback />} />
+            <Route path="/linked-dashboard" element={<LinkedInProfile/>}/>
             <Route path="/oauth-success" element={<OAuthSuccess />} />
             <Route
               path="/student-dashboard"
@@ -87,6 +95,7 @@ const App = () => {
 
           <Route path="/educator" element={<Educator />}>
             <Route index element={<Dashboard />} />
+            <Route path="tutorSignUp" element={<TutorSignUp/>}/>
             <Route path="add-course" element={<AddCourse />} />
             <Route path="my-courses" element={<MyCourses />} />
             <Route path="students-enrolled" element={<StudentsEnrolled />} />

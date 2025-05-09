@@ -17,7 +17,7 @@ import {
   useGoogleLogin,
 } from "@react-oauth/google";
 import LinkedInLogin from "../SocialMediaLogIn/Linkedin";
-import GoogleAuth from "../GoogleAuth";
+import GoogleAuth from "../SocialMediaLogIn/GoogleAuth";
 
 const SignIn = () => {
   const { login, isLoading, loggedIn } = useContext(AuthContext);
