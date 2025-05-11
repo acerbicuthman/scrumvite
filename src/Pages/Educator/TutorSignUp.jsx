@@ -14,6 +14,7 @@ import { BeatLoader } from "react-spinners";
 import { AuthContext } from "../../context/Authcontext";
 import GoogleAuth from "../SocialMediaLogIn/GoogleAuth";
 import TutorProfileImg from '../Educator/Tutur-images/Frame 1984078029.png'
+import TutorSignUpCoverImg from '../Educator/Tutur-images/Group 3841.png'
 
 
 
@@ -172,11 +173,11 @@ const TutorSignUp = () => {
           <div className="flex flex-col md:flex-row h-screen w-full overflow-hidden px-4 md:px-0">
       
       <div className="hidden md:flex w-full relative">
-  <div className="w-full  h-screen">
+  <div className="w-full h-screen">
   <img
-  src={TutorProfileImg}
+  src={TutorSignUpCoverImg}
   alt="Tutor Profile"
-  className="w-full  object-cover h-screen "
+  className="w-full  h-screen object-cover "
 />
 
   </div>
