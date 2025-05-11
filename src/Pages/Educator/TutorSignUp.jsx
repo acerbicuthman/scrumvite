@@ -13,7 +13,8 @@ import LinkedInLogin from "../SocialMediaLogIn/Linkedin";
 import { BeatLoader } from "react-spinners";
 import { AuthContext } from "../../context/Authcontext";
 import GoogleAuth from "../SocialMediaLogIn/GoogleAuth";
-import TutorProfileImg from '../Educator/Tutor-images/Frame 1984078029.png'
+import TutorProfileImg from '../Educator/Tutur-images/Frame 1984078029.png'
+
 
 
 const TutorSignUp = () => {

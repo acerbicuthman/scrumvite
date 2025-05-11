@@ -33,7 +33,7 @@ function Root() {
       <BrowserRouter>
         <ScrollToTop />
         {isLoading ? (
-          <div className="spinner-container">
+          <div className="spinner-container h-screen">
             <RingLoader size={150} color="#575D97" loading={isLoading} />
           </div>
         ) : (

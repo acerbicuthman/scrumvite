@@ -27,7 +27,7 @@ import ResetPassword from "./Pages/Learner/password/ResetPassword";
 import CheckYourEmail from "./Pages/Learner/CheckYourEmail";
 import StudentDashboard from "./Pages/Learner/StudentDashboard";
 import ChangePassword from "./Pages/Learner/password/ChangePassword";
-import OAuthSuccess from "./Pages/OAuthSuccess";
+// import OAuthSuccess from "./Pages/OAuthSuccess";
 import TutorSignUp from "./Pages/Educator/TutorSignUp";
 import LinkedInCallback from "./Pages/SocialMediaLogIn/LinkedInCallback";
 import LinkedInLogin from "./Pages/SocialMediaLogIn/Linkedin";
@@ -39,7 +39,7 @@ import LinkedInProfile from "./Pages/SocialMediaLogIn/Linkedin";
 const ProtectedRoute = ({ children }) => {
   const { user, isLoading } = React.useContext(AuthContext);
   if (isLoading) {
-    return <div>Loading...</div> ;
+    return <div className="">Loading...</div> ;
   }
   return user ? children : <Navigate to="/signin" />;
 };
@@ -81,7 +81,7 @@ const App = () => {
             {/* <Route path="/" element={<LinkedInLogin />} /> */}
             <Route path="/linkedin/callback" element={<LinkedInCallback />} />
             <Route path="/linked-dashboard" element={<LinkedInProfile/>}/>
-            <Route path="/oauth-success" element={<OAuthSuccess />} />
+            {/* <Route path="/oauth-success" element={<OAuthSuccess />} /> */}
             <Route
               path="/student-dashboard"
               element={

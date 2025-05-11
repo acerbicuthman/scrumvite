@@ -1,14 +1,19 @@
 // LinkedInLogin.jsx
 import React from 'react';
 import LinkedIcon from '../../assets/devicon_linkedin.png'
+import { base_url } from '../../library/api';
 
 const LinkedInLogin = () => {
   const clientId = import.meta.env.VITE_LINKEDIN_CLIENT_ID;
   const redirectUri = import.meta.env.VITE_LINKEDIN_REDIRECT_URI;
-  const state = crypto.randomUUID(); 
   const scope = 'openid profile email'; 
+ 
 
   const handleLogin = () => {
+       const state = crypto.randomUUID(); 
+    console.log("Generated state:", state);
+    sessionStorage.setItem('linkedin_oauth_state', state);
+
     const authUrl = `https://www.linkedin.com/oauth/v2/authorization?` +
     `response_type=code&` +
     `client_id=${clientId}&` +

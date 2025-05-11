@@ -1,59 +1,94 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { base_url } from '../../library/api';
+import { AuthContext } from '../../context/Authcontext';
+import '../../Styles.css'
 
 const LinkedInCallback = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   useEffect(() => {
-    // Extract the authorization code and state from the URL
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    // const state = urlParams.get('state');
+    const returnedState = urlParams.get('state');
+    const storedState = sessionStorage.getItem('linkedin_oauth_state');
+    const redirectUri = import.meta.env.VITE_LINKEDIN_REDIRECT_URI;
+  
+    setLoading(true);
 
-    if (code) {
-      // Exchange the authorization code for an access token
-      fetch(`${base_url}api/auth/linkedin/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ code })
+    if (!code || !returnedState || returnedState !== storedState) {
+        setLoading(true);
+        setError('State validation failed. Possible CSRF attack.');
+       
+        return;
+      }
+    sessionStorage.removeItem('linkedin_oauth_state');
+  
+    // Send only code + redirectUri to your backend
+    fetch(`${base_url}api/auth/linkedin/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        code: code,
+        redirectUri: redirectUri,
+      }),
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Backend rejected the code');
+        return res.json();
       })
-        .then((response) => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-       return response.json()
-        })
-        .then((data) => {
-          if (data.accessToken) {
-            // Store the access token in localStorage (or React state)
-            localStorage.setItem('linkedin_access_token', data.accessToken);
-            localStorage.setItem('linkedin_id_token', data.id_token);
-            // After successful login, navigate to the existing Dashboard
-            navigate('/linked-dashboard'); 
-          } else {
-            setError('Failed to exchange code for access token.');
-          }
-        })
-        .catch((error) => {
-          setError('An error occurred while exchanging the authorization code.');
-          console.error(error);
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setError('Authorization code is missing.');
-      setLoading(false);
-    }
-  }, [navigate]); // The navigate function is stable, so no need to worry about it
+      .then(data => {
+        console.log("Backend response:", data);
+  
+        // Ensure user id is handled properly in login
+        const userId = Array.isArray(data.user.id) ? data.user.id[0] : data.user.id;
+  
+        // Update user data to fix user id handling
+        const updatedUserData = {
+          ...data.user,
+          id: userId,
+        };
+  
+        // Call login function
+        login(data.access, data.refresh, updatedUserData);
+  
+        // Navigate to dashboard
+        navigate('/student-dashboard');
+      })
+      .catch(err => {
+        console.error('Error during LinkedIn login:', err);
+        setError('An error occurred during LinkedIn login.');
+      })
+      .finally(() => setLoading(false));
+  }, [navigate]);
+  
 
-  if (loading) return <p className='mt-20 p-4 h-screen text-center text-xl'>Loading...</p>;
-  if (error) return <p className='mt-20 text-red-500 p-4 h-screen text-center text-xl'>{error}</p>;
+  
 
-  return null; // Nothing to render on this page after successful OAuth
+ // Show loading text while waiting for LinkedIn callback
+if (loading) {
+    return (
+      <div className="spinner-container">
+        <div className="spinner text-center h-screen text-4xl justify-center items-center">Loading...</div>
+        </div>
+    )}
+  
+    if   (error) {
+        return (
+          <div className="mt-20 text-red-500 text-center h-screen">
+            <p>{error}</p>
+          </div>
+        )}
+      
+  
+  return null; // Nothing to render if everything works
+  
 };
+
 
 export default LinkedInCallback;
