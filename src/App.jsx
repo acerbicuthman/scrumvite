@@ -31,7 +31,8 @@ import ChangePassword from "./Pages/Learner/password/ChangePassword";
 import TutorSignUp from "./Pages/Educator/TutorSignUp";
 import LinkedInCallback from "./Pages/SocialMediaLogIn/LinkedInCallback";
 import LinkedInLogin from "./Pages/SocialMediaLogIn/Linkedin";
-import LinkedInProfile from "./Pages/SocialMediaLogIn/Linkedin";
+import TutorSignIn from "./Pages/Educator/TutorSignIn";
+// import LinkedDashboard from "./Pages/Educator/SocialMediaLogIn/LinkedInProfile";
 
 
 
@@ -61,9 +62,9 @@ const App = () => {
     <div className="text-default min-h-screen">
       <AuthProvider>
         <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<ScrumLanding />} />
-            <Route path="/landing" element={<Landing />} />
+          <Route element={<Layout />}> 
+            <Route path="/" element={< Landing/>} />
+            <Route path="/role-selection" element={<ScrumLanding />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/success_email_verification" element={<SuccessfulEmailVerification />} />
@@ -78,9 +79,9 @@ const App = () => {
             <Route path="/course/:id" element={<CourseDetails />} />
             <Route path="/myenrollment" element={<MyEnrollment />} />
             <Route path="/loading/:path" element={<Loading />} />
-            {/* <Route path="/" element={<LinkedInLogin />} /> */}
+            <Route path="/" element={<LinkedInLogin />} />
             <Route path="/linkedin/callback" element={<LinkedInCallback />} />
-            <Route path="/linked-dashboard" element={<LinkedInProfile/>}/>
+            {/* <Route path="/linked-dashboard" element={<LinkedInProfile/>}/> */}
             {/* <Route path="/oauth-success" element={<OAuthSuccess />} /> */}
             <Route
               path="/student-dashboard"
@@ -96,6 +97,7 @@ const App = () => {
           <Route path="/educator" element={<Educator />}>
             <Route index element={<Dashboard />} />
             <Route path="tutorSignUp" element={<TutorSignUp/>}/>
+            <Route path="tutor-signin" element={<TutorSignIn/>}/>
             <Route path="add-course" element={<AddCourse />} />
             <Route path="my-courses" element={<MyCourses />} />
             <Route path="students-enrolled" element={<StudentsEnrolled />} />

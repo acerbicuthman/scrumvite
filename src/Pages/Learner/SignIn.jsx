@@ -168,39 +168,6 @@ const SignIn = () => {
             </p>
           </div>
 
-          <div className=" justify-center items-center py-6 md:mx-4 md:flex hidden md:px-5">
-            <div className="App flex justify-center items-center ">
-              <div className="text-center my-2 rounded-lg">
-                <GoogleAuth buttonText="Sign up with Google" />
-              </div>
-            </div>
-
-            <div className="App flex justify-center items-center ">
-              <div className="text-center my-2 rounded-lg ">
-                <LinkedInLogin label="Sign in with LinkedIn" />
-              </div>
-            </div>
-          </div>
-
-          <div className="md:hidden gap-3 flex-row my-3 justify-center flex">
-            <GoogleAuth />
-
-            <div className="md:hidden flex  ">
-              <LinkedInLogin />
-            </div>
-          </div>
-
-          {/* Divider OR */}
-          <div className="md:flex hidden items-center gap-4">
-            <div className="flex-1">
-              <hr />
-            </div>
-            <div className="text-gray-400">OR</div>
-            <div className="flex-1">
-              <hr />
-            </div>
-          </div>
-
           {/* Sign In Form */}
           <form
             className="space-y-5 md:space-y-0 lg:space-y-5 xl:space-y-1"
@@ -287,6 +254,48 @@ const SignIn = () => {
               </div>
             </div>
           </form>
+        </div>
+        {/* Divider OR */}
+        <div className="md:flex hidden items-center gap-4">
+          <div className="flex-1">
+            <hr />
+          </div> 
+          <div className="text-gray-400">OR</div>
+          <div className="flex-1">
+            <hr />
+          </div>
+        </div>
+        <div className=" justify-center items-center py-6 md:mx-4 md:flex hidden md:px-5">
+          <div className="App flex justify-center items-center mx-3">
+            <div className="text-center my-2 rounded-lg">
+              <GoogleAuth buttonText="Sign up with Google" />
+            </div>
+          </div>
+
+          <div className="App flex justify-center items-center mx-3">
+            <div className="text-center my-2 rounded-lg ">
+              <LinkedInLogin label="Sign in with LinkedIn" />
+            </div>
+          </div>
+        </div>
+
+        <div className="md:hidden gap-3 flex-row my-3 justify-center flex">
+          <GoogleAuth />
+
+          <div className="md:hidden flex  ">
+            <LinkedInLogin />
+          </div>
+        </div>
+        <div>
+          <p className="text-center">
+            Don’t have an account?{" "}
+            <span
+              className="text-blue-500 underline cursor-pointer"
+              onClick={() => navigate("/signup")}
+            >
+              Sign Up
+            </span>
+          </p>
         </div>
         <div className="text-base font-bold text-center text-red-600 mt-2">
           {message}

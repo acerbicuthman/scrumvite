@@ -1,156 +1,64 @@
-import React, { useState } from 'react';
-import { AuthContext } from '../../context/Authcontext';
-import Carousel from '../Learner/Carousel';
+import React from 'react'
+import LandingBg from '../Landing/LandingImg/Ellipse 102 (1).png'
+import { FaArrowRightLong } from "react-icons/fa6";
+import StudentImg1 from '../Landing/LandingImg/Union (1).png'
+import StudentImg2 from '../Landing/LandingImg/Union.png'
+import VidIcon from '../Landing/LandingImg/Group 3838.png'
+import sprinkleImg from '../Landing/LandingImg/Group 3840.png'
+import { useNavigate } from 'react-router';
 
 const Landing = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  // const {login, logout, }
-  const [loggedIn, setLoggedIn] = useState(false); // Replace this with real auth check
-
-
-
-
+  const navigate = useNavigate()
   return (
-<div className='from-cyan-100/70 via-blue-200/60 to-purple-300/80'>
-      {/* Hero Section */}
-        {/* {!loggedIn ? ( */}
-      <div className="relative isolate px-6 pt-14 lg:px-8 bg-gradient-to-b">
-        <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56 text-center">
-          <h1 className="text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">Empower Your Learning Journey</h1>
-          <p className="mt-8 text-lg font-medium text-gray-500 sm:text-xl">
-            Join a community of learners and trainers shaping the future.
-          </p>
+    <div className=' flex relative h-screen w-full'>
+      {/* Background Image */}
+      <img 
+        src={LandingBg} 
+        className='absolute top-0 left-0 w-full h-full object-cover z-0' 
+        alt="" 
+      />
 
-          <div className="mt-10">
-            <div className="flex items-center justify-center gap-x-6">
-              <a
-                href="#get-started-learner"
-                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500"
-              >
-                Get Started as a Learner
-              </a>
-              <a
-                href="#get-started-trainer"
-                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500"
-              >
-                Get Started as a Trainer
-              </a>
-            </div>
-            <div className="mt-4">
-              <p>Already have an account? <a href="#login" className="text-blue-600">Login</a></p>
-            </div>
+      {/* Flex Container */}
+      <div className='relative z-10 flex flex-row items-center justify-center h-full px-8'>
+        {/* Left Column */}
+        <div className='md:w-1/2 '>
+          <h1 className='text-black text-center md:text-left text-5xl font-extrabold mb-6 w-full mx-auto md:w-[55%] md:ml-10 '>
+            Learn faster with your best tutor.
+          </h1>
+          <p className='md:mx-10 my-2'>
+            Welcome to Scrum Consult! 
+          </p>
+          <p className='md:mx-10 my-2'>Join as a Learner or Tutor and start your journey today.</p>
+
+          <div className='flex mx-10 text-white my-6'>
+            <button onClick={()=> navigate('/role-selection')} className='text-2xl font-bold bg-[linear-gradient(to_right,_#407BFF,_#5A58E5)]  p-3 items-center rounded-lg shadow-2xl hover:shadow-none  flex gap-6'>Get Started <span className=' p-2 bg-blue-500 shadow-xl rounded-full'> <FaArrowRightLong /></span></button>
           </div>
+        </div>
+
+        {/* Right Column */}
+        <div className='md:w-1/2 text-gray-800 mt-10 flex-1'>
+          
+            <div className='relative inline-block'>
+              <div><img src={StudentImg1} alt="" className='inline-block'/>
+              <div>
+              <img src={VidIcon} alt="" className='absolute top-12 right-10 p-2 bg-stone-500 bg-opacity-50 rounded-full ' />
+
+              </div>
+              </div>
+            <img src={sprinkleImg} alt="" className='absolute top-36 right-1/3 z-10 '/>
+            <div>
+            <img src={VidIcon} alt="" className='absolute bottom-1/3 right-1/3 p-2 bg-green-900 bg-opacity-50 rounded-full z-10 ' />
+            <img src={StudentImg2} alt="" className='absolute top-1/2 left-1/2 '/>
+            </div>
+          
+            </div>
+          
+           
+        
         </div>
       </div>
-
-      {/* Features Section */}
-      <section id="features" className="py-16 bg-gray-50">
-        <div className="text-center">
-          <h2 className="text-3xl font-semibold">Why Choose Our Platform?</h2>
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="feature">
-              <h3 className="text-xl font-semibold">Interactive Courses</h3>
-              <p>Engage with fun, interactive, and well-structured content.</p>
-            </div>
-            <div className="feature">
-              <h3 className="text-xl font-semibold">Expert Trainers</h3>
-              <p>Learn from experienced industry professionals.</p>
-            </div>
-            <div className="feature">
-              <h3 className="text-xl font-semibold">Flexible Learning</h3>
-              <p>Learn at your own pace from anywhere in the world.</p>
-            </div>
-            <div className="feature">
-              <h3 className="text-xl font-semibold">Certification</h3>
-              <p>Earn certificates that boost your career.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Popular Courses Section */}
-      {/* <div className='w-full h-1/2 '>
-          <Carousel/>
-          </div> */}
-      <section id="courses" className="py-16">
-        <div className="text-center">
-          <h2 className="text-3xl font-semibold">Explore Popular Courses</h2>
-          
-         
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Course Card (Repeat for each course) */}
-            
-            {/* <div className="course-card">
-              <img src="course-image.jpg" alt="Course" />
-              <h3 className="text-xl font-semibold">Course Title</h3>
-              <p className="text-gray-600">Short description of the course.</p>
-              <a href="#" className="text-indigo-600">Enroll Now</a>
-            </div> */}
-        
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section id="how-it-works" className="py-16 bg-gray-50">
-        <div className="text-center">
-          <h2 className="text-3xl font-semibold">How It Works</h2>
-          <div className="mt-8">
-            <ol className="list-decimal space-y-4 text-left max-w-3xl mx-auto">
-              <li>Browse Courses / Create Course</li>
-              <li>Enroll / Upload Content</li>
-              <li>Learn at Your Pace / Engage with Learners</li>
-              <li>Earn Certification / Track Progress</li>
-            </ol>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-16">
-        <div className="text-center">
-          <h2 className="text-3xl font-semibold">What Our Users Say</h2>
-          <div className="mt-8">
-            {/* Carousel of testimonials */}
-            <div className="testimonial-carousel">
-              {/* Add testimonials here */}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-indigo-600 text-white text-center">
-        <h2 className="text-3xl font-semibold">Ready to Start Your Journey?</h2>
-        <div className="mt-8">
-          <a href="#get-started-learner" className="text-white-600 font-semibold">Join as a Learner</a>
-          <span className="mx-4">or</span>
-          <a href="#get-started-trainer" className="text-white-600 font-semibold">Join as a Trainer</a>
-        </div>
-      </section>
-
-      {/* Footer */}
-      {/* <footer className="py-8 bg-gray-800 text-white">
-        <div className="text-center">
-          <div className="mb-4">
-            <a href="#about" className="text-white">About</a> | 
-            <a href="#courses" className="text-white"> Courses</a> | 
-            <a href="#contact" className="text-white"> Contact</a> | 
-            <a href="#privacy-policy" className="text-white"> Privacy Policy</a> | 
-            <a href="#terms-of-service" className="text-white"> Terms of Service</a>
-          </div>
-          <div>
-            <a href="#" className="text-white">Facebook</a> | 
-            <a href="#" className="text-white">Twitter</a> | 
-            <a href="#" className="text-white">LinkedIn</a>
-          </div>
-          <div className="mt-4 text-sm">
-            &copy; 2025 Your Company. All rights reserved.
-          </div>
-        </div>
-      </footer> */}
     </div>
-  );
-};
+  )
+}
 
-export default Landing;
+export default Landing

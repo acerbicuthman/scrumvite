@@ -7,14 +7,13 @@ import axios from "axios";
 import { base_url } from "../../library/api";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FcCheckmark } from "react-icons/fc";
-import ImageSlideShow from "../../Pages/Learner/ImageSlideShow";
 import EmailVerification from "../Email_verification/EmailVerification";
 import LinkedInLogin from "../SocialMediaLogIn/Linkedin";
 import { BeatLoader } from "react-spinners";
 import { AuthContext } from "../../context/Authcontext";
 import GoogleAuth from "../SocialMediaLogIn/GoogleAuth";
-import TutorProfileImg from '../Educator/Tutur-images/Frame 1984078029.png'
 import TutorSignUpCoverImg from '../Educator/Tutur-images/Group 3841.png'
+import Book from '../Educator/Tutur-images/Untitled design (2) 1.png'
 
 
 
@@ -185,8 +184,12 @@ const TutorSignUp = () => {
 
       <div className="w-full px-2 sm:px-6 pt-4 py-10  min-h-screen  overflow-scroll">
         <div className="w-full max-w-md mx-auto mt-10 ">
+            <div className="justify-center text-center place-items-center mx-auto">
+            <img src={Book} alt="" />
+            </div>
+      
           <h2 className="text-center md:text-cdnter text-4xl md font-semibold text-gray-800 p-2">
-          Welcome
+          Welcome Tutors!
           </h2>
           <div className="text-center  text-sm font-medium mb-4  ">
             <p> Create an account and Start tutoring .</p>
@@ -343,7 +346,7 @@ const TutorSignUp = () => {
                 )}
             </div>
             {/* Account Type (pre-filled and non-editable) */}
-            {/* <div>
+            <div>
               <label
                 htmlFor="account_type"
                 className="text-base sm:text-base font-medium text-gray-600"
@@ -355,7 +358,7 @@ const TutorSignUp = () => {
                   ? account_type.charAt(0).toUpperCase() + account_type.slice(1)
                   : "No option selected"}
               </div>
-            </div> */}
+            </div>
 
             <div className="text-sm flex py-1 ">
               <input
@@ -429,7 +432,7 @@ const TutorSignUp = () => {
         <div className="text-center text-base pb-4 ">
           <p>
             Already have an account?&nbsp;
-            <Link to="/signin">
+            <Link to="/educator/tutor-signin">
               <button className="font-semibold text-indigo-600">Sign in</button>{" "}
             </Link>
           </p>
