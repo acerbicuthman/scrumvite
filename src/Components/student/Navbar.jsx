@@ -28,28 +28,28 @@ const Navbar = () => {
   //   const {user} = useUser()
   if (isLoading) return null; 
   return (
-    <div className="from-cyan-100/70 via-blue-200/60 to-purple-300/80 mb-4">
-      <header className="fixed w-full bg-white p-2 inset-x-0 top-0 z-50 shadow-md">
+    <div className="from-cyan-100/70 via-blue-200/60 to-purple-300/80 mb-4 ">
+      <header className="fixed w-full bg-black p-2 inset-x-0 top-0 z-50 shadow-md ">
         <nav
           className="flex items-center justify-between lg:px-8"
           aria-label="Global"
         >
-          <div className="flex lg:flex-1">
-            <Link to="/" className="-m-1.5 p-1.5">
-              <span className="sr-only">Scrum Consult</span>
-              <img
+          <div className="flex lg:flex-col">
+            <Link to="/" className="mr-20 p-1.5">
+              <div className="text-white font-mono font-bold">Scrum Consult</div>
+              {/* <img
                 className="h-8 w-auto"
                 src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
                 alt="Logo"
-              />
+              /> */}
             </Link>
           </div>
 
           {/* Mobile Menu Toggle */}
-          <div className="flex lg:hidden">
+          <div className="flex lg:hidden ">
             <button
               type="button"
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-white"
               onClick={toggleMenu}
               aria-label="Open main menu"
             >
@@ -73,34 +73,35 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           {user !== null && user !== undefined ?
-          (<div className="hidden lg:flex lg:gap-x-12">
+          (<div className="hidden lg:flex lg:gap-x-12 justify-left items-start">
+
             <Link
               to="/"
-              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+              className="text-sm font-semibold text-white hover:text-indigo-600"
             >
               Home
             </Link>
             <Link
       to="/student-dashboard"
-      className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+      className="text-sm font-semibold text-white hover:text-indigo-600"
     >
       Dashboard
     </Link>
             <a
               href="#courses"
-              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+              className="text-sm font-semibold text-white hover:text-indigo-600"
             >
               My Courses
             </a>
             <a
               href="#become-trainer"
-              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+              className="text-sm font-semibold text-white hover:text-indigo-600"
             >
               Reports
             </a>
             <a
               href="#contact"
-              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+              className="text-sm font-semibold text-white hover:text-indigo-600"
             >
              Settings
             </a>
@@ -109,34 +110,34 @@ const Navbar = () => {
          ( <div className="hidden lg:flex lg:gap-x-12">
             <Link
               to="/"
-              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+              className="text-sm font-semibold text-white hover:text-indigo-600"
             >
               Home
             </Link>
             <a
               href="#about"
-              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+              className="text-sm font-semibold text-white hover:text-indigo-600"
             >
-              About
+              Find Tutors
             </a>
             <a
               href="#courses"
-              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+              className="text-sm font-semibold text-white hover:text-indigo-600"
             >
-              Courses
+              About Us
             </a>
-            <a
+            {/* <a
               href="#become-trainer"
-              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+              className="text-sm font-semibold text-white hover:text-indigo-600"
             >
               Become a Trainer
             </a>
             <a
               href="#contact"
-              className="text-sm font-semibold text-gray-900 hover:text-indigo-600"
+              className="text-sm font-semibold text-white hover:text-indigo-600"
             >
               Contact
-            </a>
+            </a> */}
           </div>)
 }
 
@@ -157,14 +158,26 @@ const Navbar = () => {
     </button>
   </div>
 ) : (
-  <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+  <div className="hidden lg:flex lg:flex-1 lg:justify-end space-x-8">
+    <div>
     <Link
       to="/signin"
-      className="text-sm font-semibold text-white bg-indigo-600 px-3.5 py-2 rounded-md hover:bg-indigo-500"
+      className="text-sm font-semibold text-[#4318D1] bg-transparent px-3.5 py-2 rounded-md border-2 border-[#4318D1] hover:bg-indigo-500 hover:text-white"
     >
       Log in
     </Link>
+    </div>
+    <div>
+    <Link
+      to="/signin"
+      className="text-sm font-semibold text-white bg-[#4318D1] px-5 py-2  hover:bg-indigo-500"
+    >
+     Get Started
+    </Link>
+    </div>
+   
   </div>
+  
 )}
 
 

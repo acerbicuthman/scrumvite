@@ -52,17 +52,17 @@ const WhatOurUserSays = () => {
   };
   const { name, role, image, text } = testimonials[currentIndex];
   return (
-    <div className="mx-4">
+    <div className="mx-2 my-10">
       <div className="text-white px-4  ">
-        <h1 className=" text-4xl font-semibold my-2 text-center">
+        <h1 className=" text-2xl md:text-4xl font-semibold my-2 text-center">
           What Our Users Say
         </h1>
-        <p className="text-gray-400 text-center">
+        <p className="text-gray-400 text-center text-lg">
           Join thousands of satisfied learners and tutors
         </p>
 
-        <div className="flex flex-col items-center justify-center my-10 px-2 ">
-          <div className="flex items-center justify-center md:gap-10 gap-3 w-full max-w-3xl">
+        <div className="flex flex-col items-center justify-center my-10 px-1  ">
+          <div className="flex items-center justify-center md:gap-10 gap-3 w-full md:space-x-20 space-x-2 px-3">
             <div
               onClick={prevTestimonials}
               className="text-white text-4xl cursor-pointer select-none"
@@ -71,19 +71,19 @@ const WhatOurUserSays = () => {
               &lt;
             </div>
 
-            <div className="flex-1 rounded-lg bg-gray-900 md:w-1/2 mx-auto p-14 text-white shadow-lg">
-              <div className="flex items-center mb-4">
+            <div className="flex-1 bg-white/5 rounded-lg backdrop-blur-lg border-2 border-gray-800 w-full max-w-screen-sm md:max-w-[905px] md:h-[225px] p-6 md:p-14 text-white shadow-lg mx-auto">
+              <div className="flex items-center mb-4 pr-20 md:pr-0 ">
                 <img
                   src={image}
                   alt={name}
-                  className="w-16 h-16 rounded-full mr-4 object-cover"
+                  className="w-16 h-16 rounded-full left-0 mr-4 object-cover "
                 />
-                <div>
-                  <p className="font-semibold">{name}</p>
+                <div className="max-w-full">
+                  <p className="font-semibold text-nowrap ">{name}</p>
                   <p className="text-sm text-gray-300">{role}</p>
                 </div>
               </div>
-              <p className="text-left">{text}</p>
+              <p className="text-sm">{text}</p>
             </div>
 
             {/* Right Arrow */}
