@@ -51,6 +51,7 @@ const Layout = () => {
   return (
     <>
       {/* {!isEducatorRoute && <Navbar />} */}
+      <Navbar/>
       <Outlet />
       <Footer />
     </>
