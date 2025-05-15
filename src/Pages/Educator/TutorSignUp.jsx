@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
-import "../Learner/signup.css";
+// import "../Learner/signup.css";
 import "../../Pages/Learner/signup.css";
 import axios from "axios";
 import { base_url } from "../../library/api";
@@ -12,7 +12,7 @@ import LinkedInLogin from "../SocialMediaLogIn/Linkedin";
 import { BeatLoader } from "react-spinners";
 import { AuthContext } from "../../context/Authcontext";
 import GoogleAuth from "../SocialMediaLogIn/GoogleAuth";
-import TutorSignUpCoverImg from '../Educator/Tutur-images/Group 3841.png'
+import TutorSignUpCoverImg from '../Educator/Tutur-images/Rectangle 39.png'
 import Book from '../Educator/Tutur-images/Untitled design (2) 1.png'
 
 
@@ -169,14 +169,14 @@ const TutorSignUp = () => {
 
   return (
     <div>
-          <div className="flex flex-col md:flex-row h-screen w-full overflow-hidden px-4 md:px-0">
+          <div className="flex flex-col md:flex-row  w-full overflow-hidden px-4 md:px-0 mt-18 bg-black text-white">
       
-      <div className="hidden md:flex w-full relative">
-  <div className="w-full h-screen">
+      <div className="hidden md:flex w-full  my-auto h-2/4 justify-center items-center mt-20">
+  <div className="w-full mx-auto items-center justify-center py-auto my-auto  ">
   <img
   src={TutorSignUpCoverImg}
   alt="Tutor Profile"
-  className="w-full  h-screen object-cover "
+  className="w-[645px] mx-auto  my-auto rounded-lg "
 />
 
   </div>
@@ -185,10 +185,10 @@ const TutorSignUp = () => {
       <div className="w-full px-2 sm:px-6 pt-4 py-10  min-h-screen  overflow-scroll">
         <div className="w-full max-w-md mx-auto mt-10 ">
             <div className="justify-center text-center place-items-center mx-auto">
-            <img src={Book} alt="" />
+            {/* <img src={Book} alt="" /> */}
             </div>
       
-          <h2 className="text-center md:text-cdnter text-4xl md font-semibold text-gray-800 p-2">
+          <h2 className="text-center md:text-cdnter text-4xl md font-semibold  p-2">
           Welcome Tutors!
           </h2>
           <div className="text-center  text-sm font-medium mb-4  ">
@@ -198,7 +198,7 @@ const TutorSignUp = () => {
             <div>
               <label
                 htmlFor="first_name"
-                className="text-base sm:text-base font-medium text-gray-600"
+                className="text-base sm:text-base font-medium "
               >
                 First Name
               </label>
@@ -207,14 +207,14 @@ const TutorSignUp = () => {
                 value={first_name}
                 onChange={(e) => setfirst_name(e.target.value)}
                 placeholder="Enter First Name"
-                className="block w-full border rounded-md mt-2  bg-white px-3 py-2 text-sm text-gray-600 outline-1 outline-offset-1 outline-black-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                className="block w-full border rounded-md mt-2 text-white   bg-white bg-opacity-5 border-gray-700  px-3 py-2 text-sm outline-1 outline-offset-1 outline-black-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
               />
             </div>
             {/* Other form fields with similar fixes */}
             <div>
               <label
                 htmlFor="last_name"
-                className="text-base sm:text-base font-medium text-gray-600"
+                className="text-base sm:text-base font-medium "
               >
                 Last Name
               </label>
@@ -223,12 +223,12 @@ const TutorSignUp = () => {
                 value={last_name}
                 onChange={(e) => setlast_name(e.target.value)}
                 placeholder="Enter Last Name"
-                className="block w-full border mt-2  rounded-md bg-white px-3 py-2 text-sm text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                className="block w-full border mt-2  rounded-md text-white   bg-white bg-opacity-5 border-gray-700  px-3 py-2 text-sm  outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
               />
             </div>
 
             <div>
-              <label htmlFor="text-base sm:text-base font-medium text-gray-600">
+              <label htmlFor="text-base sm:text-base font-medium ">
                 Email address
               </label>
               <div className="relative">
@@ -241,7 +241,7 @@ const TutorSignUp = () => {
                   autoComplete="email"
                   placeholder="Enter your Email"
                   required
-                  className={`block w-full mt-2  border rounded-md bg-white px-3 py-2 text-sm text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
+                  className={`block w-full mt-2  border rounded-md text-white   bg-white bg-opacity-5 border-gray-700  px-3 py-2 text-sm  outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
                     email && (isEmailValid ? "valid-input" : "invalid-input")
                   }`}
                 />
@@ -255,7 +255,7 @@ const TutorSignUp = () => {
             <div>
               <label
                 htmlFor="password1"
-                className="text-base sm:text-base font-medium text-gray-600"
+                className="text-base sm:text-base font-medium "
               >
                 Create Password
               </label>
@@ -268,7 +268,7 @@ const TutorSignUp = () => {
                   onChange={handlePasswordChange}
                   placeholder="Enter Password"
                   required
-                  className={`block w-full border mt-2  rounded-md bg-white px-3 py-2 text-sm text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
+                  className={`block w-full border mt-2  rounded-md px-3 py-2 text-sm text-white   bg-white bg-opacity-5 border-gray-700  outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
                     isPasswordTouched && password1 && !isPasswordValid
                       ? "invalid-input"
                       : ""
@@ -276,10 +276,11 @@ const TutorSignUp = () => {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-2"
+                  className="absolute right-3 top-2 text-gray-400"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  {showPassword ? "hide" : "show"}
+                  {/* <FaEyeSlash /> : <FaEye /> */}
                 </button>
               </div>
               {password1 && (
@@ -307,7 +308,7 @@ const TutorSignUp = () => {
             <div>
               <label
                 htmlFor="password2"
-                className="text-base sm:text-base font-medium text-gray-600"
+                className="text-base sm:text-base font-medium "
               >
                 Confirm Password
               </label>
@@ -320,7 +321,7 @@ const TutorSignUp = () => {
                   onChange={handleConfirmPasswordChange}
                   placeholder="Confirm Password"
                   required
-                  className={`block w-full border mt-2 rounded-md bg-white px-3 py-2 text-sm text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                  className={`block w-full border mt-2 rounded-md text-white  bg-white bg-opacity-5 px-3 py-2 text-sm  border-gray-700  outline-1 outline-offset-1 outline-gray-700 placeholder:text-gray-400 focus:outline-2 focus:outline-gray-600"
                 ${
                   isConfirmPasswordTouched &&
                   password2 &&
@@ -331,10 +332,12 @@ const TutorSignUp = () => {
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-2"
+                  className="absolute right-3 top-2 text-gray-400"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
-                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                  {showConfirmPassword ? "hide" : "show"}
+                 
+                 {/* <FaEyeSlash /> : <FaEye /> */}
                 </button>
               </div>
               {isConfirmPasswordTouched &&
@@ -349,11 +352,11 @@ const TutorSignUp = () => {
             <div>
               <label
                 htmlFor="account_type"
-                className="text-base sm:text-base font-medium text-gray-600"
+                className="text-base sm:text-base font-medium "
               >
                 You Selected:
               </label>
-              <div className="mt-2 py-2 px-1 border-2 text-sm  border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700">
+              <div className="mt-2 py-2 px-1 border-2 text-sm  bg-white bg-opacity-20  border-gray-700 rounded-md shadow-sm text-white ">
                 {account_type
                   ? account_type.charAt(0).toUpperCase() + account_type.slice(1)
                   : "No option selected"}
@@ -391,22 +394,22 @@ const TutorSignUp = () => {
                   !isEmailValid ||
                   !checkBoxValid
                 }
-                className="w-full rounded-md px-4 py-3 text-white font-semibold bg-blue-900 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full rounded-md px-4 py-3 text-white font-semibold bg-[#4045E1] hover:bg-blue-700  disabled:cursor-not-allowed"
               >
-                {localLoading ? <BeatLoader /> : "Continue"}
+                {localLoading ? <BeatLoader /> : "Sign Up"}
               </button>
             </div>
           </form>
-          <div className="flex items-center my-2">
+          <div className="flex items-center mt-12 mb-0">
             <div className="flex-grow ">
-              <hr className="border-t-2 border-black ml-4 border-opacity-30" />
+              <hr className="border-t-2 border-white ml-4 border-opacity-30" />
             </div>
-            <div className="mx-1">OR</div>
+            <div className="mx-1 text-xs">Or Sign Up with</div>
             <div className="flex-grow">
-              <hr className="border-t-2 border-black mr-4 border-opacity-30" />
+              <hr className="border-t-2 border-white mr-4 border-opacity-30" />
             </div>
           </div>
-          <div className=" justify-center items-center py-6 md:mx-4 md:flex hidden">
+          <div className=" justify-center items-center py-2 md:mx-2 md:flex hidden">
             <div className="App flex justify-center items-center ">
               <div className="text-center my-2 rounded-lg">
                 <GoogleAuth buttonText="Sign up with Google" />
@@ -419,7 +422,7 @@ const TutorSignUp = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> 
 
         <div className="md:hidden flex-row my-3 gap-5 justify-center flex">
           <GoogleAuth />
@@ -429,7 +432,7 @@ const TutorSignUp = () => {
           </div>
         </div>
 
-        <div className="text-center text-base pb-4 ">
+        <div className="text-center text-base pb-4 text-gray-400">
           <p>
             Already have an account?&nbsp;
             <Link to="/educator/tutor-signin">

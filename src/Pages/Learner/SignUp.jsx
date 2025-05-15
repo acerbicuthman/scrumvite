@@ -77,8 +77,8 @@ const SignUp = () => {
     setpassword1(e.target.value);
     setIsPasswordTouched(true);
     if (
-      password1.toLowerCase().includes(firstName.toLowerCase()) ||
-      password1.toLowerCase().includes(lastName.toLowerCase()) ||
+      password1.toLowerCase().includes(first_name.toLowerCase()) ||
+      password1.toLowerCase().includes(last_name.toLowerCase()) ||
       password1.toLowerCase().includes(email.split("@")[0].toLowerCase())
     ) {
       setMessage("Password should not contain your name or email.");
@@ -163,69 +163,28 @@ const SignUp = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
 
-  // const { login } = useContext(AuthContext);
-  // const loginWithGoogle = useGoogleLogin({
-  //   onSuccess: async (response) => {
-  //     try {
-  //       // Extract the access_token from the response
-  //       const { access_token } = response;
-
-  //       if (!access_token) {
-  //         throw new Error("Access token is missing.");
-  //       }
-
-  //       // Pass the access_token to the backend to fetch user data
-  //       const res = await fetch(`${base_url}api/auth/google/`, {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           access_token: access_token, // Send access_token to backend
-  //         }),
-  //       });
-
-  //       const data = await res.json(); // Parse response as JSON
-
-  //       if (res.ok && data.access && data.user) {
-  //         // Successfully logged in, now update the context with the user data
-  //         await login(data.access, data.refresh, data.user);
-
-  //         // Redirect user to the dashboard
-  //         navigate("/student-dashboard"); // Redirect to student dashboard
-  //       } else {
-  //         throw new Error("Failed to authenticate user.");
-  //       }
-  //     } catch (err) {
-  //       console.error("Error logging in:", err);
-  //     }
-  //   },
-  //   onError: (err) => {
-  //     console.error("Google Login Failed", err);
-  //   },
-  // });
 
   return (
-    <div className="flex flex-col md:flex-row h-screen w-full overflow-hidden px-4 md:px-0">
+    <div className="flex flex-col md:flex-row h-screen w-full  mt-16 overflow-hidden px-4 md:px-0 bg-black text-white">
       {/* Left - Image SlideShow */}
-      <div className="hidden md:flex image-slide-show">
-        <div className="w-full  overflow-y-hidden">
+      <div className="hidden md:flex  h-full my-auto w-full justify-center  ">
+        <div className="w-full my-12 mx-auto items-center justify-center py-auto ml-20 ">
           <ImageSlideShow />
         </div>
       </div>
       <div className="w-full px-2 sm:px-6 pt-4 py-10  min-h-screen  overflow-scroll">
         <div className="w-full max-w-md mx-auto mt-10 ">
-          <h2 className="text-center md:text-left text-4xl md font-semibold text-gray-800 p-2">
-            Create Account
+          <h2 className="text-center text-4xl md font-semibold text-white p-2">
+          Welcome Learner!
           </h2>
           <div className="text-center  text-sm font-medium mb-4  ">
-            <p>Welcome, Create an account and begin your learning Journey</p>
+            <p> Create an account and begin your learning Journey</p>
           </div>
           <form className="space-y-5" onSubmit={handleAuthCodeChange}>
             <div>
               <label
                 htmlFor="first_name"
-                className="text-base sm:text-base font-medium text-gray-600"
+                className="text-base sm:text-base font-medium text-white"
               >
                 First Name
               </label>
@@ -234,14 +193,14 @@ const SignUp = () => {
                 value={first_name}
                 onChange={(e) => setfirst_name(e.target.value)}
                 placeholder="Enter First Name"
-                className="block w-full border rounded-md mt-2  bg-white px-3 py-2 text-sm text-gray-600 outline-1 outline-offset-1 outline-black-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                className="block w-full border rounded-md mt-2  text-white   bg-white bg-opacity-5 border-gray-700 px-3 py-2 text-sm outline-1 outline-offset-1 outline-black-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
               />
             </div>
             {/* Other form fields with similar fixes */}
             <div>
               <label
                 htmlFor="last_name"
-                className="text-base sm:text-base font-medium text-gray-600"
+                className="text-base sm:text-base font-medium text-white"
               >
                 Last Name
               </label>
@@ -250,12 +209,12 @@ const SignUp = () => {
                 value={last_name}
                 onChange={(e) => setlast_name(e.target.value)}
                 placeholder="Enter Last Name"
-                className="block w-full border mt-2  rounded-md bg-white px-3 py-2 text-sm text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                className="block w-full border mt-2  rounded-md text-white   bg-white bg-opacity-5 border-gray-700 px-3 py-2 text-sm outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
               />
             </div>
 
             <div>
-              <label htmlFor="text-base sm:text-base font-medium text-gray-600">
+              <label htmlFor="text-base sm:text-base font-medium text-white">
                 Email address
               </label>
               <div className="relative">
@@ -268,7 +227,7 @@ const SignUp = () => {
                   autoComplete="email"
                   placeholder="Enter your Email"
                   required
-                  className={`block w-full mt-2  border rounded-md bg-white px-3 py-2 text-sm text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
+                  className={`block w-full mt-2  border rounded-md text-white   bg-white bg-opacity-5 border-gray-700 px-3 py-2 text-sm outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
                     email && (isEmailValid ? "valid-input" : "invalid-input")
                   }`}
                 />
@@ -282,7 +241,7 @@ const SignUp = () => {
             <div>
               <label
                 htmlFor="password1"
-                className="text-base sm:text-base font-medium text-gray-600"
+                className="text-base sm:text-base font-medium text-white"
               >
                 Create Password
               </label>
@@ -295,7 +254,7 @@ const SignUp = () => {
                   onChange={handlePasswordChange}
                   placeholder="Enter Password"
                   required
-                  className={`block w-full border mt-2  rounded-md bg-white px-3 py-2 text-sm text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
+                  className={`block w-full border mt-2  rounded-md text-white   bg-white bg-opacity-5 border-gray-700 px-3 py-2 text-sm  outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
                     isPasswordTouched && password1 && !isPasswordValid
                       ? "invalid-input"
                       : ""
@@ -306,7 +265,8 @@ const SignUp = () => {
                   className="absolute right-3 top-2"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  {showPassword ? "hide" : "show"}
+                   {/* <FaEyeSlash /> : <FaEye /> */}
                 </button>
               </div>
               {password1 && (
@@ -334,7 +294,7 @@ const SignUp = () => {
             <div>
               <label
                 htmlFor="password2"
-                className="text-base sm:text-base font-medium text-gray-600"
+                className="text-base sm:text-base font-medium text-white"
               >
                 Confirm Password
               </label>
@@ -347,7 +307,7 @@ const SignUp = () => {
                   onChange={handleConfirmPasswordChange}
                   placeholder="Confirm Password"
                   required
-                  className={`block w-full border mt-2 rounded-md bg-white px-3 py-2 text-sm text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                  className={`block w-full border mt-2 rounded-md text-white   bg-white bg-opacity-5 border-gray-700 px-3 py-2 text-sm  outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                 ${
                   isConfirmPasswordTouched &&
                   password2 &&
@@ -361,7 +321,8 @@ const SignUp = () => {
                   className="absolute right-3 top-2"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
-                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                  {showConfirmPassword ? "hide" : "show"}
+                    {/* <FaEyeSlash /> : <FaEye /> */}
                 </button>
               </div>
               {isConfirmPasswordTouched &&
@@ -376,11 +337,11 @@ const SignUp = () => {
             <div>
               <label
                 htmlFor="account_type"
-                className="text-base sm:text-base font-medium text-gray-600"
+                className="text-base sm:text-base font-medium text-white"
               >
                 You Selected:
               </label>
-              <div className="mt-2 py-2 px-1 border-2 text-sm  border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700">
+              <div className="mt-2 py-2 px-1 border-2 text-sm   bg-white bg-opacity-20  border-gray-700 rounded-md shadow-sm text-white">
                 {account_type
                   ? account_type.charAt(0).toUpperCase() + account_type.slice(1)
                   : "No option selected"}
@@ -418,22 +379,22 @@ const SignUp = () => {
                   !isEmailValid ||
                   !checkBoxValid
                 }
-                className="w-full rounded-md px-4 py-3 text-white font-semibold bg-blue-900 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full rounded-md px-4 py-3 text-white font-semibold bg-[#4045E1] hover:bg-blue-700  disabled:cursor-not-allowed"
               >
-                {localLoading ? <BeatLoader /> : "Continue"}
+                {localLoading ? <BeatLoader /> : "Sign Up"}
               </button>
             </div>
           </form>
-          <div className="flex items-center my-2">
+          <div className="flex items-center mt-10">
             <div className="flex-grow ">
-              <hr className="border-t-2 border-black ml-4 border-opacity-30" />
+              <hr className="border-t-2 border-white ml-4 border-opacity-30" />
             </div>
             <div className="mx-1">OR</div>
             <div className="flex-grow">
-              <hr className="border-t-2 border-black mr-4 border-opacity-30" />
+              <hr className="border-t-2 border-white mr-4 border-opacity-30" />
             </div>
           </div>
-          <div className=" justify-center items-center py-6 md:mx-4 md:flex hidden">
+          <div className=" justify-center items-center py-4 md:mx-4 md:flex hidden">
             <div className="App flex justify-center items-center ">
               <div className="text-center my-2 rounded-lg">
                 <GoogleAuth buttonText="Sign up with Google" />
@@ -483,7 +444,7 @@ const SignUp = () => {
             onClick={() =>
               navigate("/check-your-email", { state: { email, first_name } })
             }
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-500 text-sm"
+            className="bg-[#4045E1] text-white px-4 py-2 rounded-md hover:bg-indigo-500 text-sm"
           >
             Continue
           </button>

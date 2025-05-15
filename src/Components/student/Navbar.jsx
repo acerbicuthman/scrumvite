@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 // import {  SignedIn, SignedOut, SignInButton,useClerk, UserButton, useUser } from '@clerk/clerk-react'
 import google from "../../assets/googleIcon.png";
 import { AuthContext } from "../../context/Authcontext";
+import Logo from '../../Pages/Landing/LandingImg/Clip path group.png'
 
 
 const Navbar = () => {
@@ -28,20 +29,15 @@ const Navbar = () => {
   //   const {user} = useUser()
   if (isLoading) return null; 
   return (
-    <div className="from-cyan-100/70 via-blue-200/60 to-purple-300/80 mb-4 ">
+    <div className=" mb-8 ">
       <header className="fixed w-full bg-black p-2 inset-x-0 top-0 z-50 shadow-md ">
         <nav
           className="flex items-center justify-between lg:px-8"
           aria-label="Global"
         >
-          <div className="flex lg:flex-col">
-            <Link to="/" className="mr-20 p-1.5">
-              <div className="text-white font-mono font-bold">Scrum Consult</div>
-              {/* <img
-                className="h-8 w-auto"
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                alt="Logo"
-              /> */}
+          <div className="flex lg:flex-col ">
+            <Link to="/" className="mr-20 p-2  ">
+              <img src={Logo} alt="ScrumVite" className="h-[50px]  rounded-full hover:scale-105 transition-transform duration-300 "/>
             </Link>
           </div>
 

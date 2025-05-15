@@ -9,7 +9,7 @@ const HEroLanding = () => {
 
   const handleNavigateType = (type) => {
     setAccount_type(type);
-    navigate(type === "educator" ? "/educator/tutorSignUp" : "signup", {
+    navigate(type === "tutor" ? "/educator/tutorSignUp" : "signup", {
       state: { account_type: type },
     });
   };
@@ -38,7 +38,7 @@ const HEroLanding = () => {
           </p>
           <div className="md:flex mt-10 mx-10 ">
             <button
-              onClick={() => handleNavigateType("educator")}
+              onClick={() => handleNavigateType("tutor")}
               className="bg-[#4318d1] text-white md:px-10 py-4 rounded-lg md:mx-4 mb-5 w-full text-nowrap "
             >
               Become a Tutor

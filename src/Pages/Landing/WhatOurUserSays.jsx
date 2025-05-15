@@ -71,7 +71,7 @@ const WhatOurUserSays = () => {
               &lt;
             </div>
 
-            <div className="flex-1 bg-white/5 rounded-lg backdrop-blur-lg border-2 border-gray-800 w-full max-w-screen-sm md:max-w-[905px] md:h-[225px] p-6 md:p-14 text-white shadow-lg mx-auto">
+            <div className="flex-1 bg-white/5 bg-opacity-5 border-2 border-[#C0C0C01A] backdrop-blur-lg  w-full max-w-screen-sm md:max-w-[905px] md:h-[225px] p-6 md:p-14 text-white shadow-lg mx-auto">
               <div className="flex items-center mb-4 pr-20 md:pr-0 ">
                 <img
                   src={image}

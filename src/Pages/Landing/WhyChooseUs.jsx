@@ -76,7 +76,7 @@ const WhyChooseUs = () => {
       </div>
     
         <img src={Cuate} alt="" className="relative -mb-20 z-10 mx-auto" />
-        <div className="bg-white/15  backdrop-blur-md py-20 ">
+        <div className="bg-white/5 bg-opacity-5 border-2 border-[#C0C0C01A] backdrop-blur-lg py-20 ">
           <div className="mt-5 z-10 px-1">
             <h1 className="my-2 text-lg font-semibold">AI-Powered Matching</h1>
             <p className="text-gray-400 text-xs">
@@ -88,7 +88,7 @@ const WhyChooseUs = () => {
       </div>
       <div className="relative text-white text-center md:hidden justify-center items-center mx-4 ">
         <img src={Pana} alt="" className="relative -mb-20 z-10 mx-auto" />
-        <div className="bg-white/15  backdrop-blur-md py-20 ">
+        <div className="bg-white bg-opacity-5 border-2 border-[#C0C0C01A] backdrop-blur-md py-20 ">
           <div className="mt-5 z-10 px-2">
             <h1 className="my-2 text-lg font-semibold">Live Interactive Sessions</h1>
             <p className="text-gray-400 text-xs">
@@ -100,7 +100,7 @@ const WhyChooseUs = () => {
       </div>
       <div className="relative text-white text-center md:hidden justify-center items-center mx-4 ">
         <img src={Bro} alt="" className="relative -mb-20 z-10 mx-auto" />
-        <div className="bg-white/15  backdrop-blur-md py-20 ">
+        <div className="bg-white bg-opacity-5  border-2 border-[#C0C0C01A] backdrop-blur-md py-20 ">
           <div className="mt-5 z-10 ">
             <h1 className="my-2 text-lg font-semibold">Flexible Scheduling</h1>
             <p className="text-gray-400 text-xs">

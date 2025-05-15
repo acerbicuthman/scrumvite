@@ -7,7 +7,7 @@ import Navbar from "../../Components/student/Navbar";
 
 const Landing = () => {
   return (
-    <div className="mt-18 overflow-auto bg-black">
+    <div className="mt-16 overflow-auto bg-black">
       <HEroLanding />
       <WhyChooseUs />
       <WhatOurUserSays />

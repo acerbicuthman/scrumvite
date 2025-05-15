@@ -15,14 +15,14 @@ const ImageSlideShow = () => {
   }, [images.length]);
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-4/5 mx-auto h-full py-4">
       {images.map((src, index) => (
         <img
           key={index}
           src={src}
           alt={`Slide ${index}`}
           className={`
-            absolute inset-0 w-full h-full  object-cover transition-opacity duration-700 ease-in-out
+            absolute rounded-xl inset-0 w-[645px] mx-auto h-[652px]  object-cover transition-opacity duration-700 ease-in-out
             ${index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"}
           `}
         />

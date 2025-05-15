@@ -47,7 +47,7 @@ const ProtectedRoute = ({ children }) => {
 
 // Layout to conditionally render Navbar/Footer
 const Layout = () => {
-  const isEducatorRoute = useMatch("/educator/*");
+  // const isEducatorRoute = useMatch("/educator/*");
   return (
     <>
       {/* {!isEducatorRoute && <Navbar />} */}
