@@ -33,7 +33,7 @@ const LinkedInLogin = () => {
         >
           <img
             src={LinkedIcon}
-            alt="Google"
+            alt="LinkedIn"
             className="w-5 h-5 mr-2 lg:-ml-5 md:-ml-3"
           />
           <span className="text-sm text-nowrap">Sign in with Google</span>
@@ -48,8 +48,8 @@ const LinkedInLogin = () => {
         >
           <img
             src={LinkedIcon}
-            alt="Google"
-            className="w-12 h-12 border-2 rounded-full border-black"
+            alt="LinkedIn"
+            className="w-12 h-12 border-2 p-1.5 rounded-full border-black"
           />
         </button>
       </div>

@@ -50,7 +50,7 @@ const Layout = () => {
   const isEducatorRoute = useMatch("/educator/*");
   return (
     <>
-      {!isEducatorRoute && <Navbar />}
+      {/* {!isEducatorRoute && <Navbar />} */}
       <Outlet />
       <Footer />
     </>
@@ -59,7 +59,7 @@ const Layout = () => {
 
 const App = () => {
   return (
-    <div className="text-default min-h-screen">
+    <div className=" ">
       <AuthProvider>
         <Routes>
           <Route element={<Layout />}> 

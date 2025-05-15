@@ -19,7 +19,7 @@ carousel1,carousel2, carousel3
       setCurrentIndex((prevIndex) =>
         prevIndex === images.length - 1 ? 0 : prevIndex + 1
       );
-    }, 3000);
+    }, 4000);
 
     return () => clearInterval(timer);
   }, []);
@@ -59,7 +59,7 @@ carousel1,carousel2, carousel3
             onClick={nextSlide}
             className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/70 hover:bg-white text-black px-3 py-1 rounded-l-lg"
           >
-            ›
+            , 
           </button>
     
           {/* Dots */}
