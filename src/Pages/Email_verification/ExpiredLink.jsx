@@ -11,7 +11,7 @@ const ExpiredLink = () => {
         </div>
         <div className="lg:justify-items-center">
           <p className="m-2 py-2 lg:px-6 w-full lg:w-4/5 px-4 lg:text-2xl font-semibold">
-            Oops! Looks like your magic link has expired.
+            Oops! Looks like your magic link has expired!!.
           </p>
           <p className="text-sm">
             But no worries, we can send you a fresh one!
