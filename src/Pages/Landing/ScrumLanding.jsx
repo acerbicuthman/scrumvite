@@ -20,14 +20,12 @@ const ScrumLanding = () => {
       return;
     }
 
-    if(account_type === "learner"){
+    if (account_type === "learner") {
       navigate("/signup", { state: { account_type } });
-    } 
-    if (account_type === "educator"){
-      navigate("/educator/tutorSignUp", {state: {account_type}})
     }
-
-
+    if (account_type === "educator") {
+      navigate("/educator/tutorSignUp", { state: { account_type } });
+    }
   };
 
   return (
@@ -42,14 +40,11 @@ const ScrumLanding = () => {
         <h1 className="text-3xl lg:text-3xl  font-semibold text-black text-center md:text-left mb-4">
           Create Your Account on Scrum Consult
         </h1>
-        <p className="text-lg text-gray-600">
-          Welcome to Scrum Consult!
-        </p>
+        <p className="text-lg text-gray-600">Welcome to Scrum Consult!</p>
         <p className="text-lg text-gray-600 mb-6">
           Join as a Learner or Tutor and start Your Journey today.
         </p>
 
-      
         <div className="space-y-4 mb-6">
           {/* Tutor Card */}
           <div
@@ -66,7 +61,11 @@ const ScrumLanding = () => {
               <p className="text-sm ">Upload your course videos and details.</p>
             </div>
             <div className="flex md:ml-24">
-            {account_type === "educator" ? <FaArrowRightLong className="text-black text-xl "/> : ""}
+              {account_type === "educator" ? (
+                <FaArrowRightLong className="text-black text-xl " />
+              ) : (
+                ""
+              )}
             </div>
           </div>
 
@@ -79,16 +78,26 @@ const ScrumLanding = () => {
                 : "border-gray-300 hover:border-purple-500 shadow-xl"
             }`}
           >
-            <img src={studentIcon} alt="Learner Icon" className="w-12 h-12 mr-4" />
+            <img
+              src={studentIcon}
+              alt="Learner Icon"
+              className="w-12 h-12 mr-4"
+            />
             <div className="px-4 md:p-0">
               <p className="text-lg font-semibold">Learner</p>
-              <p className="text-sm ">Take courses tailored to your learning needs.</p>
+              <p className="text-sm ">
+                Take courses tailored to your learning needs.
+              </p>
             </div>
             <div className="flex md:ml-16">
-            {account_type === "learner"  ? <FaArrowRightLong className="text-black text-xl "/> : ""}
+              {account_type === "learner" ? (
+                <FaArrowRightLong className="text-black text-xl " />
+              ) : (
+                ""
+              )}
             </div>
           </div>
-          
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <button
               type="submit"
@@ -99,7 +108,6 @@ const ScrumLanding = () => {
           </form>
         </div>
 
-    
         {/* <div className="w-full max-w-md mx-auto">
           
 
