@@ -17,6 +17,7 @@ import Book from '../Educator/Tutur-images/Untitled design (2) 1.png'
 
 
 
+
 const TutorSignUp = () => {
   const [first_name, setfirst_name] = useState("");
   const [last_name, setlast_name] = useState("");
@@ -37,6 +38,7 @@ const TutorSignUp = () => {
   const location = useLocation();
   const [localLoading, setLocalLoading] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("")
 
   const minLength = /.{8,}/;
   const upperCase = /[A-Z]/;
@@ -124,34 +126,43 @@ const TutorSignUp = () => {
         data
       );
       console.log("Response:", response.data);
-
-      // navigate("/emailverification");
+      localStorage.setItem("registered_email", email);
+      localStorage.setItem("registered_password", password1);
+  
+      setfirst_name("");
+      setlast_name("");
+      setEmail("");
+      setpassword1("");
+      setpassword2("");
+      setCheckBoxValid(false);
+  
+      s // navigate("/emailverification");
     } catch (error) {
-      if (error.response) {
-        // Request was made and server responded with a status code other than 2xx
-        console.error("Error response data:", error.response.data);
+      if (error.response && error.response.data) {
+        const data = error.response.data;
+    
+        // Convert the backend error object to a nicely formatted JSON string
+        const rawMessage = JSON.stringify(data, null, 2);
+    
+        // Set the raw backend error message to display in the UI
+        setErrorMessage(rawMessage);
+    
+        // Log detailed error info
+        console.error("Error response data:", data);
         console.error("Error status:", error.response.status);
       } else if (error.request) {
-        // Request was made but no response was received
-        console.error("Error request:", error.request);
+        // The request was made but no response was received
+        console.error("No response received:", error.request);
+        setErrorMessage("No response received from server.");
       } else {
-        // Something else went wrong
-        console.error("Error message:", error.message);
+        // Something happened while setting up the request
+        console.error("Request setup error:", error.message);
+        setErrorMessage("An unexpected error occurred.");
       }
     } finally {
-      setLocalLoading(false); // 👈 THIS ENSURES LOADER STOPS
+      setLocalLoading(false);
     }
-    localStorage.setItem("registered_email", email);
-    localStorage.setItem("registered_password", password1);
-
-    setfirst_name("");
-    setlast_name("");
-    setEmail("");
-    setpassword1("");
-    setpassword2("");
-    setCheckBoxValid(false);
   };
-
   useEffect(() => {
     // Retrieve `account_type` from the location state (from the previous page)
     if (location.state && location.state.account_type) {
@@ -172,7 +183,7 @@ const TutorSignUp = () => {
           <div className="flex flex-col md:flex-row  w-full overflow-hidden px-4 md:px-0 mt-18 bg-black text-white">
       
       <div className="hidden md:flex w-full  my-auto h-2/4 justify-center items-center mt-20">
-  <div className="w-full mx-auto items-center justify-center py-auto my-auto  ">
+  <div className="w-full mx-auto items-center  justify-center py-auto my-auto  ">
   <img
   src={TutorSignUpCoverImg}
   alt="Tutor Profile"
@@ -243,7 +254,7 @@ const TutorSignUp = () => {
                   required
                   className={`block w-full mt-2  border rounded-md text-white   bg-white bg-opacity-5 border-gray-700  px-3 py-2 text-sm  outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
                     email && (isEmailValid ? "valid-input" : "invalid-input")
-                  }`}
+                  } ${email && (errorMessage ? "invalid-input" : "valid-input" )}`}
                 />
               </div>
               {!isEmailValid && email && (
@@ -251,6 +262,12 @@ const TutorSignUp = () => {
                   Please enter a valid email
                 </div>
               )}
+       {errorMessage && (
+  <div className="text-red-500 text-xs mt-1">
+    {JSON.parse(errorMessage)?.email?.[0]}
+  </div>
+)}
+
             </div>
             <div>
               <label

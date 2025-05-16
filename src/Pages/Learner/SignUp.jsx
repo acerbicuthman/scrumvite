@@ -34,6 +34,7 @@ const SignUp = () => {
   const location = useLocation();
   const [localLoading, setLocalLoading] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("")
 
   const minLength = /.{8,}/;
   const upperCase = /[A-Z]/;
@@ -104,6 +105,7 @@ const SignUp = () => {
   const handleAuthCodeChange = async (e) => {
     e.preventDefault();
     setLocalLoading(true);
+    setErrorMessage(""); 
 
     const data = {
       account_type,
@@ -122,23 +124,7 @@ const SignUp = () => {
       );
       console.log("Response:", response.data);
 
-      // navigate("/emailverification");
-    } catch (error) {
-      if (error.response) {
-        // Request was made and server responded with a status code other than 2xx
-        console.error("Error response data:", error.response.data);
-        console.error("Error status:", error.response.status);
-      } else if (error.request) {
-        // Request was made but no response was received
-        console.error("Error request:", error.request);
-      } else {
-        // Something else went wrong
-        console.error("Error message:", error.message);
-      }
-    } finally {
-      setLocalLoading(false); // 👈 THIS ENSURES LOADER STOPS
-    }
-    localStorage.setItem("registered_email", email);
+      localStorage.setItem("registered_email", email);
     localStorage.setItem("registered_password", password1);
 
     setfirst_name("");
@@ -147,6 +133,35 @@ const SignUp = () => {
     setpassword1("");
     setpassword2("");
     setCheckBoxValid(false);
+
+    setIsModalOpen(true);
+
+      // navigate("/emailverification");
+    } catch (error) {
+      if (error.response && error.response.data) {
+        const data = error.response.data;
+    
+        // Convert the backend error object to a nicely formatted JSON string
+        const rawMessage = JSON.stringify(data, null, 2);
+    
+        // Set the raw backend error message to display in the UI
+        setErrorMessage(rawMessage);
+    
+        // Log detailed error info
+        console.error("Error response data:", data);
+        console.error("Error status:", error.response.status);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error("No response received:", error.request);
+        setErrorMessage("No response received from server.");
+      } else {
+        // Something happened while setting up the request
+        console.error("Request setup error:", error.message);
+        setErrorMessage("An unexpected error occurred.");
+      }
+    } finally {
+      setLocalLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -167,17 +182,18 @@ const SignUp = () => {
   return (
     <div className="flex flex-col md:flex-row h-screen w-full  mt-16 overflow-hidden px-4 md:px-0 bg-black text-white">
       {/* Left - Image SlideShow */}
-      <div className="hidden md:flex  h-full my-auto w-full justify-center  ">
+      <div className="hidden lg:flex  h-full my-auto w-full justify-center  ">
         <div className="w-full my-12 mx-auto items-center justify-center py-auto ml-20 ">
           <ImageSlideShow />
         </div>
       </div>
-      <div className="w-full px-2 sm:px-6 pt-4 py-10  min-h-screen  overflow-scroll">
-        <div className="w-full max-w-md mx-auto mt-10 ">
+      <div className="w-full lg:w-10/12 px-4 sm:px-8 pt-6 pb-10 overflow-auto">
+
+        <div className="w-full max-w-lg mx-auto mt-10 ">
           <h2 className="text-center text-4xl md font-semibold text-white p-2">
           Welcome Learner!
           </h2>
-          <div className="text-center  text-sm font-medium mb-4  ">
+          <div className="text-center  text-sm font-medium mb-4 opacity-50 ">
             <p> Create an account and begin your learning Journey</p>
           </div>
           <form className="space-y-5" onSubmit={handleAuthCodeChange}>
@@ -229,7 +245,7 @@ const SignUp = () => {
                   required
                   className={`block w-full mt-2  border rounded-md text-white   bg-white bg-opacity-5 border-gray-700 px-3 py-2 text-sm outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
                     email && (isEmailValid ? "valid-input" : "invalid-input")
-                  }`}
+                  } ${email && (errorMessage ? "invalid-input" : "valid-input" )}`}
                 />
               </div>
               {!isEmailValid && email && (
@@ -237,6 +253,12 @@ const SignUp = () => {
                   Please enter a valid email
                 </div>
               )}
+          {errorMessage && (
+  <div className="text-red-500 text-xs mt-1">
+    {JSON.parse(errorMessage)?.email?.[0]}
+  </div>
+)}
+
             </div>
             <div>
               <label
@@ -265,7 +287,7 @@ const SignUp = () => {
                   className="absolute right-3 top-2"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? "hide" : "show"}
+                  {showPassword ?  <div className="text-white opacity-50">Hide</div> : <div className="text-white opacity-50">Show</div>}
                    {/* <FaEyeSlash /> : <FaEye /> */}
                 </button>
               </div>
@@ -321,7 +343,7 @@ const SignUp = () => {
                   className="absolute right-3 top-2"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
-                  {showConfirmPassword ? "hide" : "show"}
+                  {showConfirmPassword ?  <div className="text-white opacity-50">Hide</div> : <div className="text-white opacity-50">Show</div>}
                     {/* <FaEyeSlash /> : <FaEye /> */}
                 </button>
               </div>
@@ -372,7 +394,7 @@ const SignUp = () => {
             <div className="text-center py-2">
               <button
                 type="submit"
-                onClick={() => setIsModalOpen(true)}
+                // onClick={() => setIsModalOpen(true)}
                 disabled={
                   !isPasswordValid ||
                   !isConfirmPasswordValid ||
@@ -385,37 +407,54 @@ const SignUp = () => {
               </button>
             </div>
           </form>
-          <div className="flex items-center mt-10">
-            <div className="flex-grow ">
-              <hr className="border-t-2 border-white ml-4 border-opacity-30" />
-            </div>
-            <div className="mx-1">OR</div>
-            <div className="flex-grow">
-              <hr className="border-t-2 border-white mr-4 border-opacity-30" />
+          {/* {errorMessage && (
+  <div className="text-red-500 text-center text-xs mt-1">
+    {JSON.parse(errorMessage)?.email?.[0]}
+  </div>
+)} */}
+
+        </div>
+
+         {/* Divider OR */}
+         <div className="md:flex hidden md:items-center md:gap-4 text-white opacity-50 mt-10 md:px-14">
+          <div className="flex-1 ">
+            <hr />
+          </div> 
+          <div className="">Or Sign Up With</div>
+          <div className="flex-1 ">
+            <hr />
+          </div>
+        </div>
+        {/* Divider Mobile View */}
+        <div className="md:hidden flex items-center text-sm text-gray-500 gap-2 w-full my-6">
+  <hr className="flex-grow border-t border-gray-500" />
+  <span className="whitespace-nowrap">Or Sign Up With</span>
+  <hr className="flex-grow border-t border-gray-500" />
+</div>
+
+        <div className=" justify-center items-center py-4 md:mx-4 md:flex hidden md:px-5">
+          <div className="App flex justify-center items-center mx-3">
+            <div className="text-center my-2 rounded-lg">
+              <GoogleAuth buttonText="Sign up with Google" />
             </div>
           </div>
-          <div className=" justify-center items-center py-4 md:mx-4 md:flex hidden">
-            <div className="App flex justify-center items-center ">
-              <div className="text-center my-2 rounded-lg">
-                <GoogleAuth buttonText="Sign up with Google" />
-              </div>
-            </div>
 
-            <div className="App flex justify-center items-center ">
-              <div className="text-center my-2 rounded-lg">
-                <LinkedInLogin label="Sign in with LinkedIn" />
-              </div>
+          <div className="App flex justify-center items-center mx-3">
+            <div className="text-center my-2 rounded-lg ">
+              <LinkedInLogin label="Sign in with LinkedIn" />
             </div>
           </div>
         </div>
 
-        <div className="md:hidden flex-row my-3 gap-5 justify-center flex">
-          <GoogleAuth />
+        <div className="md:hidden flex flex-col justify-center mx-auto items-center">
+        <div className="flex"> <GoogleAuth /> <p className="my-auto ">Sign in WIth Google</p>
+          </div> 
 
-          <div className="md:hidden flex rounded-full">
-            <LinkedInLogin />
+          <div className="md:hidden  ">
+            <div className="flex"> <LinkedInLogin /> <p className="my-auto">Sign in WIth Google</p></div>
           </div>
         </div>
+        
 
         <div className="text-center text-base pb-4 ">
           <p>
@@ -428,28 +467,33 @@ const SignUp = () => {
       </div>
 
       <EmailVerification
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        email={email}
-        first_name={first_name}
-      >
-        <div className="w-full max-w-sm mx-auto p-4">
-          <h2 className="bg-blue-800 text-white rounded-lg my-3 p-2 text-sm">
-            Check your Email for the Verification Link
-          </h2>
-        </div>
+  isOpen={isModalOpen}
+  onClose={() => setIsModalOpen(false)}
+  email={email}
+  first_name={first_name}
+>
+  
+    
+      <div className="w-full max-w-sm mx-auto p-4">
+        <h2 className="bg-[#4045E1] text-white rounded-lg my-3 p-2 text-sm">
+          Check your Email for the Verification Link
+        </h2>
+      </div>
 
-        <div className="flex flex-col gap-3">
-          <button
-            onClick={() =>
-              navigate("/check-your-email", { state: { email, first_name } })
-            }
-            className="bg-[#4045E1] text-white px-4 py-2 rounded-md hover:bg-indigo-500 text-sm"
-          >
-            Continue
-          </button>
-        </div>
-      </EmailVerification>
+      <div className="flex flex-col gap-3">
+        <button
+          onClick={() =>
+            navigate("/check-your-email", { state: { email, first_name } })
+          }
+          className="bg-[#4045E1] text-white px-3 py-1 rounded-md hover:bg-indigo-500 text-sm"
+        >
+          Continue
+        </button>
+      </div>
+   
+
+</EmailVerification>
+
     </div>
   );
 };

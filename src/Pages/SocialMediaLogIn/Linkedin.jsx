@@ -29,14 +29,14 @@ const LinkedInLogin = () => {
   <div className="text-center my-2 rounded-lg hidden md:block">
         <button
           onClick={handleLogin}
-          className="flex items-center border-opacity-10 md:px-6 lg:px-8 py-3 rounded-lg border-black border-2  hover:bg-gray-100 transition"
+          className="flex items-center border-opacity-10 md:px-6 lg:px-8 py-3 rounded-lg border-black border-2  hover:bg-gray-700 transition"
         >
           <img
             src={LinkedIcon}
             alt="LinkedIn"
             className="w-5 h-5 mr-2 lg:-ml-5 md:-ml-3"
           />
-          <span className="text-sm text-nowrap">Sign in with Google</span>
+          <span className="text-lg text-nowrap">LinkedIn</span>
         </button>
       </div>
 

@@ -32,12 +32,12 @@ const EmailVerification = ({ isOpen, onClose, email, first_name }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="md:w-2/5 w-full items-center justify-center rounded-xl p-2 m-10 md:m-1 overflow-hidden bg-transparent border-2 border-white">
-        <div className='flex flex-col justify-center items-center text-center rounded-xl bg-white'>
-          <div className="w-full max-w-lg h-auto px-6 py-8 bg-transparent">
+      <div className="md:w-[622px] h-[429px] w-full items-center justify-center rounded-xl bg-black m-10 md:m-1 overflow-hidden py-10 border-2 border-white">
+        <div className='flex flex-col justify-center items-center text-center  '>
+          <div className="w-full max-w-lg h-auto px-3 py-2 bg-transparent ">
             <div className="flex justify-center items-center m-auto">
               <button
-                className="absolute top-2 right-4 text-gray-600 hover:text-black text-3xl"
+                className="absolute top-2 right-4 text-white hover:text-black text-4xl"
                 onClick={onClose}
               >
                 ✕
@@ -48,7 +48,7 @@ const EmailVerification = ({ isOpen, onClose, email, first_name }) => {
                 alt="Email Verification Illustration"
               />
             </div>
-            <h1 className="font-semibold lg:text-2xl text-xl">
+            <h1 className="font-semibold lg:text-2xl text-xl w-3/5 text-center mx-auto">
               You are just one click away!
             </h1>
             <p className="text-sm">
@@ -56,12 +56,12 @@ const EmailVerification = ({ isOpen, onClose, email, first_name }) => {
 </p>
             <p className="text-sm">Just confirm your email to get started!</p>
 
-            <div className="flex flex-col gap-3 mt-6">
+            <div className="flex flex-col gap-3 mt-6 ">
             <button
-            className='w-full bg-blue-900 text-white px-3 py-2 rounded-lg '
+            className='w-full bg-[#4045E1] text-white px-3 py-2 rounded-lg '
   onClick={() => navigate("/check-your-email", { state: { email: localEmail, first_name: localFirstName } })}
 >
-  Continue
+ <p className='text-3xl'>Continue</p> 
 </button>
 
               {/* <button

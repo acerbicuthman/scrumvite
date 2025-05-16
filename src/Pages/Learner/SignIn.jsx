@@ -9,7 +9,7 @@ import { AuthContext } from "../../context/Authcontext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./signin.css";
-import image from "../../assets/Frame 1984078024.png";
+import image from "../../assets/Mask group (1).png";
 import { BeatLoader } from "react-spinners";
 import {
   GoogleOAuthProvider,
@@ -146,37 +146,35 @@ const SignIn = () => {
       <BeatLoader color="white" size={12} />
     </div>
   ) : (
-    <div className="flex flex-col md:flex-row min-h-screen w-full">
+    <div className="flex flex-col md:flex-row min-h-screen w-full bg-black text-white">
       {/* Left - Image SlideShow */}
-      <div className="hidden md:flex w-1/2 items-center justify-center bg-gray-100">
-        <div className="w-full h-full min-h-screen overflow-hidden">
-          {/* <ImageSlideShow /> */}
-          <img src={image} alt="" />
+      <div className="hidden md:flex w-1/2 items-center justify-center mt-">
+        <div className="w-full mx-auto items-center justify-center ">
+          <div className="xl:w-[845px] lg:w-[638px] md:w-[420px]  mx-auto absolute rounded-lg top-28  "><ImageSlideShow/></div>
         </div>
       </div>
 
       {/* Right - Sign In Form */}
-      <div className="flex-1 mt-10 px-12 sm:px-8 md:px-12 mb-4 md:mb-1 xl:py-18 h-screen overflow-x-hidden xl:mb-1 lg:mb- lg:min-h-screen lg:overflow-hidden ">
-        <div className="w-full max-w-lg mx-auto pt-8">
-          <h2 className="hidden md:block text-center text-xl sm:text-3xl md:text-xl font-medium tracking-tight text-gray-600 mb-4 md:mb-1 xl:text-3xl">
+      <div className="flex-1 mt-16 px-2 sm:px-8 lg:px-12 mb-4 md:mb-1 xl:py-18 h-screen overflow-x-hidden xl:mb-1 lg:mb- lg:min-h-screen lg:overflow-hidden ">
+        <div className="w-full max-w-lg mx-auto my-auto border-2 rounded-lg border-white border-opacity-10 md:p-14 p-6 h-[499px]">
+          <h2 className=" block text-center text-xl sm:text-3xl md:text-xl font-medium tracking-tight mb-4 md:mb-1 xl:text-3xl">
             Welcome Back!
           </h2>
-          <div className="text-center md:px-0 px-2 lg:text-lg text-base mb-4 md:text-lg md:text-nowrap xl:text-base">
-            <p>
-              <span className="md:hidden">Welcome,</span> Log back in to
-              continue your learning journey
+          <div className="text-center md:px-0 lg:text-lg text-base mb-4 md:text-lg lg:text-nowrap xl:text-base">
+            <p className="text-white opacity-50 ">
+              <span className="md:block hidden">Welcome,</span> <span className="mx-auto"> Enter your credentials to access your account</span>
             </p>
           </div>
 
           {/* Sign In Form */}
           <form
-            className="space-y-5 md:space-y-0 lg:space-y-5 xl:space-y-1"
+            className="space-y-5 md:space-y-0 lg:space-y-5 xl:space-y-1 "
             onSubmit={handleLogInSubmit}
           >
             <div className="py-2">
               <label
                 htmlFor="email"
-                className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-900"
+                className="text-sm sm:text-base md:text-base xl:text-sm font-medium "
               >
                 Email address
               </label>
@@ -190,7 +188,7 @@ const SignIn = () => {
                   autoComplete="email"
                   placeholder="Enter your Email"
                   required
-                  className="block w-full border rounded-md bg-white px-2 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                  className="block w-full border  rounded-md text-white  bg-white bg-opacity-5  border-gray-700  px-2 py-2 text-base  outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                 />
               </div>
             </div>
@@ -198,7 +196,7 @@ const SignIn = () => {
             <div className="py-2">
               <label
                 htmlFor="password1"
-                className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-900"
+                className="text-sm sm:text-base md:text-base xl:text-sm font-medium "
               >
                 Password
               </label>
@@ -211,19 +209,20 @@ const SignIn = () => {
                   onChange={handlePasswordChange}
                   placeholder="Enter Password"
                   required
-                  className="block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                  className="block w-full border rounded-md text-white  bg-white bg-opacity-5  border-gray-700  px-3 py-2 text-base outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                 />
                 <button
                   type="button"
                   className="absolute right-3 top-2"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  {showPassword ? <div className="text-white opacity-50">Hide</div> : <div className="text-white opacity-50">Show</div> }
+                   {/* <FaEyeSlash /> : <FaEye /> */}
                 </button>
               </div>
             </div>
 
-            <div className="flex md:text-sm text-sm lg:text-base">
+            <div className="flex md:text-sm text-sm lg:text-base    border-gray-700 ">
               <div className="flex-1">
                 <label htmlFor="remember">
                   <input
@@ -231,7 +230,7 @@ const SignIn = () => {
                     id="remember"
                     className="mr-2 h-3 w-3 text-indigo-600 border-gray-300 rounded"
                   />
-                  Remember Me
+                 <span className="text-white opacity-50">Remember Me</span> 
                 </label>
               </div>
               <Link to="/forgetpassword">
@@ -243,12 +242,12 @@ const SignIn = () => {
               <div className="w-full md: text-center">
                 <button
                   type="submit"
-                  className="bg-blue-900 w-full rounded-md p py-3 text-white"
+                  className="bg-[#4045E1] w-full rounded-md p py-3 text-white"
                 >
                   {localLoading ? (
                     <BeatLoader color="white" size={12} />
                   ) : (
-                    "Continue"
+                    "Sign In"
                   )}
                 </button>
               </div>
@@ -256,16 +255,23 @@ const SignIn = () => {
           </form>
         </div>
         {/* Divider OR */}
-        <div className="md:flex hidden items-center gap-4">
-          <div className="flex-1">
+        <div className="md:flex hidden md:items-center md:gap-4 text-white opacity-50 mt-10 md:px-14">
+          <div className="flex-1 ">
             <hr />
           </div> 
-          <div className="text-gray-400">OR</div>
-          <div className="flex-1">
+          <div className="">Or Log In with</div>
+          <div className="flex-1 ">
             <hr />
           </div>
         </div>
-        <div className=" justify-center items-center py-6 md:mx-4 md:flex hidden md:px-5">
+        {/* Divider Mobile View */}
+        <div className="md:hidden flex items-center text-sm text-gray-500 gap-2 w-full">
+  <hr className="flex-grow border-t border-gray-500" />
+  <span className="whitespace-nowrap">Or Sign Up With</span>
+  <hr className="flex-grow border-t border-gray-500" />
+</div>
+
+        <div className=" justify-center items-center py-4 md:mx-4 md:flex hidden md:px-5">
           <div className="App flex justify-center items-center mx-3">
             <div className="text-center my-2 rounded-lg">
               <GoogleAuth buttonText="Sign up with Google" />
@@ -279,18 +285,19 @@ const SignIn = () => {
           </div>
         </div>
 
-        <div className="md:hidden gap-3 flex-row my-3 justify-center flex">
-          <GoogleAuth />
+        <div className="md:hidden flex flex-col justify-center mx-auto items-center">
+        <div className="flex"> <GoogleAuth /> <p className="my-auto ">Sign in WIth Google</p>
+          </div> 
 
-          <div className="md:hidden flex  ">
-            <LinkedInLogin />
+          <div className="md:hidden  ">
+            <div className="flex"> <LinkedInLogin /> <p className="my-auto">Sign in WIth Google</p></div>
           </div>
         </div>
         <div>
-          <p className="text-center">
-            Don’t have an account?{" "}
+          <p className="text-center ">
+           <span className="text-white opacity-50"> Don’t have an account?{" "}</span>
             <span
-              className="text-blue-500 underline cursor-pointer"
+              className="text-[#4045E1] underline cursor-pointer"
               onClick={() => navigate("/signup")}
             >
               Sign Up

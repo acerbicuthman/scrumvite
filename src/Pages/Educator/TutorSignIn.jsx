@@ -13,7 +13,7 @@ import {
 } from "@react-oauth/google";
 import LinkedInLogin from "../SocialMediaLogIn/Linkedin";
 import GoogleAuth from "../SocialMediaLogIn/GoogleAuth";
-import TutorSignUpCoverImg from '../Educator/Tutur-images/Group 3841.png'
+import TutorSignUpCoverImg from '../Educator/Tutur-images/Rectangle 39.png'
 import Book from '../Educator/Tutur-images/Untitled design (2) 1.png'
 
 const TutorSignIn = () => {
@@ -143,33 +143,32 @@ const TutorSignIn = () => {
         <BeatLoader color="white" size={12} />
       </div>
     ) : (
-        <div className="flex flex-col md:flex-row h-screen w-full overflow-hidden">
-        <div className="hidden md:flex w-1/2 relative">
-  <div className="w-full h-screen">
+        <div className="flex flex-col md:flex-row  w-full h-screen px-4 md:px-4 mt-18 bg-black text-white">
+     <div className="hidden md:flex w-full md:w-1/2 my-10 items-center justify-center px-4">
   <img
-  src={TutorSignUpCoverImg}
-  alt="Tutor Profile"
-  className="w-full  h-screen object-cover "
-/>
-
-  </div>
+    src={TutorSignUpCoverImg}
+    alt="Tutor Profile"
+    className="w-full max-w-lg h-auto rounded-lg object-contain"
+  />
 </div>
+
+
+
   
         {/* Right - Sign In Form */}
-        <div className="flex-1 mt-10 px-12 sm:px-8 md:px-12 mb-4 md:mb-1 xl:py-18 h-screen overflow-x-hidden xl:mb-1 lg:mb- lg:min-h-screen lg:overflow-hidden ">
+        <div className="flex-1 mt-10 px-12 sm:px-8 md:px-12 mb-4 md:mb-1  overflow-x-hidden xl:mb-1  lg:overflow-hidden ">
           <div className="w-full max-w-lg mx-auto pt-8">
-          <div className="justify-center text-center place-items-center mx-auto">
-            <img src={Book} alt="" />
-            </div>
-            <h2 className="hidden md:block text-center text-xl sm:text-3xl md:text-xl font-medium tracking-tight text-gray-600 mb-4 md:mb-1 xl:text-3xl">
+        
+            <h2 className=" block text-center text-xl sm:text-3xl md:text-xl font-medium tracking-tight  mb-4 md:mb-1 xl:text-3xl">
               Welcome Back!
             </h2>
-            <div className="text-center md:px-0 px-2 lg:text-lg text-base mb-4 md:text-lg md:text-nowrap xl:text-base">
-              <p>
-                <span className="md:hidden">Welcome,</span> Log back in to
-                continue your learning journey
-              </p>
-            </div>
+            <div className="text-center text-white opacity-50 px-2 md:px-0 text-base md:text-sm xl:text-base mb-4 whitespace-normal md:whitespace-nowrap">
+  <p>
+    {/* <span className="md:hidden">Welcome, </span> */}
+    Log back in to continue your learning journey
+  </p>
+</div>
+
   
             {/* Sign In Form */}
             <form
@@ -179,7 +178,7 @@ const TutorSignIn = () => {
               <div className="py-2">
                 <label
                   htmlFor="email"
-                  className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-900"
+                  className="text-sm sm:text-base md:text-base xl:text-sm font-medium"
                 >
                   Email address
                 </label>
@@ -193,7 +192,7 @@ const TutorSignIn = () => {
                     autoComplete="email"
                     placeholder="Enter your Email"
                     required
-                    className="block w-full border rounded-md bg-white px-2 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                    className="block w-full border rounded-md text-white  bg-white bg-opacity-5 px-3 py-2  border-gray-700  text-base outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                   />
                 </div>
               </div>
@@ -201,7 +200,7 @@ const TutorSignIn = () => {
               <div className="py-2">
                 <label
                   htmlFor="password1"
-                  className="text-sm sm:text-base md:text-base xl:text-sm font-medium text-gray-900"
+                  className="text-sm sm:text-base md:text-base xl:text-sm font-medium "
                 >
                   Password
                 </label>
@@ -214,7 +213,7 @@ const TutorSignIn = () => {
                     onChange={handlePasswordChange}
                     placeholder="Enter Password"
                     required
-                    className="block w-full border rounded-md bg-white px-3 py-2 text-base text-gray-900 outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                    className="block w-full border  rounded-md text-white  bg-white bg-opacity-5 px-3 py-2 text-sm  border-gray-700  outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
                   />
                   <button
                     type="button"
@@ -257,40 +256,51 @@ const TutorSignIn = () => {
                 </div>
               </div>
 
-         {/* Divider OR */}
-         <div className="md:flex hidden items-center gap-3 w-full">
-              <div className="flex-1">
-                <hr />
-              </div>
-              <div className="text-gray-400">OR</div>
-              <div className="flex-1">
-                <hr />
-              </div>
-            </div>
+         
+       
             </form>
           </div>
-          <div className=" justify-center items-center py-4 md:mx- md:flex hidden md:px-2">
-              <div className="App flex justify-center items-center mx-2 ">
-                <div className="text-center my-2 rounded-lg">
-                  <GoogleAuth buttonText="Sign up with Google" />
-                </div>
-              </div>
-  
-              <div className="App flex justify-center items-center mx-2 ">
-                <div className="text-center my-2 rounded-lg ">
-                  <LinkedInLogin label="Sign in with LinkedIn" />
-                </div>
-              </div>
+           {/* Divider OR */}
+        <div className="md:flex hidden md:items-center md:gap-4 text-white opacity-50 mt-10 md:px-14">
+          <div className="flex-1 ">
+            <hr />
+          </div> 
+          <div className="">Or Log In with</div>
+          <div className="flex-1 ">
+            <hr />
+          </div>
+        </div>
+        {/* Divider Mobile View */}
+        <div className="md:hidden flex items-center text-sm text-gray-500 gap-2 w-full">
+  <hr className="flex-grow border-t border-gray-500" />
+  <span className="whitespace-nowrap">Or Sign In With</span>
+  <hr className="flex-grow border-t border-gray-500" />
+</div>
+
+        <div className=" justify-center items-center py-4 md:mx-4 md:flex hidden md:px-5">
+          <div className="App flex justify-center items-center mx-3">
+            <div className="text-center my-2 rounded-lg">
+              <GoogleAuth buttonText="Sign up with Google" />
             </div>
-  
-            <div className="md:hidden gap-3 flex-row my-3 justify-center flex">
-              <GoogleAuth />
-  
-             
-                <LinkedInLogin />
-            
+          </div>
+
+          <div className="App flex justify-center items-center mx-3">
+            <div className="text-center my-2 ">
+              <LinkedInLogin label="Sign in with LinkedIn" />
             </div>
-          <div className="text-center"> <p>Don’t have an account? <span className="text-blue-500 cursor-pointer" onClick={()=> navigate('/educator/tutorSignUp')}>Sign Up</span> </p></div>
+          </div>
+        </div>
+
+        <div className="md:hidden flex flex-col justify-center mx-auto items-center">
+        <div className="flex"> <GoogleAuth /> <p className="my-auto ">Sign in WIth Google</p>
+          </div> 
+
+          <div className="md:hidden  ">
+            <div className="flex"> <LinkedInLogin /> <p className="my-auto">Sign in WIth Google</p></div>
+          </div>
+        </div>
+        <div></div>
+          <div className="text-center my-4"> <p>Don’t have an account? <span className="text-blue-500 cursor-pointer" onClick={()=> navigate('/educator/tutorSignUp')}>Sign Up</span> </p></div>
           <div className="text-base font-bold text-center text-red-600 mt-2">
             {message}
           </div>
