@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import InputField from "@/Components/demo/InputField";
 import SelectField from "@/Components/demo/SelectField";
@@ -466,26 +465,26 @@ export function CardWithForm() {
           <p>{error}</p>
           <div className="flex gap-4 mt-4">
             {error.includes("log in") ? (
-              <Button
+              <button
                 onClick={handleLogout}
                 className="bg-[#4318D1] px-4 py-2"
               >
                 Log In
-              </Button>
+              </button>
             ) : (
-              <Button
+              <button
                 onClick={() => fetchProfile()}
                 className="bg-[#4318D1] px-4 py-2"
               >
                 Retry
-              </Button>
+              </button>
             )}
-            <Button
+            <button
               onClick={handleLogout}
               className="bg-gray-500 px-4 py-2"
             >
               Log Out
-            </Button>
+            </button>
           </div>
         </div>
       </div>
@@ -605,25 +604,25 @@ export function CardWithForm() {
         </form>
         <CardFooter className="md:flex justify-center md:justify-end m-2">
           {success ? (
-            <Button
+            <button
               type="button"
               onClick={handleEditProfile}
               className="bg-[#4318D1] px-4 py-5"
             >
               Edit Profile
-            </Button>
+            </button>
           ) : (
-            <Button type="submit" form="profile-form" className="bg-[#4318D1] px-10 py-6">
+            <button type="submit" form="profile-form" className="bg-[#4318D1] px-10 py-6">
               Save
-            </Button>
+            </button>
           )}
-          <Button
+          <button
             type="button"
             onClick={handleLogout}
             className="bg-gray-500 px-4 py-5 ml-4"
           >
             Log Out
-          </Button>
+          </button>
         </CardFooter>
       </CardContent>
     </Card>
