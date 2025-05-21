@@ -5,14 +5,14 @@ import {
   CardTitle,
   CardContent,
   CardFooter,
-} from "@/components/ui/card";
-import InputField from "@/Components/demo/InputField";
-import SelectField from "@/Components/demo/SelectField";
-import ImageUploadBox from "@/Pages/Learner/learner-profile/ProfileImgUpload";
+} from "../../Components/ui/card";
+import InputField from "../../Components/demo/InputField";
+import SelectField from "../../Components/demo/SelectField";
+import ImageUploadBox from "../../Pages/Learner/learner-profile/ProfileImgUpload";
 import axios from "axios";
-import { base_url } from "@/library/api";
+import { base_url } from "../../library/api";
 import { useNavigate } from "react-router-dom";
-import { supabase } from '@/SupabaseFile';
+import { supabase } from '../../SupabaseFile';
 
 // Utility to decode JWT token
 function parseJwt(token) {

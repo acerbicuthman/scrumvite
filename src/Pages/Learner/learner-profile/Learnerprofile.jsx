@@ -1,5 +1,4 @@
-import React from 'react';
-import { CardWithForm } from '@/Components/demo/CardWithForm';
+import {CardWithForm}  from "../../../Components/demo/CardWithForm";
 
 const Learnerprofile = () => {
   return (

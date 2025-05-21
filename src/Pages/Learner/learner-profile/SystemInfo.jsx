@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { base_url } from '@/library/api';
+import { base_url } from '../../../library/api';
 
 // Manual JWT decode function
 function parseJwt(token) {

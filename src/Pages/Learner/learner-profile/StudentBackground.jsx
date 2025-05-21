@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { base_url } from '@/library/api';
+import { base_url } from '../../../library/api';
 
 const StudentBackground = () => {
   const [formData, setFormData] = useState({

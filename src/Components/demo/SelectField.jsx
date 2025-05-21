@@ -1,6 +1,6 @@
 // SelectField.js
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Label } from "../../Components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../Components/ui/select"
 
 
 const SelectField = ({ id, label, value, onChange, options, placeholder }) => (
