@@ -32,7 +32,6 @@ import TutorSignUp from "./Pages/Educator/TutorSignUp";
 import LinkedInCallback from "./Pages/SocialMediaLogIn/LinkedInCallback";
 import LinkedInLogin from "./Pages/SocialMediaLogIn/Linkedin";
 import TutorSignIn from "./Pages/Educator/TutorSignIn";
-import { Carousel } from "./Components/ui/carousel";
 import Learnerprofile from "./Pages/Learner/learner-profile/Learnerprofile";
 import SystemInfo from "./Pages/Learner/learner-profile/SystemInfo";
 import StudentBackground from "./Pages/Learner/learner-profile/StudentBackground";
