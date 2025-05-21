@@ -1,6 +1,7 @@
 import React from 'react';
 
-const ProfileImgUpload = ({ imageUrl, onImageChange, disabled }) => {
+
+const ProfileImgUpload = ({ defaultImage, onImageChange, disabled }) => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith('image/')) {
@@ -13,9 +14,9 @@ const ProfileImgUpload = ({ imageUrl, onImageChange, disabled }) => {
 
   return (
     <div className="md:w-1/2 w-3/4 h-[250px] mx-auto md:mx-5 md:h-full flex flex-col items-center justify-center border-2 border-dashed border-white/50 rounded-md p-4">
-      {imageUrl ? (
+      {defaultImage ? (
         <img
-          src={imageUrl}
+          src={defaultImage}
           alt="Profile"
           className="w-full h-full object-cover rounded-md"
         />

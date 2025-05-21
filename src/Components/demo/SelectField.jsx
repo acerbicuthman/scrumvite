@@ -11,11 +11,12 @@ const SelectField = ({ id, label, value, onChange, options, placeholder }) => (
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent position="popper">
-        {options.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
-            {option.label}
-          </SelectItem>
-        ))}
+      {options.map((option, index) => (
+  <SelectItem key={`${option}-${index}`} value={option}>
+    {option}
+  </SelectItem>
+))}
+
       </SelectContent>
     </Select>
   </div>
