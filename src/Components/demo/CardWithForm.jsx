@@ -52,6 +52,34 @@ export function CardWithForm() {
     profilePicture: null,
   });
 
+
+
+  useEffect(() => {
+    // Assuming you have an API that returns the form data
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${base_url}api/userProfile/student_profile`); // Replace with your API URL
+        const data = response.data;
+
+        // Populate formData state with the backend data
+        setFormData({
+          fullName: data.first_name + " " + data.last_name,
+          email: data.email,
+          phone: data.phone_number,
+          gender: data.gender, // Make sure gender matches your options (e.g., 'male')
+          dob: data.date_of_birth,
+          city: data.city,
+          nationality: data.nationality,
+          country: data.country,
+        });
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+
+    fetchData();
+  }, []); // 
+
   // Handlers
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -81,7 +109,7 @@ export function CardWithForm() {
     const fileName = `${Date.now()}_${file.name}`;
   
     // Upload the file to Supabase Storage
-    const { data, error: uploadError } =  supabase.storage
+    const { data, error: uploadError } = await supabase.storage
       .from("img-profile") 
       .upload(fileName, file);
   
@@ -341,12 +369,19 @@ export function CardWithForm() {
             <InputField id="email" label="Email" value={formData.email} onChange={handleChange} disabled />
             <InputField id="phone" label="Phone" value={formData.phone} onChange={handleChange} />
             <SelectField
+  id="gender"
   label="Gender"
   value={formData.gender}
   onChange={(val) => handleSelectChange(val, "gender")}
-  options={["Male", "Female", "Other"]}
+  options={[
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
+    { label: "Other", value: "other" },
+  ]}
+  placeholder="Select Gender"
 />
-            <InputField id="dob" label="Date of Birth" value={formData.dob} onChange={handleChange} type="date" />
+
+     <InputField id="dob" label="Date of Birth" value={formData.dob} onChange={handleChange} type="date" />
             <InputField id="city" label="City" value={formData.city} onChange={handleChange} />
             <InputField id="nationality" label="Nationality" value={formData.nationality} onChange={handleChange} />
             <InputField id="country" label="Country" value={formData.country} onChange={handleChange} />
@@ -371,3 +406,4 @@ export function CardWithForm() {
     </Card>
   );
 }
+
