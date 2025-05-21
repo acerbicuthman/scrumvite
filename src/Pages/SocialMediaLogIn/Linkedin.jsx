@@ -44,12 +44,12 @@ const LinkedInLogin = () => {
       <div className="md:hidden flex justify-center my-3">
         <button
           onClick={handleLogin}
-          className="rounded-full hover:bg-gray-100 transition"
+          className="rounded-none hover:bg-gray-100 transition"
         >
           <img
             src={LinkedIcon}
             alt="LinkedIn"
-            className="w-12 h-12 border-2 p-1.5 rounded-full border-black"
+            className="w-10 h-10 border p-1.5 rounded-sm  border-black"
           />
         </button>
       </div>

@@ -10,7 +10,7 @@ import { FcCheckmark } from "react-icons/fc";
 import EmailVerification from "../Email_verification/EmailVerification";
 import LinkedInLogin from "../SocialMediaLogIn/Linkedin";
 import { BeatLoader } from "react-spinners";
-import { AuthContext } from "../../context/Authcontext";
+import { AuthContext, useAuth } from "../../context/Authcontext";
 import GoogleAuth from "../SocialMediaLogIn/GoogleAuth";
 import TutorSignUpCoverImg from '../Educator/Tutur-images/Rectangle 39.png'
 import Book from '../Educator/Tutur-images/Untitled design (2) 1.png'
@@ -38,7 +38,10 @@ const TutorSignUp = () => {
   const location = useLocation();
   const [localLoading, setLocalLoading] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [message, setMessage] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
+  const [validationErrors, setValidationErrors] = useState(null); 
+  const { setTempCredentials } = useAuth();
 
   const minLength = /.{8,}/;
   const upperCase = /[A-Z]/;
@@ -82,8 +85,8 @@ const TutorSignUp = () => {
     setpassword1(e.target.value);
     setIsPasswordTouched(true);
     if (
-      password1.toLowerCase().includes(firstName.toLowerCase()) ||
-      password1.toLowerCase().includes(lastName.toLowerCase()) ||
+      password1.toLowerCase().includes(first_name.toLowerCase()) ||
+      password1.toLowerCase().includes(last_name.toLowerCase()) ||
       password1.toLowerCase().includes(email.split("@")[0].toLowerCase())
     ) {
       setMessage("Password should not contain your name or email.");
@@ -126,8 +129,9 @@ const TutorSignUp = () => {
         data
       );
       console.log("Response:", response.data);
+      setTempCredentials({ email, password: password1 });
       localStorage.setItem("registered_email", email);
-      localStorage.setItem("registered_password", password1);
+      localStorage.setItem("registered_first_name", first_name);
   
       setfirst_name("");
       setlast_name("");
@@ -262,11 +266,6 @@ const TutorSignUp = () => {
                   Please enter a valid email
                 </div>
               )}
-       {errorMessage && (
-  <div className="text-red-500 text-xs mt-1">
-    {JSON.parse(errorMessage)?.email?.[0]}
-  </div>
-)}
 
             </div>
             <div>
@@ -338,7 +337,7 @@ const TutorSignUp = () => {
                   onChange={handleConfirmPasswordChange}
                   placeholder="Confirm Password"
                   required
-                  className={`block w-full border mt-2 rounded-md text-white  bg-white bg-opacity-5 px-3 py-2 text-sm  border-gray-700  outline-1 outline-offset-1 outline-gray-700 placeholder:text-gray-400 focus:outline-2 focus:outline-gray-600"
+                  className={`block w-full border mt-2 rounded-md text-white  bg-white bg-opacity-5 px-3 py-2 text-sm  border-gray-700  outline-1 outline-offset-1 outline-gray-700 placeholder:text-gray-400 focus:outline-2 focus:outline-gray-600
                 ${
                   isConfirmPasswordTouched &&
                   password2 &&
@@ -379,6 +378,19 @@ const TutorSignUp = () => {
                   : "No option selected"}
               </div>
             </div>
+            {/* {validationErrors?.email?.[0] && (
+  <div className="text-red-500 text-xs mt-1">
+    {validationErrors.email[0]}
+  </div>
+)} */}
+
+{!validationErrors && errorMessage && (
+  <div className="text-red-500 text-xs mt-1 space-y-1">
+    {Object.values(JSON.parse(errorMessage)).flat().map((msg, index) => (
+      <div key={index}>{msg}</div>
+    ))}
+  </div>
+)}
 
             <div className="text-sm flex py-1 ">
               <input
@@ -409,7 +421,7 @@ const TutorSignUp = () => {
                   !isPasswordValid ||
                   !isConfirmPasswordValid ||
                   !isEmailValid ||
-                  !checkBoxValid
+                  !checkBoxValid 
                 }
                 className="w-full rounded-md px-4 py-3 text-white font-semibold bg-[#4045E1] hover:bg-blue-700  disabled:cursor-not-allowed"
               >
@@ -417,37 +429,47 @@ const TutorSignUp = () => {
               </button>
             </div>
           </form>
-          <div className="flex items-center mt-12 mb-0">
-            <div className="flex-grow ">
-              <hr className="border-t-2 border-white ml-4 border-opacity-30" />
-            </div>
-            <div className="mx-1 text-xs">Or Sign Up with</div>
-            <div className="flex-grow">
-              <hr className="border-t-2 border-white mr-4 border-opacity-30" />
-            </div>
-          </div>
-          <div className=" justify-center items-center py-2 md:mx-2 md:flex hidden">
-            <div className="App flex justify-center items-center ">
-              <div className="text-center my-2 rounded-lg">
-                <GoogleAuth buttonText="Sign up with Google" />
-              </div>
-            </div>
-
-            <div className="App flex justify-center items-center ">
-              <div className="text-center my-2 rounded-lg">
-                <LinkedInLogin label="Sign in with LinkedIn" />
-              </div>
-            </div>
-          </div>
-        </div> 
-
-        <div className="md:hidden flex-row my-3 gap-5 justify-center flex">
-          <GoogleAuth />
-
-          <div className="md:hidden flex rounded-full">
-            <LinkedInLogin />
+           {/* Divider OR */}
+        <div className="md:flex hidden md:items-center md:gap-4 text-white opacity-50 mt-10 md:px-14">
+          <div className="flex-1 ">
+            <hr />
+          </div> 
+          <div className="">Or Sign Up with</div>
+          <div className="flex-1 ">
+            <hr />
           </div>
         </div>
+        {/* Divider Mobile View */}
+        <div className="md:hidden flex items-center text-sm text-gray-500 gap-2 w-full mt-8">
+  <hr className="flex-grow border-t border-gray-500" />
+  <span className="whitespace-nowrap">Or Sign Up With</span>
+  <hr className="flex-grow border-t border-gray-500" />
+</div>
+
+        <div className=" justify-center items-center py-4 md:mx-4 md:flex hidden md:px-5">
+          <div className="App flex justify-center items-center mx-3">
+            <div className="text-center my-2 rounded-lg">
+              <GoogleAuth buttonText="Sign up with Google" />
+            </div>
+          </div>
+
+          <div className="App flex justify-center items-center mx-3">
+            <div className="text-center my-2 rounded-lg ">
+              <LinkedInLogin label="Sign in with LinkedIn" />
+            </div>
+          </div>
+        </div>
+
+        <div className="md:hidden flex flex-col justify-center mx-auto items-center">
+        <div className="flex"> <GoogleAuth /> <p className="my-auto ">Sign in WIth Google</p>
+          </div> 
+
+          <div className="md:hidden  ">
+            <div className="flex"> <LinkedInLogin /> <p className="my-auto">Sign in WIth Google</p></div>
+          </div>
+        </div>
+        <div></div>
+                  </div>
 
         <div className="text-center text-base pb-4 text-gray-400">
           <p>
@@ -459,29 +481,17 @@ const TutorSignUp = () => {
         </div>
       </div>
 
+      {!errorMessage && (
+
       <EmailVerification
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         email={email}
         first_name={first_name}
       >
-        <div className="w-full max-w-sm mx-auto p-4">
-          <h2 className="bg-blue-800 text-white rounded-lg my-3 p-2 text-sm">
-            Check your Email for the Verification Link
-          </h2>
-        </div>
-
-        <div className="flex flex-col gap-3">
-          <button
-            onClick={() =>
-              navigate("/check-your-email", { state: { email, first_name } })
-            }
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-500 text-sm"
-          >
-            Continue
-          </button>
-        </div>
+        
       </EmailVerification>
+      )}
     </div>
     </div>
   )

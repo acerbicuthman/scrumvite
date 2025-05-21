@@ -11,10 +11,10 @@ import {
   useGoogleLogin,
 } from "@react-oauth/google";
 
+
 function Root() {
   const [isLoading, setIsLoading] = useState(true); 
   const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  console.log("Google Client ID:", CLIENT_ID);
 
 
   

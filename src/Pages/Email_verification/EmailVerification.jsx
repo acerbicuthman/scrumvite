@@ -4,16 +4,20 @@ import EmailVerify from '../../assets/emailverification.png'
 import axios from 'axios';
 import { base_url } from '../../library/api';
 
-const EmailVerification = ({ isOpen, onClose, email, first_name }) => {
+const EmailVerification = ({ isOpen, onClose}) => {
   const navigate = useNavigate();
-  const [localEmail, setLocalEmail] = useState("");
-  const [localFirstName, setLocalFirstName] = useState("");
-  useEffect(() => {
-    if (isOpen && email && first_name) {
-      setLocalEmail(email);
-      setLocalFirstName(first_name);
-    }
-  }, [isOpen, email, first_name]);
+  
+  const storedEmail = localStorage.getItem("registered_email");
+  const storedFirstName = localStorage.getItem("registered_first_name");
+
+  const email = location.state?.email || storedEmail;
+  const first_name = location.state?.first_name || storedFirstName;
+  // useEffect(() => {
+  //   if (isOpen && email && first_name) {
+  //     setLocalEmail(email);
+  //     setLocalFirstName(first_name);
+  //   }
+  // }, [isOpen, email, first_name]);
 
   if (!isOpen) return null;
 
@@ -32,7 +36,7 @@ const EmailVerification = ({ isOpen, onClose, email, first_name }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="md:w-[622px] h-[429px] w-full items-center justify-center rounded-xl bg-black m-10 md:m-1 overflow-hidden py-10 border-2 border-white">
+      <div className="md:w-[622px] lg:h-[429px] w-full h items-center justify-center rounded-xl bg-black m-10 md:m-1 overflow-hidden py-10 border-2 border-white">
         <div className='flex flex-col justify-center items-center text-center  '>
           <div className="w-full max-w-lg h-auto px-3 py-2 bg-transparent ">
             <div className="flex justify-center items-center m-auto">
@@ -52,16 +56,16 @@ const EmailVerification = ({ isOpen, onClose, email, first_name }) => {
               You are just one click away!
             </h1>
             <p className="text-sm">
-  Hey <span>{localFirstName}</span>, we just sent you an email.
+  Hey <span>{first_name}</span>, we just sent you an email.
 </p>
             <p className="text-sm">Just confirm your email to get started!</p>
 
             <div className="flex flex-col gap-3 mt-6 ">
             <button
             className='w-full bg-[#4045E1] text-white px-3 py-2 rounded-lg '
-  onClick={() => navigate("/check-your-email", { state: { email: localEmail, first_name: localFirstName } })}
+  onClick={() => navigate("/check-your-email", { state: { email: email, first_name: first_name } })}
 >
- <p className='text-3xl'>Continue</p> 
+ <p className='text-xl'>Continue</p> 
 </button>
 
               {/* <button

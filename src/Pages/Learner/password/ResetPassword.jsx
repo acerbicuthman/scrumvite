@@ -60,22 +60,25 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center px-5">
-      <div className="w-full max-w-md mx-auto text-center space-y-6">
-        <div>
+    <div className="h-screen flex items-center justify-center px-5 text-white">
+      <div className="w-full max-w-lg bg-white/5 mx-auto text-center space-y-6 border-white/10 border-2 p-8">
+        <div className="">
           <div className="flex justify-center my-4">
             <img src={key} alt="Password Icon" className="w-15 h-15" />
           </div>
           <h2 className="text-xl font-semibold mb-2">Reset Your Password</h2>
-          <p className="text-gray-600">
+          <p className="">
             Your new password must be different from previously used passwords.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-2">
+        <div className="text-left mt-2">Password</div>
           <div className="relative">
+           
             <input
-              className="w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+              className="w-full px-3 py-2  bg-white/5 border-white/10 border text-[#999999] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               type={showPassword1 ? "text" : "password"}
               placeholder="New password"
               value={new_password1}
@@ -90,10 +93,13 @@ const ResetPassword = () => {
               {showPassword1 ? <FaEyeSlash /> : <FaEye />}
             </button>
           </div>
+       
+       
+          <div className="text-left pt-4">Confirm Password</div>
 
           <div className="relative">
             <input
-              className="w-full px-3 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2  bg-white/5 border-white/10 border text-[#999999] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               type={showPassword2 ? "text" : "password"}
               placeholder="Confirm password"
               value={new_password2}
@@ -107,18 +113,21 @@ const ResetPassword = () => {
             >
               {showPassword2 ? <FaEyeSlash /> : <FaEye />}
             </button>
+    
           </div>
-
+          <div className="pt-4">
           <button
-            className="bg-blue-800 text-white w-full px-4 py-2 rounded-lg"
+            className="bg-[#4045E1] text-white w-full px-4 py-2 rounded-lg"
             type="submit"
             disabled={loading}
           >
             {loading ? <BeatLoader color="white" /> : "Reset Password"}
           </button>
+          </div>
+          
 
-          <div className="my-5 mx-auto">
-            <Link to="/signin" className="text-blue-900 underline hover:text-blue-700">
+          <div className="py-6 mx-auto">
+            <Link to="/signin" className="text-[#4045E1] underline hover:text-blue-700">
               Back to login
             </Link>
           </div>

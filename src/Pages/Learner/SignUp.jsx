@@ -11,7 +11,7 @@ import ImageSlideShow from "./ImageSlideShow";
 import EmailVerification from "../Email_verification/EmailVerification";
 import LinkedInLogin from "../SocialMediaLogIn/Linkedin";
 import { BeatLoader } from "react-spinners";
-import { AuthContext } from "../../context/Authcontext";
+import { AuthContext, useAuth } from "../../context/Authcontext";
 import GoogleAuth from "../SocialMediaLogIn/GoogleAuth";
 
 const SignUp = () => {
@@ -34,7 +34,11 @@ const SignUp = () => {
   const location = useLocation();
   const [localLoading, setLocalLoading] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [message, setMessage] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
+  const [validationErrors, setValidationErrors] = useState(null); //
+  const { setTempCredentials } = useAuth();
+
 
   const minLength = /.{8,}/;
   const upperCase = /[A-Z]/;
@@ -124,8 +128,9 @@ const SignUp = () => {
       );
       console.log("Response:", response.data);
 
+      setTempCredentials({ email, password: password1 });
       localStorage.setItem("registered_email", email);
-    localStorage.setItem("registered_password", password1);
+      localStorage.setItem("registered_first_name", first_name);
 
     setfirst_name("");
     setlast_name("");
@@ -171,6 +176,7 @@ const SignUp = () => {
     }
   }, [location.state]);
 
+ 
   // useEffect(() => {
   //   console.log(handleAuthCodeChange());
   // });
@@ -245,7 +251,7 @@ const SignUp = () => {
                   required
                   className={`block w-full mt-2  border rounded-md text-white   bg-white bg-opacity-5 border-gray-700 px-3 py-2 text-sm outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600 ${
                     email && (isEmailValid ? "valid-input" : "invalid-input")
-                  } ${email && (errorMessage ? "invalid-input" : "valid-input" )}`}
+                  }`}
                 />
               </div>
               {!isEmailValid && email && (
@@ -253,11 +259,9 @@ const SignUp = () => {
                   Please enter a valid email
                 </div>
               )}
-          {errorMessage && (
-  <div className="text-red-500 text-xs mt-1">
-    {JSON.parse(errorMessage)?.email?.[0]}
-  </div>
-)}
+         
+
+
 
             </div>
             <div>
@@ -329,7 +333,7 @@ const SignUp = () => {
                   onChange={handleConfirmPasswordChange}
                   placeholder="Confirm Password"
                   required
-                  className={`block w-full border mt-2 rounded-md text-white   bg-white bg-opacity-5 border-gray-700 px-3 py-2 text-sm  outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600"
+                  className={`block w-full border mt-2 rounded-md text-white   bg-white bg-opacity-5 border-gray-700 px-3 py-2 text-sm  outline-1 outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:outline-indigo-600
                 ${
                   isConfirmPasswordTouched &&
                   password2 &&
@@ -369,7 +373,13 @@ const SignUp = () => {
                   : "No option selected"}
               </div>
             </div>
-
+            {!validationErrors && errorMessage && (
+  <div className="text-red-500 text-xs mt-1 space-y-1">
+    {Object.values(JSON.parse(errorMessage)).flat().map((msg, index) => (
+      <div key={index}>{msg}</div>
+    ))}
+  </div>
+)}
             <div className="text-sm flex py-1 ">
               <input
                 type="checkbox"
@@ -465,35 +475,16 @@ const SignUp = () => {
           </p>
         </div>
       </div>
-
+{ !errorMessage && (
       <EmailVerification
   isOpen={isModalOpen}
   onClose={() => setIsModalOpen(false)}
   email={email}
   first_name={first_name}
->
-  
-    
-      <div className="w-full max-w-sm mx-auto p-4">
-        <h2 className="bg-[#4045E1] text-white rounded-lg my-3 p-2 text-sm">
-          Check your Email for the Verification Link
-        </h2>
-      </div>
-
-      <div className="flex flex-col gap-3">
-        <button
-          onClick={() =>
-            navigate("/check-your-email", { state: { email, first_name } })
-          }
-          className="bg-[#4045E1] text-white px-3 py-1 rounded-md hover:bg-indigo-500 text-sm"
-        >
-          Continue
-        </button>
-      </div>
-   
+>  
 
 </EmailVerification>
-
+)}
     </div>
   );
 };

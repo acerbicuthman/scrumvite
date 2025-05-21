@@ -90,7 +90,7 @@ const ForgetPassword = () => {
   };
   
   return (
-    <div className="h-screen flex py-20 px-auto text-center px-5 bg-black text-white  ">
+    <div className="h-screen flex justify-center items-center py-20 px-auto text-center px-5 bg-black text-white  ">
       <div className="flex flex-col w-full px-auto h-1/2">
         <div className="xl:w-1/3 md:w-1/2 w-full mx-auto  bg-white bg-opacity-5 border-white border-opacity-10 border-2 p-5">
 

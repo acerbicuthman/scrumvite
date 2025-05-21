@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { base_url } from '../../../library/api';
 import axios from 'axios';
+import keyImg from '../../../assets/forgetpassword-key.png'
 
 const ChangePassword = () => {
   const [new_password1, setNewPassword] = useState('');
@@ -53,32 +54,52 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className='h-screen flex items-center justify-center'>
-      <div className='flex flex-col'>
-        <form onSubmit={HandlePasswordSubmit}>
-          <div>
+    <div className='h-screen flex items-center justify-center text-white px-4 md:px-0'>
+       <div className='md:mx-auto   w-full md:w-1/3 lg:w-1/3  my-40 justify-center items-center bg-white bg-opacity-[4%]  border-white border-opacity-10 border-2 text-white'>
+
+       <div className='my-8 p-4 md:p-1 '>
+      <div className='items-center justify-center mx-auto flex flex-col mb-4'>
+        <img src={keyImg} alt="" />
+        <p className='my-4 text-2xl'>Reset Your Password</p>
+        <p className='text-center mb-4'>Your new password must be different from previously used passwords.</p>
+      </div>
+     
+      <div className='flex flex-col px-4 '>
+        <form onSubmit={HandlePasswordSubmit} 
+        className='space-y-3'>
+          <div > 
             <label htmlFor='newpassword1'>New Password</label>
             <input
+            className='w-full bg-white/5 border-white/10 border text-[#999999] px-2'
+            placeholder='New Password'
               type='password'
               value={new_password1}
               onChange={(e) => setNewPassword(e.target.value)}
               required
             />
           </div>
-          <div>
+          <br />
+          <div >
             <label htmlFor='new-password2'>Confirm New Password</label>
             <input
+             className='w-full bg-white/5 border-white/10 border text-[#999999] px-2'
+             placeholder='New Password'
               type='password'
               value={new_password2}
               onChange={(e) => setNewPassword2(e.target.value)}
               required
             />
+            
           </div>
-          <button type='submit' className='w-full bg-blue-900 text-white'>
+          <div>
+            <button type='submit' className='w-full my-4 bg-[#4045E1] p-2 text-white'>
             Change Password
           </button>
+            </div>
         </form>
         {message && <div className='text-base mt-4'>{message}</div>}
+      </div>
+      </div>
       </div>
     </div>
   );

@@ -1,22 +1,16 @@
 import { React, useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
-// import {  SignedIn, SignedOut, SignInButton,useClerk, UserButton, useUser } from '@clerk/clerk-react'
-import google from "../../assets/googleIcon.png";
 import { AuthContext } from "../../context/Authcontext";
-import Logo from '../../Pages/Landing/LandingImg/Clip path group.png'
-
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { useNavigate } from "react-router-dom";
+import Logo from '../../Pages/Landing/LandingImg/Clip path group.png';
+import UserNavImg from '../../assets/Ellipse 122.png';
+import polygon from '../../assets/Polygon 2.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [navbarHeight, setNavbarHeight] = useState(0);
   const { user, logout, isLoading } = useContext(AuthContext);
-
-  console.log("user in Navbar:", user); 
-  
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
 
   // Dynamically calculate the navbar height
   useEffect(() => {
@@ -25,24 +19,88 @@ const Navbar = () => {
       setNavbarHeight(navbar.offsetHeight);
     }
   }, []);
-  //   const {openSignIn} = useClerk()
-  //   const {user} = useUser()
-  if (isLoading) return null; 
+
+  if (isLoading) return null; // Early return for loading state
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  // Define links for signed-in users
+  const signedInLinks = (
+    <div className="hidden lg:flex lg:gap-x-12 justify-left items-start">
+      <Link to="/" className="text-sm font-semibold text-white hover:text-indigo-600">Home</Link>
+      <Link to="/student-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Dashboard</Link>
+    </div>
+  );
+
+  // Define links for non-signed-in users
+  const signedOutLinks = (
+    <div className="hidden lg:flex lg:gap-x-12">
+      <Link to="/" className="text-sm font-semibold text-white hover:text-indigo-600">Home</Link>
+      <a href="#about" className="text-sm font-semibold text-white hover:text-indigo-600">Find Tutors</a>
+      <a href="#courses" className="text-sm font-semibold text-white hover:text-indigo-600">About Us</a>
+    </div>
+  );
+
+  // Profile Menu for signed-in users
+  const profileMenu = (
+    <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center space-x-4">
+      <Menu as="div" className="relative inline-block text-left">
+        <div>
+          <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-black px-3 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-800 ring-inset hover:bg-white/50">
+            <img src={UserNavImg} className="h-[50px] w-[50px] py-2 my-auto" alt="User" />
+            <div className="py-4 flex">
+              <p>{user?.name}uthman</p>
+              <div className="mx-2 py-2"><img src={polygon} alt="Polygon" /></div>
+            </div>
+          </MenuButton>
+        </div>
+
+        <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5">
+          <div className="py-1">
+            <MenuItem>
+              <Link to="/system-info" className="block px-4 py-2 text-sm text-gray-700">System Information</Link>
+            </MenuItem>
+            <MenuItem>
+              <Link to="/student-bg-info" className="block px-4 py-2 text-sm text-gray-700">Student Background Info</Link>
+            </MenuItem>
+          </div>
+          <div className="py-1">
+            <MenuItem>
+              <Link to="/learner-profile" className="block px-4 py-2 text-sm text-gray-700">Learner Profile</Link>
+            </MenuItem>
+          </div>
+          <div className="py-1">
+            <MenuItem>
+              <button onClick={logout} className="flex px-4 py-2 text-sm bg-red-500 rounded-lg justify-center items-center mx-auto my-3 text-white">Log Out</button>
+            </MenuItem>
+          </div>
+        </MenuItems>
+      </Menu>
+    </div>
+  );
+
+  // Auth Buttons for non-signed-in users
+  const authButtons = (
+    <div className="hidden lg:flex lg:flex-1 lg:justify-end space-x-8">
+      <Link to="/signin" className="text-sm font-semibold text-[#4318D1] bg-transparent px-3.5 py-2 rounded-md border-2 border-[#4318D1] hover:bg-indigo-500 hover:text-white">Log in</Link>
+      <Link to="/signin" className="text-sm font-semibold text-white bg-[#4318D1] px-5 py-2 hover:bg-indigo-500">Get Started</Link>
+    </div>
+  );
+
   return (
-    <div className=" mb-8 ">
-      <header className="fixed w-full bg-black p-2 inset-x-0 top-0 z-50 shadow-md ">
-        <nav
-          className="flex items-center justify-between lg:px-8"
-          aria-label="Global"
-        >
-          <div className="flex lg:flex-col ">
-            <Link to="/" className="mr-20 p-2  ">
-              <img src={Logo} alt="ScrumVite" className="h-[50px]  rounded-full hover:scale-105 transition-transform duration-300 "/>
+    <div className="mb-8">
+      <header className="fixed w-full bg-black p-2 inset-x-0 top-0 z-50 shadow-md">
+        <nav className="flex items-center justify-between lg:px-8" aria-label="Global">
+          <div className="flex lg:flex-col">
+            <Link to="/" className="mr-20 p-2">
+              <img src={Logo} alt="ScrumVite" className="h-[50px] rounded-full hover:scale-105 transition-transform duration-300" />
             </Link>
           </div>
 
           {/* Mobile Menu Toggle */}
-          <div className="flex lg:hidden ">
+          <div className="flex lg:hidden">
             <button
               type="button"
               className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-white"
@@ -50,162 +108,17 @@ const Navbar = () => {
               aria-label="Open main menu"
             >
               <span className="sr-only">Open main menu</span>
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                />
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
               </svg>
             </button>
           </div>
 
           {/* Desktop Menu */}
-          {user !== null && user !== undefined ?
-          (<div className="hidden lg:flex lg:gap-x-12 justify-left items-start">
+          {user ? signedInLinks : signedOutLinks}
 
-            <Link
-              to="/"
-              className="text-sm font-semibold text-white hover:text-indigo-600"
-            >
-              Home
-            </Link>
-            <Link
-      to="/student-dashboard"
-      className="text-sm font-semibold text-white hover:text-indigo-600"
-    >
-      Dashboard
-    </Link>
-            <a
-              href="#courses"
-              className="text-sm font-semibold text-white hover:text-indigo-600"
-            >
-              My Courses
-            </a>
-            <a
-              href="#become-trainer"
-              className="text-sm font-semibold text-white hover:text-indigo-600"
-            >
-              Reports
-            </a>
-            <a
-              href="#contact"
-              className="text-sm font-semibold text-white hover:text-indigo-600"
-            >
-             Settings
-            </a>
-          </div>)
-          :
-         ( <div className="hidden lg:flex lg:gap-x-12">
-            <Link
-              to="/"
-              className="text-sm font-semibold text-white hover:text-indigo-600"
-            >
-              Home
-            </Link>
-            <a
-              href="#about"
-              className="text-sm font-semibold text-white hover:text-indigo-600"
-            >
-              Find Tutors
-            </a>
-            <a
-              href="#courses"
-              className="text-sm font-semibold text-white hover:text-indigo-600"
-            >
-              About Us
-            </a>
-            {/* <a
-              href="#become-trainer"
-              className="text-sm font-semibold text-white hover:text-indigo-600"
-            >
-              Become a Trainer
-            </a>
-            <a
-              href="#contact"
-              className="text-sm font-semibold text-white hover:text-indigo-600"
-            >
-              Contact
-            </a> */}
-          </div>)
-}
-
-          {/* Login Button */}
-          
-          {user !== null && user !== undefined  ? (
-  <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center space-x-4">
-  
-    {/* <Link 
-     className="text-sm font-semibold text-gray-900 hover:text-indigo-600">
-    Change Password
-    </Link> */}
-    <button
-      onClick={logout}
-      className="text-sm font-semibold text-white bg-red-500 px-3.5 py-2 rounded-md hover:bg-red-400"
-    >
-      Log Out
-    </button>
-  </div>
-) : (
-  <div className="hidden lg:flex lg:flex-1 lg:justify-end space-x-8">
-    <div>
-    <Link
-      to="/signin"
-      className="text-sm font-semibold text-[#4318D1] bg-transparent px-3.5 py-2 rounded-md border-2 border-[#4318D1] hover:bg-indigo-500 hover:text-white"
-    >
-      Log in
-    </Link>
-    </div>
-    <div>
-    <Link
-      to="/signin"
-      className="text-sm font-semibold text-white bg-[#4318D1] px-5 py-2  hover:bg-indigo-500"
-    >
-     Get Started
-    </Link>
-    </div>
-   
-  </div>
-  
-)}
-
-
-
-
-          
-          <div className="hidden lg:block ml-6">
-            {/* {user ? ( */}
-            <header className="flex justify-center  border-b">
-              {/* <SignedIn>
-            <UserButton />
-          </SignedIn> */}
-            </header>
-            {/* ) : ( */}
-            <div className="flex justify-center m border-b">
-              {/* <SignedOut>
-            <SignInButton mode="modal"> */}
-
-              <button
-              // onClick={openSignIn}
-              >
-                {/* <img
-                  src={google}
-                  alt="Sign in with Google"
-                  className="w-10 h-10 object-contain"
-                /> */}
-              </button>
-              {/* </SignInButton>
-          </SignedOut> */}
-            </div>
-            {/* )} */}
-          </div>
+          {/* Profile Menu for signed-in users */}
+          {user ? profileMenu : authButtons}
         </nav>
 
         {/* Mobile Menu */}
@@ -216,11 +129,7 @@ const Navbar = () => {
               <div className="flex items-center justify-between">
                 <Link to="/" className="-m-1.5 p-1.5">
                   <span className="sr-only">Scrum Consult</span>
-                  <img
-                    className="h-8 w-auto"
-                    src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                    alt="Logo"
-                  />
+                  <img className="h-8 w-auto" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Logo" />
                 </Link>
                 <button
                   type="button"
@@ -228,164 +137,41 @@ const Navbar = () => {
                   onClick={toggleMenu}
                   aria-label="Close menu"
                 >
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
               <div className="mt-6 flow-root">
-              {user !== null && user !== undefined ?
-              (
-                <div className="-my-6 divide-y divide-gray-500/10">
-                  <div className="space-y-2 py-6">
-                    <Link
-                      to="/student-dashboard"
-                      onClick={toggleMenu}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      Home
-                    </Link>
-                    <a
-                      href="#about"
-                      onClick={toggleMenu}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      Dashboard
-                    </a>
-                    <a
-                      href="#courses"
-                      onClick={toggleMenu}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      My Courses
-                    </a>
-                    <a
-                      href="#become-trainer"
-                      onClick={toggleMenu}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      Schedule
-                    </a>
-                    <a
-                      href="#contact"
-                      onClick={toggleMenu}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      Settings
-                    </a>
-                  </div>
-                  </div>)
-                  :
-             ( 
-                <div className="-my-6 divide-y divide-gray-500/10">
-                  <div className="space-y-2 py-6">
-                    <Link
-                      to="/"
-                      onClick={toggleMenu}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      Home
-                    </Link>
-                    <a
-                      href="#about"
-                      onClick={toggleMenu}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      About
-                    </a>
-                    <a
-                      href="#courses"
-                      onClick={toggleMenu}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      Courses
-                    </a>
-                    <a
-                      href="#become-trainer"
-                      onClick={toggleMenu}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      Become a Trainer
-                    </a>
-                    <a
-                      href="#contact"
-                      onClick={toggleMenu}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      Contact
-                    </a>
-                  </div>
-                  </div>
-                  )
-}
-                  
-              
-                  {user  !== null && user !== undefined  ?(
-                  <div className="py-6">
-                  <Link
-                    to="/signin"
-                    onClick={logout}
-                    className="-mx-3 block rounded-l px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                  >
-                    <button className="p-2 bg-red-700 text-white">
-                    Log Out
-                    </button>
-                  
-                  </Link> 
-                  </div>)
-                  :
-                 ( <div className="py-6">
-                    <Link
-                      to="/signin"
-                      onClick={toggleMenu}
-                      className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      Log in
-                    </Link>
-                  </div>)
-}
-                  <div>
-                
-                    {/* {user ? ( */}
-                    <header className="flex justify-center p-4 border-b">
-                      {/* <SignedIn>
-            <UserButton />
-          </SignedIn> */}
-                    </header>
-                    {/* ) : ( */}
-                    <div className="flex justify-center p-4 border-b">
-                      {/* <SignedOut>
-            <SignInButton mode="modal"> */}
+                {user ? (
+                  <div className="-my-6 divide-y divide-gray-500/10">
+                    <div className="space-y-2 py-6">
+                      <Link to="/student-dashboard" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Dashboard</Link>
+                      <Link to="/system-info" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">System Info</Link>
+                      <Link to="/learner-profile" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Profile</Link>
+                      <Link to="/student-bg-info" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Student Background</Link>
 
-                      <button
-                      // onClick={openSignIn}
-                      >
-                        {/* <img
-                          src={google}
-                          alt="Sign in with Google"
-                          className="w-10 h-10 object-contain"
-                        /> */}
-                      </button>
-                      {/* </SignInButton>
-          </SignedOut> */}
                     </div>
-                    {/* )} */}
                   </div>
-                </div>
+                ) : (
+                  <div className="-my-6 divide-y divide-gray-500/10">
+                    <div className="space-y-2 py-6">
+                      <Link to="/" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Home</Link>
+                      <Link to="#about" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">About</Link>
+                      <Link to="#courses" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Courses</Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="py-6">
+                {user ? (
+                  <button onClick={logout} className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50">Log Out</button>
+                ) : (
+                  <Link to="/signin" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-gray-900 hover:bg-gray-50">Log In</Link>
+                )}
               </div>
             </div>
-          
+          </div>
         )}
       </header>
 

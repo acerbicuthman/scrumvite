@@ -5,10 +5,11 @@ import Profile2 from '../../assets/Profile_images/profile_img2.png';
 import Profile3 from '../../assets/Profile_images/profile_img3.png';
 import Profile4 from '../../assets/Profile_images/profile_img_1.png';
 import Profile5 from '../../assets/Profile_images/profile_img_2.png';
+import { Link } from 'react-router';
 
 const StudentDashboard = () => {
   return (
-    <div className="flex flex-col mt-10 md:flex-row h-screen overflow-hidden bg-gray-50">
+    <div className="flex flex-col mt-20 md:flex-row h-screen overflow-hidden bg-gray-50">
 
       {/* Sidebar */}
       <div className="hidden md:flex flex-col w-1/4 bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-500 text-white px-6 py-8">
@@ -42,6 +43,27 @@ const StudentDashboard = () => {
             <FaCog />
             <span>Settings</span>
           </li>
+          <Link to="/system-info" 
+          className='block'>
+  <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
+    <FaCog />
+    <span>System Information</span>
+  </li>
+</Link>
+    <Link to="/student-bg-info "
+     className='block'>
+<li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
+  <FaCog />
+  <span>Student Background Info</span>
+</li>
+    </Link>
+      <Link to="/learner-profile"
+       className='block'>
+          <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
+            <FaCog />
+            <span>Learner Profile</span>
+          </li>
+          </Link>
         </ul>
       </div>
 

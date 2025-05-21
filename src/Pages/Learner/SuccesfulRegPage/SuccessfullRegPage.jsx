@@ -3,7 +3,7 @@ import Congrats from '../../../assets/congratulations.gif';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { base_url } from '../../../library/api';
-import { AuthContext } from '../../../context/Authcontext';
+import { AuthContext, useAuth } from '../../../context/Authcontext';
 import { BeatLoader } from 'react-spinners';
 
 const SuccessfulReg = () => {
@@ -15,15 +15,17 @@ const SuccessfulReg = () => {
   const [autoLoggingIn, setAutoLoggingIn] = useState(false);
 
 
+
   const location = useLocation();
   const navigate = useNavigate();
   const verificationKey = new URLSearchParams(location.search).get('key');
-  const { email, password } = location.state || {};
-  const { login } = useContext(AuthContext);
+ 
+  const { login, tempCredentials, setTempCredentials } = useAuth();
+
   
   const handleAutoLogin = async () => {
-    const storedEmail = localStorage.getItem("registered_email");
-    const storedPassword = localStorage.getItem("registered_password");
+    const storedEmail = tempCredentials?.email;
+    const storedPassword = tempCredentials?.password;
   
     if (!storedEmail || !storedPassword) {
       setMessage("Email verified, but login credentials are missing. Please log in manually.");
@@ -41,8 +43,8 @@ const SuccessfulReg = () => {
   
       const { token: accessToken, refresh: refreshToken, user } = res.data;
       await login(accessToken, refreshToken, user);
-      localStorage.removeItem("registered_email");
-      localStorage.removeItem("registered_password");
+      // Clear temp credentials from context after use
+      // setTempCredentials(null);
   
       // setMessage("Email verified. Logging you in...");
   
@@ -98,16 +100,13 @@ const SuccessfulReg = () => {
       } catch (err) {
         const status = err.response?.status;
         const data = err.response?.data;
-
-        console.error("Verification failed:", err);
-          if (status === 404){
-            setMessage("This verification link has expired.")
-          }
-        if (status === 400) {
-          if (data?.key?.[0]?.includes({"detail":"Not found."})) {
-            setMessage("This verification link has expired.");
-            setErrorType("expired");
-          } else if (data?.key?.[0]?.includes("invalid")) {
+      
+        if (status === 404 || data?.detail === "Not found.") {
+          setMessage("This verification link has expired.");
+          setErrorType("expired");
+        } else if (status === 400) {
+          const keyError = data?.key?.[0];
+          if (keyError?.toLowerCase().includes("invalid")) {
             setMessage("This verification link is invalid. Please check your email or contact support.");
             setErrorType("invalid");
           } else {
@@ -117,8 +116,8 @@ const SuccessfulReg = () => {
         } else {
           setMessage("An unexpected error occurred during verification. Please try again later.");
           setErrorType("server");
-          navigate("/expired_link_page")
         }
+      
       } finally {
         setIsLoading(false);
       }
@@ -164,7 +163,7 @@ const SuccessfulReg = () => {
               <button
                 type="button"
                 onClick={handleResendVerification}
-                className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold px-6 py-3 rounded-md transition duration-300"
+                className="bg-[#4045E1] hover:bg-yellow-600 text-white text-sm font-semibold px-6 py-3 rounded-md transition duration-300"
                 disabled={resending}
               >
                 {resending ? "Resending..." : "Resend Verification Email"}

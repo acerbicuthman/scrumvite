@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 
 export const AuthContext = createContext();
 
@@ -8,6 +8,20 @@ export const AuthProvider = ({ children }) => {
     const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken') || null);
     const [isLoading, setIsLoading] = useState(true);
     const [loggedIn, setLoggedIn] = useState(false);
+    
+    const [tempCredentials, setTempCredentialsState] = useState(() => {
+      const stored = localStorage.getItem("tempCredentials");
+      return stored ? JSON.parse(stored) : null;
+    });
+    
+    const setTempCredentials = (credentials) => {
+      setTempCredentialsState(credentials);
+      if (credentials) {
+        localStorage.setItem("tempCredentials", JSON.stringify(credentials));
+      } else {
+        localStorage.removeItem("tempCredentials");
+      }
+    };
   
     // Load user from localStorage on mount
     useEffect(() => {
@@ -49,26 +63,39 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false)
     };
   
-    // Logout function
+    // Updated Logout function
     const logout = async() => {
         setIsLoading(true)
         await new Promise(resolve => setTimeout(resolve, 500))
-      setAccessToken(null);
-      setRefreshToken(null);
-      setUser(null);
-      setLoggedIn(false);
+        
+        // Clear tokens and user data from localStorage
+        setAccessToken(null);
+        setRefreshToken(null);
+        setUser(null);
+        setLoggedIn(false);
   
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user');
-      
-      setIsLoading(false)
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('user');
+        
+        // Remove all keys that start with 'userProfileData_'
+        Object.keys(localStorage).forEach((key) => {
+          if (key.startsWith("userProfileData_")) {
+            localStorage.removeItem(key);
+          }
+        });
+
+        // Redirect to the login page
+        window.location.href = "/login";  // Redirect to the login page
+
+        setIsLoading(false);
     };
   
     return (
-      <AuthContext.Provider value={{ user, accessToken, refreshToken, login, logout, isLoading, loggedIn }}>
+      <AuthContext.Provider value={{ user, accessToken, refreshToken, login, logout, isLoading, loggedIn,  tempCredentials, setTempCredentials }}>
         {children}
       </AuthContext.Provider>
     );
-  };
+};
   
+export const useAuth = () => useContext(AuthContext);

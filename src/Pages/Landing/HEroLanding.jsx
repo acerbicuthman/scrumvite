@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import Eclipse from "../Landing/LandingImg/Ellipse 102.png";
 import ManInSuit from "../Landing/LandingImg/FullSuit-man.png";
 import { useNavigate } from "react-router";
-
+import { Button } from "../../Components/ui/button";
+import { Carousel } from "@/Components/ui/carousel";
+import { CarouselDemo } from "@/Components/demo/CarouselDemo";
 const HEroLanding = () => {
   const [account_type, setAccount_type] = useState("");
   const navigate = useNavigate();
@@ -51,6 +53,8 @@ const HEroLanding = () => {
             </button>
           </div>
         </div>
+
+
       </div>
     </div>
   );
