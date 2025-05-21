@@ -1,19 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { base_url } from '../../../library/api';
 
 const StudentBackground = () => {
-  const [formData, setFormData] = useState({
-    education_level: '',
-    current_role: '',
-    industry: '',
-    linkedin_profile: '',
-  });
-
-  const [isEditing, setIsEditing] = useState(true); // Editable until saved
+  const formRef = useRef();  // We'll use a reference to access form values directly
+  const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
+  // Fetch the profile from the backend and populate the form fields
   const fetchProfile = async () => {
     const token = localStorage.getItem('accessToken');
     const user = JSON.parse(localStorage.getItem('user'));
@@ -33,52 +28,40 @@ const StudentBackground = () => {
       console.log('GET response:', res.data); // Debug backend response
 
       if (res.status === 200 && res.data?.results?.length > 0) {
+        // Look for the profile that matches the logged-in user's email
         const profile = res.data.results.find(item => item?.student?.email === email);
+
         if (profile) {
-          const apiData = {
-            education_level: profile.education_level || '',
-            current_role: profile.current_role || '',
-            industry: profile.industry || '',
-            linkedin_profile: profile.linkedin_profile || '',
-          };
-          setFormData(apiData);
-          setIsEditing(false); // Set read-only after fetching
+          // Populate the form fields with the fetched data
+          formRef.current.education_level.value = profile.education_level || '';
+          formRef.current.current_role.value = profile.current_role || '';
+          formRef.current.industry.value = profile.industry || '';
+          formRef.current.linkedin_profile.value = profile.linkedin_profile || '';
+          setIsEditing(false); // Set form to read-only after fetching data
           setSuccess('Profile loaded successfully');
-          console.log('Profile loaded:', profile);
         } else {
           console.log('No profile found, ready to create new profile');
-          setIsEditing(true);
+          setIsEditing(true); // Allow editing if no profile exists
         }
       } else {
         console.log('No profiles found in response');
-        setIsEditing(true);
+        setIsEditing(true); // Allow editing if no data is found
       }
     } catch (err) {
       console.error('Error fetching profile:', err.response?.data || err.message);
-      if (err.response?.status === 404) {
-        console.log('No profile exists, ready to create new profile');
-        setIsEditing(true);
-      } else {
-        setError('Failed to fetch profile: ' + (err.response?.data?.detail || err.message));
-      }
+      setError('Failed to fetch profile: ' + (err.response?.data?.detail || err.message));
+      setIsEditing(true); // Allow editing in case of error (e.g., 404 or other failures)
     }
   };
 
+  // Call fetchProfile when component mounts
   useEffect(() => {
-    console.log('Component mounted, fetching profile'); // Debug mount
     fetchProfile();
   }, []);
 
-  const handleChange = (e) => {
-    if (!isEditing) return; // Prevent changes in read-only mode
-
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
-  };
-
+  // Handle saving the form data to the backend
   const handleSave = async (e) => {
     e.preventDefault();
-    console.log('handleSave triggered'); // Debug save trigger
 
     setError(null);
     setSuccess(null);
@@ -89,13 +72,12 @@ const StudentBackground = () => {
       return;
     }
 
+    // Gather form data using ref
     const profileData = new FormData();
-    profileData.append('education_level', formData.education_level || '');
-    profileData.append('current_role', formData.current_role || '');
-    profileData.append('industry', formData.industry || '');
-    profileData.append('linkedin_profile', formData.linkedin_profile || '');
-
-    console.log('Sending POST with FormData:', Object.fromEntries(profileData)); // Debug payload
+    profileData.append('education_level', formRef.current.education_level.value || '');
+    profileData.append('current_role', formRef.current.current_role.value || '');
+    profileData.append('industry', formRef.current.industry.value || '');
+    profileData.append('linkedin_profile', formRef.current.linkedin_profile.value || '');
 
     try {
       const response = await axios.post(
@@ -113,12 +95,12 @@ const StudentBackground = () => {
 
       if (response.status === 201) {
         setSuccess('Profile saved successfully');
-        setIsEditing(false); // Set read-only
-        await fetchProfile(); // Re-fetch to update displayed data
+        setIsEditing(false); // Set form to read-only after saving
+        fetchProfile(); // Re-fetch to update displayed data from the backend
       }
     } catch (err) {
       console.error('Error saving profile:', err.response?.data || err.message);
-      setError(`Failed to save profile: ${err.response?.data?.detail || JSON.stringify(err.response?.data) || err.message}`);
+      setError(`Failed to save profile: ${err.response?.data?.detail || err.message}`);
     }
   };
 
@@ -130,10 +112,7 @@ const StudentBackground = () => {
             <h1 className='lg:text-2xl font-semibold'>Professional & Education Info</h1>
             <button
               type='button'
-              onClick={() => {
-                console.log('Edit Details clicked'); // Debug edit button
-                setIsEditing(true);
-              }}
+              onClick={() => setIsEditing(true)}
               className='bg-transparent text-[#4318D1] border-white/10 border-2 px-2 rounded-md md:flex hidden'
               disabled={isEditing}
             >
@@ -144,19 +123,14 @@ const StudentBackground = () => {
           {error && <div className='text-red-500 m-5'>{error}</div>}
           {success && <div className='text-green-500 m-5'>{success}</div>}
 
-          <form onSubmit={(e) => {
-            console.log('Form submitted'); // Debug form submission
-            handleSave(e);
-          }}>
+          <form ref={formRef} onSubmit={handleSave}>
             <div className='flex-1 mx-4 my-2'>
               <label htmlFor="education_level" className='text-white/50'>Education</label>
               <div>
                 <input
                   type="text"
-                  id="education_level"
+                  name="education_level"
                   className='bg-white bg-opacity-10 w-full rounded-sm p-2'
-                  value={formData.education_level}
-                  onChange={handleChange}
                   disabled={!isEditing}
                 />
               </div>
@@ -168,10 +142,8 @@ const StudentBackground = () => {
                 <div>
                   <input
                     type="text"
-                    id="current_role"
+                    name="current_role"
                     className='bg-white bg-opacity-10 w-full rounded-sm p-2'
-                    value={formData.current_role}
-                    onChange={handleChange}
                     disabled={!isEditing}
                   />
                 </div>
@@ -182,10 +154,8 @@ const StudentBackground = () => {
                 <div>
                   <input
                     type="text"
-                    id="industry"
+                    name="industry"
                     className='bg-white bg-opacity-10 w-full rounded-sm p-2'
-                    value={formData.industry}
-                    onChange={handleChange}
                     disabled={!isEditing}
                   />
                 </div>
@@ -197,10 +167,8 @@ const StudentBackground = () => {
               <div>
                 <input
                   type="text"
-                  id="linkedin_profile"
+                  name="linkedin_profile"
                   className='bg-white bg-opacity-10 w-full rounded-sm p-2'
-                  value={formData.linkedin_profile}
-                  onChange={handleChange}
                   disabled={!isEditing}
                 />
               </div>
@@ -211,7 +179,6 @@ const StudentBackground = () => {
                 <button
                   type="submit"
                   className='bg-[#4318D1] text-white px-4 py-2 rounded-md'
-                  onClick={() => console.log('Save button clicked')} // Debug save button
                 >
                   Save
                 </button>
@@ -223,10 +190,7 @@ const StudentBackground = () => {
             <div className='md:hidden flex justify-center mt-6'>
               <button
                 type='button'
-                onClick={() => {
-                  console.log('Mobile Edit Details clicked'); // Debug mobile edit button
-                  setIsEditing(true);
-                }}
+                onClick={() => setIsEditing(true)}
                 className='bg-transparent text-[#4318D1] border-white/10 border-2 px-2 rounded-md'
               >
                 Edit Details

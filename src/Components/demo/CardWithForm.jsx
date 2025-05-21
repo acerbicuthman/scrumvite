@@ -69,10 +69,10 @@ export function CardWithForm() {
       setError("No file selected.");
       return;
     }
-    if (!file.type.startsWith("image/")) {
-      setError("Please upload a valid image file.");
-      return;
-    }
+    // if (!file.type.startsWith("image/")) {
+    //   setError("Please upload a valid image file.");
+    //   return;
+    // }
     if (file.size > 5 * 1024 * 1024) {
       setError("Image size should be under 5MB.");
       return;
@@ -81,8 +81,8 @@ export function CardWithForm() {
     const fileName = `${Date.now()}_${file.name}`;
   
     // Upload the file to Supabase Storage
-    const { data, error: uploadError } = await supabase.storage
-      .from("profile-pics") // ✅ use your actual bucket name
+    const { data, error: uploadError } =  supabase.storage
+      .from("img-profile") 
       .upload(fileName, file);
   
     if (uploadError) {
@@ -93,7 +93,7 @@ export function CardWithForm() {
   
     // Get the public URL of the uploaded image
     const { data: urlData } = supabase.storage
-      .from("profile-pics")
+      .from("img-profile")
       .getPublicUrl(fileName);
   
     const publicUrl = urlData?.publicUrl;
@@ -237,47 +237,54 @@ export function CardWithForm() {
   const handleSaveProfile = async (e) => {
     e.preventDefault();
     setError(null);
-
+  
     const token = localStorage.getItem("accessToken");
     const decoded = parseJwt(token);
     const userId = decoded?.email || decoded?.user_id;
-
-    const { fullName, email, phone, gender, city, nationality, country, dob } = formData;
+  
+    const { fullName, email, phone, gender, city, nationality, country, dob, profilePicture } = formData;
     const [firstName, ...rest] = fullName.trim().split(" ");
     const lastName = rest.join(" ");
-
+  
     if (!firstName || !email || !city || !country) {
       setError("Required fields are missing.");
       return;
     }
-
-    const profileData = new FormData();
-    profileData.append("first_name", firstName);
-    profileData.append("last_name", lastName);
-    profileData.append("email", email);
-    profileData.append("phone_number", phone);
-    profileData.append("gender", gender);
-    profileData.append("date_of_birth", dob);
-    profileData.append("city", city);
-    profileData.append("country", country);
-    profileData.append("nationality", nationality);
-    profileData.append("status", "active");
-
-    if (imageFile) {
-      profileData.append("profile_picture", imageFile);
-    } else if (formData.profilePicture && isUsingExistingImage.current) {
-      profileData.append("keep_existing_picture", "true");
-    }
-
+  
+    const profileData = {
+      studentId: "", // You may set this from context or backend if needed
+      student: {
+        id: "",
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+      },
+      username: email, // or another identifier
+      profile_picture: profilePicture || "", // 👈 string URL
+      phone_number: phone,
+      gender: gender || "male",
+      date_of_birth: dob || null,
+      city,
+      country,
+      nationality,
+      status: "active",
+      education_level: "", // Add if used
+      current_role: "",    // Add if used
+      industry: "",        // Add if used
+      linkedin_profile: "", // Add if used
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+  
     try {
       const res = await axios.get(`${base_url}api/userProfile/student_profile/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
+  
       const existing = res.data.results.find(
         (item) => item.email === userId || item.student?.email === userId
       );
-
+  
       let response;
       if (existing) {
         response = await axios.patch(
@@ -292,7 +299,7 @@ export function CardWithForm() {
           { headers: { Authorization: `Bearer ${token}` } }
         );
       }
-
+  
       if (response.status === 200 || response.status === 201) {
         alert("Profile saved.");
         const updatedData = {
@@ -310,6 +317,7 @@ export function CardWithForm() {
       setError("Failed to save profile.");
     }
   };
+  
 
   useEffect(() => {
     fetchProfile();
@@ -332,7 +340,12 @@ export function CardWithForm() {
             <InputField id="fullName" label="Full Name" value={formData.fullName} onChange={handleChange} />
             <InputField id="email" label="Email" value={formData.email} onChange={handleChange} disabled />
             <InputField id="phone" label="Phone" value={formData.phone} onChange={handleChange} />
-            <SelectField label="Gender" value={formData.gender} onChange={(val) => handleSelectChange(val, "gender")} options={["Male", "Female", "Other"]} />
+            <SelectField
+  label="Gender"
+  value={formData.gender}
+  onChange={(val) => handleSelectChange(val, "gender")}
+  options={["Male", "Female", "Other"]}
+/>
             <InputField id="dob" label="Date of Birth" value={formData.dob} onChange={handleChange} type="date" />
             <InputField id="city" label="City" value={formData.city} onChange={handleChange} />
             <InputField id="nationality" label="Nationality" value={formData.nationality} onChange={handleChange} />

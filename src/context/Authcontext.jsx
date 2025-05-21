@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }) => {
         });
 
         // Redirect to the login page
-        window.location.href = "/login";  // Redirect to the login page
+        window.location.href = "/signin";  // Redirect to the login page
 
         setIsLoading(false);
     };
