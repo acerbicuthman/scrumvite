@@ -33,6 +33,11 @@ export function CardWithForm() {
     }
   }, [error]);
 
+  const handleEditClick = () => {
+    setIsEditing(true);  
+  };
+  
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
@@ -120,7 +125,7 @@ export function CardWithForm() {
       industry,
       linkedin_profile,
     } = formData;
-    const email = userEmail;
+    const email = userEmail; // This is the email we are trying to update
     const [firstName, ...rest] = fullName.trim().split(" ");
     const lastName = rest.join(" ").trim();
     
@@ -143,10 +148,10 @@ export function CardWithForm() {
       student: {
         first_name: firstName,
         last_name: lastName,
-        email, // Using the formData email
+        email, // Only include email if it’s not already part of the profile
         id: userId.includes('@') ? undefined : userId,
       },
-      username: email,
+      username: email,  // Don't change the email if the user didn't modify it
       profile_picture: profilePicture || "",
       phone_number: phone || "",
       gender: gender || "male",
@@ -163,20 +168,22 @@ export function CardWithForm() {
       updated_at: new Date().toISOString(),
     };
   
+    // If the email is already part of the profile and has not been changed, 
+    // don’t include it in the update request to avoid duplicate email errors
+    if (userEmail === email) {
+      delete profileData.student.email;
+    }
+  
     try {
       const res = await axios.get(`${base_url}api/userProfile/student_profile/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-  
-      console.log("Fetched profiles:", res.data.results);
   
       // Filter profiles by email match
       const profiles = res.data.results.filter((item) => {
         const profileEmail = item?.student?.email || item?.email || item?.username;
         return profileEmail?.toLowerCase() === email?.toLowerCase();
       });
-  
-      console.log("Matched profile:", profiles);
   
       let response;
       if (profiles.length > 1) {
@@ -231,9 +238,10 @@ export function CardWithForm() {
         isUsingExistingImage.current = !!updated.profile_picture;
       }
     } catch (err) {
-      handleSaveProfileError(err);
+      setError('Failed to save profile. Please try again.');
     }
   };
+  
   
   const handleCancel = () => {
     const userId = getCurrentUserId();
@@ -299,29 +307,44 @@ export function CardWithForm() {
 
           {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
           {success && <p className="text-green-500 mt-4 text-center">{success}</p>}
+          {/* <CardFooter className="flex justify-end gap-4"> */}
+          {isEditing ? (
+      <>
+        
+      <div className="flex ">
+
+     
+        <button 
+          type="submit" 
+          className="px-4 py-2 bg-[#4318D1] text-white rounded hover:bg-[#3510a1]"
+        >
+          Save
+        </button>
+        <button 
+          type="button" 
+          onClick={handleCancel} 
+          className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+        >
+          Cancel
+        </button>
+        </div> 
+      </>
+   ) : (<div>
+      <button
+        type="button"
+        onClick={() => setIsEditing(true)}
+        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        <FaEdit className="inline mr-2" /> Edit
+      </button>
+      
+      </div>)}
+      {/* </CardFooter> */}
         </form>
       </CardContent>
 
-      <CardFooter className="flex justify-end gap-4">
-        {isEditing ? (
-          <>
-            <button type="submit" form="profile-form" className="px-4 py-2 bg-[#4318D1] text-white rounded hover:bg-[#3510a1]">
-              Save
-            </button>
-            <button type="button" onClick={handleCancel} className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
-              Cancel
-            </button>
-          </>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setIsEditing(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            <FaEdit className="inline mr-2" /> Edit
-          </button>
-        )}
-      </CardFooter>
+    
+    
     </Card>
   );
 }
