@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -11,76 +11,28 @@ import SelectField from "../../Components/demo/SelectField";
 import ImageUploadBox from "../../Pages/Learner/learner-profile/ProfileImgUpload";
 import axios from "axios";
 import { base_url } from "../../library/api";
-import { useNavigate } from "react-router-dom";
-import { supabase } from '../../SupabaseFile';
-
-// Utility to decode JWT token
-function parseJwt(token) {
-  try {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-    return JSON.parse(jsonPayload);
-  } catch (e) {
-    console.error("Failed to parse token:", e);
-    return null;
-  }
-}
+import { supabase } from "../../SupabaseFile";
+import { getCurrentUserId } from "../../lib/utilityCurrent";
+import useHydratedProfile from "../../hooks/useHydratedProfile";
+import { FaEdit } from "react-icons/fa";
+import { useNavigate } from "react-router";
 
 export function CardWithForm() {
-  const navigate = useNavigate();
   const isUsingExistingImage = useRef(false);
-  const [loading, setLoading] = useState(true);
-  const [success, setSuccess] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [success, setSuccess] = useState("");
   const [error, setError] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
+  const navigate = useNavigate();
+  const { formData, setFormData, loading, userEmail, setError: setProfileError } = useHydratedProfile();
 
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    gender: "",
-    city: "",
-    nationality: "",
-    country: "",
-    dob: "",
-    profilePicture: null,
-  });
-
-
-
+  // Auto-enable editing if profile is not found
   useEffect(() => {
-    // Assuming you have an API that returns the form data
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${base_url}api/userProfile/student_profile`); // Replace with your API URL
-        const data = response.data;
+    if (error === "Profile not found. Please create a profile.") {
+      const userId = getCurrentUserId();
+      if (userId) setIsEditing(true);
+    }
+  }, [error]);
 
-        // Populate formData state with the backend data
-        setFormData({
-          fullName: data.first_name + " " + data.last_name,
-          email: data.email,
-          phone: data.phone_number,
-          gender: data.gender, // Make sure gender matches your options (e.g., 'male')
-          dob: data.date_of_birth,
-          city: data.city,
-          nationality: data.nationality,
-          country: data.country,
-        });
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-      }
-    };
-
-    fetchData();
-  }, []); // 
-
-  // Handlers
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
@@ -92,214 +44,121 @@ export function CardWithForm() {
 
   const handleImageChange = async (file) => {
     setError(null);
-  
-    if (!file) {
-      setError("No file selected.");
+
+    if (!file || !file.type.startsWith("image/")) {
+      setError("Please upload a valid image file.");
       return;
     }
-    // if (!file.type.startsWith("image/")) {
-    //   setError("Please upload a valid image file.");
-    //   return;
-    // }
+
     if (file.size > 5 * 1024 * 1024) {
-      setError("Image size should be under 5MB.");
+      setError("Image must be under 5MB.");
       return;
     }
-  
-    const fileName = `${Date.now()}_${file.name}`;
-  
-    // Upload the file to Supabase Storage
-    const { data, error: uploadError } = await supabase.storage
-      .from("img-profile") 
-      .upload(fileName, file);
-  
+
+    const userId = getCurrentUserId();
+    const safeUserId = userId.replace(/[@.]/g, "_");
+    const fileName = `user_${safeUserId}/${Date.now()}_${file.name}`;
+
+    if (formData.profilePicture) {
+      const oldFileName = formData.profilePicture.split("/").pop();
+      await supabase.storage
+        .from("img-profile")
+        .remove([`user_${safeUserId}/${oldFileName}`]);
+    }
+
+    const { error: uploadError } = await supabase.storage
+      .from("img-profile")
+      .upload(fileName, file, {
+        cacheControl: "3600",
+        upsert: true,
+        contentType: file.type,
+      });
+
     if (uploadError) {
-      console.error("Upload error:", uploadError.message);
-      setError("Failed to upload image.");
+      setError("Image upload failed.");
       return;
     }
-  
-    // Get the public URL of the uploaded image
+
     const { data: urlData } = supabase.storage
       .from("img-profile")
       .getPublicUrl(fileName);
-  
+
     const publicUrl = urlData?.publicUrl;
-  
     if (!publicUrl) {
-      setError("Unable to retrieve image URL.");
-      return;
-    }
-  
-    // Update formData with the public image URL
-    setFormData((prev) => ({
-      ...prev,
-      profilePicture: publicUrl,
-    }));
-  };
-  
-
-  const handleEditProfile = () => {
-    setSuccess(false);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    navigate("/signin");
-  };
-
-  const saveToLocalStorage = (data) => {
-    const token = localStorage.getItem("accessToken");
-    const decoded = parseJwt(token);
-    const userId = data.email || decoded?.email || decoded?.user_id || "default";
-    localStorage.setItem(`userProfileData_${userId}`, JSON.stringify(data));
-  };
-
-  const loadFromLocalStorage = () => {
-    const token = localStorage.getItem("accessToken");
-    const decoded = parseJwt(token);
-    const userId = decoded?.email || decoded?.user_id;
-    if (userId) {
-      const stored = localStorage.getItem(`userProfileData_${userId}`);
-      if (stored) return JSON.parse(stored);
-    }
-    return null;
-  };
-
-  const clearStaleLocalStorage = (currentUserId) => {
-    Object.keys(localStorage).forEach((key) => {
-      if (key.startsWith("userProfileData_") && !key.includes(currentUserId)) {
-        localStorage.removeItem(key);
-      }
-    });
-  };
-
-  const refreshToken = async () => {
-    try {
-      const res = await axios.post(`${base_url}api/token/refresh/`, {
-        refresh: localStorage.getItem("refreshToken"),
-      });
-      localStorage.setItem("accessToken", res.data.access);
-      return res.data.access;
-    } catch (err) {
-      console.error("Token refresh failed", err);
-      return null;
-    }
-  };
-
-  const fetchProfileFromAPI = async (token, userId) => {
-    const res = await axios.get(`${base_url}api/userProfile/student_profile/`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    const profile = res.data.results.find(
-      (item) => item.email === userId || item.student?.email === userId
-    );
-
-    if (profile) {
-      const apiData = {
-        fullName: `${profile.first_name || ""} ${profile.last_name || ""}`.trim(),
-        email: profile.email || "",
-        phone: profile.phone_number || "",
-        gender: profile.gender || "",
-        dob: profile.date_of_birth || "",
-        city: profile.city || "",
-        country: profile.country || "",
-        nationality: profile.nationality || "",
-        profilePicture: profile.profile_picture || null,
-      };
-      setFormData(apiData);
-      setSuccess(true);
-      isUsingExistingImage.current = !!profile.profile_picture;
-      saveToLocalStorage(apiData);
-    } else {
-      setSuccess(false);
-    }
-  };
-
-  const fetchProfile = async () => {
-    setLoading(true);
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-      setError("Missing access token. Please log in.");
-      setLoading(false);
+      setError("Failed to retrieve uploaded image URL.");
       return;
     }
 
-    const decoded = parseJwt(token);
-    const userId = decoded?.email || decoded?.user_id;
-
-    if (!userId) {
-      setError("Invalid token. Please log in again.");
-      setLoading(false);
-      return;
-    }
-
-    clearStaleLocalStorage(userId);
-    const localData = loadFromLocalStorage();
-    if (localData) {
-      setFormData(localData);
-      setSuccess(true);
-      setLoading(false);
-    }
-
-    try {
-      await fetchProfileFromAPI(token, userId);
-    } catch (err) {
-      if (err.response?.status === 401) {
-        const newToken = await refreshToken();
-        if (newToken) {
-          await fetchProfileFromAPI(newToken, userId);
-        } else {
-          setError("Authentication failed. Please log in.");
-          navigate("/signin");
-        }
-      } else {
-        setError("Failed to fetch profile.");
-      }
-    } finally {
-      setLoading(false);
-    }
+    setFormData((prev) => ({ ...prev, profilePicture: publicUrl }));
   };
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
     setError(null);
+    setSuccess("");
   
     const token = localStorage.getItem("accessToken");
-    const decoded = parseJwt(token);
-    const userId = decoded?.email || decoded?.user_id;
+    const userId = getCurrentUserId();
   
-    const { fullName, email, phone, gender, city, nationality, country, dob, profilePicture } = formData;
+    if (!token || !userId) {
+      setError("No valid session. Please log in.");
+      setTimeout(() => navigate("/signin"), 2000);
+      return;
+    }
+  
+    const {
+      fullName,
+      phone,
+      gender,
+      city,
+      nationality,
+      country,
+      dob,
+      profilePicture,
+      education_level,
+      current_role,
+      industry,
+      linkedin_profile,
+    } = formData;
+    const email = userEmail;
     const [firstName, ...rest] = fullName.trim().split(" ");
-    const lastName = rest.join(" ");
+    const lastName = rest.join(" ").trim();
+    
+    if (!firstName || !lastName) {
+      setError("Full name must include at least a first and last name.");
+      return;
+    }
   
-    if (!firstName || !email || !city || !country) {
-      setError("Required fields are missing.");
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+  
+    if (!city || !country) {
+      setError("City and country are required.");
       return;
     }
   
     const profileData = {
-      studentId: "", // You may set this from context or backend if needed
       student: {
-        id: "",
         first_name: firstName,
         last_name: lastName,
-        email: email,
+        email, // Using the formData email
+        id: userId.includes('@') ? undefined : userId,
       },
-      username: email, // or another identifier
-      profile_picture: profilePicture || "", // 👈 string URL
-      phone_number: phone,
+      username: email,
+      profile_picture: profilePicture || "",
+      phone_number: phone || "",
       gender: gender || "male",
       date_of_birth: dob || null,
-      city,
-      country,
-      nationality,
+      city: city || "",
+      country: country || "",
+      nationality: nationality || "",
       status: "active",
-      education_level: "", // Add if used
-      current_role: "",    // Add if used
-      industry: "",        // Add if used
-      linkedin_profile: "", // Add if used
+      education_level: education_level || "",
+      current_role: current_role || "",
+      industry: industry || "",
+      linkedin_profile: linkedin_profile || "",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
@@ -309,18 +168,37 @@ export function CardWithForm() {
         headers: { Authorization: `Bearer ${token}` },
       });
   
-      const existing = res.data.results.find(
-        (item) => item.email === userId || item.student?.email === userId
-      );
+      console.log("Fetched profiles:", res.data.results);
+  
+      // Filter profiles by email match
+      const profiles = res.data.results.filter((item) => {
+        const profileEmail = item?.student?.email || item?.email || item?.username;
+        return profileEmail?.toLowerCase() === email?.toLowerCase();
+      });
+  
+      console.log("Matched profile:", profiles);
   
       let response;
-      if (existing) {
+      if (profiles.length > 1) {
+        // Handle multiple profiles scenario, take the most recent one
+        setError("Multiple profiles detected. Using the most recent. Contact support to resolve duplicates.");
+        const existing = profiles.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))[0];
         response = await axios.patch(
-          `${base_url}api/userProfile/student_profile/${studentId}/`,
+          `${base_url}api/userProfile/student_profile/${existing.studentId}/`,
+          profileData,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      } else if (profiles.length === 1) {
+        // Profile exists, update it
+        const existing = profiles[0];
+        response = await axios.patch(
+          `${base_url}api/userProfile/student_profile/${existing.studentId}/`,
           profileData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } else {
+        // No profile found, create a new profile
+        profileData.studentId = `student_${userId.replace(/[@.]/g, '_')}_${Date.now()}`;
         response = await axios.post(
           `${base_url}api/userProfile/student_profile/`,
           profileData,
@@ -328,82 +206,122 @@ export function CardWithForm() {
         );
       }
   
+      // Check if the request was successful
       if (response.status === 200 || response.status === 201) {
-        alert("Profile saved.");
-        const updatedData = {
-          ...formData,
-          profilePicture: response.data.profile_picture || formData.profilePicture,
+        const updated = response.data;
+        const updatedFormData = {
+          fullName: `${updated.student?.first_name || firstName} ${updated.student?.last_name || lastName}`.trim(),
+          phone: updated.phone_number || phone,
+          gender: updated.gender || gender,
+          dob: updated.date_of_birth || dob,
+          city: updated.city || city,
+          nationality: updated.nationality || nationality,
+          country: updated.country || country,
+          profilePicture: updated.profile_picture || profilePicture,
+          education_level: updated.education_level || education_level,
+          current_role: updated.current_role || current_role,
+          industry: updated.industry || industry,
+          linkedin_profile: updated.linkedin_profile || linkedin_profile,
         };
-        setFormData(updatedData);
-        setImageFile(null);
-        saveToLocalStorage(updatedData);
-        setSuccess(true);
-        isUsingExistingImage.current = !!response.data.profile_picture;
+  
+        setFormData(updatedFormData);
+        localStorage.setItem(`formData_${userId.replace(/[@.]/g, '_')}`, JSON.stringify(updatedFormData));
+        setSuccess("Profile saved successfully.");
+        setIsEditing(false);
+        isUsingExistingImage.current = !!updated.profile_picture;
       }
     } catch (err) {
-      console.error("Save failed", err);
-      setError("Failed to save profile.");
+      handleSaveProfileError(err);
     }
   };
   
-
-  useEffect(() => {
-    fetchProfile();
-  }, []);
+  const handleCancel = () => {
+    const userId = getCurrentUserId();
+    const safeUserId = userId.replace(/[@.]/g, "_");
+    const savedData = localStorage.getItem(`formData_${safeUserId}`);
+    if (savedData) {
+      setFormData(JSON.parse(savedData));
+    }
+    setIsEditing(false);
+    setError(null);
+  };
 
   if (loading) return <div className="text-center text-lg my-20">Loading...</div>;
+  if (error && error !== "Profile not found. Please create a profile.") {
+    return <div className="text-red-600 text-xl text-center mt-28">{error}</div>;
+  }
 
   return (
-    <Card className="w-full max-w-[800px] mx-auto mt-20 p-6 bg-black bg-opacity-10 text-white">
+    <Card className="w-full max-w-[800px] mx-auto mt-10 md:mt-20 p-4 md:p-6 bg-black bg-opacity-10 text-white">
       <CardHeader>
-        <CardTitle>Profile</CardTitle>
+        <CardTitle>{error ? "Create Profile" : "Profile"}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSaveProfile} id="profile-form">
-          <ImageUploadBox
-            onImageChange={handleImageChange}
-            defaultImage={formData.profilePicture}
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-            <InputField id="fullName" label="Full Name" value={formData.fullName} onChange={handleChange} />
-            <InputField id="email" label="Email" value={formData.email} onChange={handleChange} disabled />
-            <InputField id="phone" label="Phone" value={formData.phone} onChange={handleChange} />
-            <SelectField
-  id="gender"
-  label="Gender"
-  value={formData.gender}
-  onChange={(val) => handleSelectChange(val, "gender")}
-  options={[
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
-    { label: "Other", value: "other" },
-  ]}
-  placeholder="Select Gender"
-/>
-
-     <InputField id="dob" label="Date of Birth" value={formData.dob} onChange={handleChange} type="date" />
-            <InputField id="city" label="City" value={formData.city} onChange={handleChange} />
-            <InputField id="nationality" label="Nationality" value={formData.nationality} onChange={handleChange} />
-            <InputField id="country" label="Country" value={formData.country} onChange={handleChange} />
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="w-full md:w-[200px] aspect-square">
+              <ImageUploadBox
+                onImageChange={handleImageChange}
+                defaultImage={formData.profilePicture}
+                disabled={!isEditing}
+              />
+            </div>
+            <div className="w-full space-y-4">
+              <InputField id="fullName" label="Full Name" value={formData.fullName} onChange={handleChange} readOnly={!isEditing} />
+              <InputField id="email" label="Email" value={userEmail} defaultValue={true} />
+              <InputField id="phone" label="Phone" value={formData.phone} onChange={handleChange} readOnly={!isEditing} />
+            </div>
           </div>
-          {error && <p className="text-red-500 mt-4">{error}</p>}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            <SelectField
+              id="gender"
+              label="Gender"
+              value={formData.gender}
+              onChange={(val) => handleSelectChange(val, "gender")}
+              options={[
+                { label: "Male", value: "male" },
+                { label: "Female", value: "female" },
+                { label: "Other", value: "other" },
+              ]}
+              placeholder="Select Gender"
+              disabled={!isEditing}
+            />
+            <InputField id="dob" label="Date of Birth" value={formData.dob || ""} onChange={handleChange} type="date" readOnly={!isEditing} />
+            <InputField id="city" label="City" value={formData.city} onChange={handleChange} readOnly={!isEditing} />
+            <InputField id="nationality" label="Nationality" value={formData.nationality} onChange={handleChange} readOnly={!isEditing} />
+            <InputField id="country" label="Country" value={formData.country} onChange={handleChange} readOnly={!isEditing} />
+            <InputField id="education_level" label="Education Level" value={formData.education_level} onChange={handleChange} readOnly={!isEditing} />
+            <InputField id="current_role" label="Current Role" value={formData.current_role} onChange={handleChange} readOnly={!isEditing} />
+            <InputField id="industry" label="Industry" value={formData.industry} onChange={handleChange} readOnly={!isEditing} />
+            <InputField id="linkedin_profile" label="LinkedIn Profile" value={formData.linkedin_profile} onChange={handleChange} readOnly={!isEditing} />
+          </div>
+
+          {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+          {success && <p className="text-green-500 mt-4 text-center">{success}</p>}
         </form>
       </CardContent>
+
       <CardFooter className="flex justify-end gap-4">
-        {success ? (
-          <button onClick={handleEditProfile} className="bg-[#4318D1] px-6 py-2 text-white rounded">
-            Edit Profile
-          </button>
+        {isEditing ? (
+          <>
+            <button type="submit" form="profile-form" className="px-4 py-2 bg-[#4318D1] text-white rounded hover:bg-[#3510a1]">
+              Save
+            </button>
+            <button type="button" onClick={handleCancel} className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+              Cancel
+            </button>
+          </>
         ) : (
-          <button type="submit" form="profile-form" className="bg-[#4318D1] px-6 py-2 text-white rounded">
-            Save
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            <FaEdit className="inline mr-2" /> Edit
           </button>
         )}
-        <button onClick={handleLogout} className="bg-gray-600 px-6 py-2 text-white rounded">
-          Log Out
-        </button>
       </CardFooter>
     </Card>
   );
 }
-

@@ -13,12 +13,12 @@ const ProfileImgUpload = ({ defaultImage, onImageChange, disabled }) => {
   };
 
   return (
-    <div className="md:w-1/2 w-3/4 h-[250px] mx-auto md:mx-5 md:h-full flex flex-col items-center justify-center border-2 border-dashed border-white/50 rounded-md p-4">
+    <div className="  md:mx-5 md:h-full flex flex-col items-center justify-center border-2 border-dashed border-white/50 rounded-md ">
       {defaultImage ? (
         <img
           src={defaultImage}
           alt="Profile"
-          className="w-full h-full object-cover rounded-md"
+          className="w-full h-full object-contain -mb-20 md:-mb-20 rounded-md"
         />
       ) : (
         <p className="text-white/50">Upload Profile Picture</p>
