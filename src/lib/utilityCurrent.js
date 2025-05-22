@@ -1,3 +1,6 @@
+// lib/utilityCurrent.js
+
+// Parses a JWT without any dependencies
 export function parseJwt(token) {
     try {
       const base64Url = token.split(".")[1];
@@ -10,34 +13,43 @@ export function parseJwt(token) {
       );
       return JSON.parse(jsonPayload);
     } catch (e) {
-      console.error("Failed to parse token:", e);
+      console.error("Failed to parse JWT token:", e);
       return null;
     }
   }
   
+  // Extracts the current user ID from the token
   export function getCurrentUserId() {
     const token = localStorage.getItem("accessToken");
     if (!token) {
-      console.log("No accessToken found in localStorage");
+      console.warn("No accessToken found in localStorage");
       return null;
     }
   
     const decoded = parseJwt(token);
     if (!decoded) {
-      console.log("Failed to decode JWT token");
+      console.warn("Failed to decode JWT token");
       return null;
     }
   
-    console.log("Decoded JWT payload:", decoded);
-    const userId = decoded.email || decoded.sub || decoded.user_id || null;
+    const userId = decoded.email || decoded.sub || decoded.user_id || decoded.username || null;
     if (!userId) {
-      console.log("No email, sub, or user_id found in JWT payload");
+      console.warn("No identifiable user ID found in JWT payload");
     }
+  
     return userId;
   }
   
+  // Gets the full decoded user object from JWT
   export function getCurrentUser() {
     const token = localStorage.getItem("accessToken");
     if (!token) return null;
     return parseJwt(token);
   }
+  
+  // Optionally, expose an easy way to get user email from the token
+  export function getCurrentUserEmail() {
+    const user = getCurrentUser();
+    return user?.email || user?.username || null;
+  }
+  

@@ -1,8 +1,8 @@
-// hooks/useHydratedProfile.js or .ts
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { base_url } from '../library/api';
-import { getCurrentUserId } from '../lib/utilityCurrent';
+import { useNavigate } from 'react-router';
+import useAuthenticatedUser from './useAuthenticatedUser';
 
 export default function useHydratedProfile() {
   const [formData, setFormData] = useState({
@@ -19,43 +19,52 @@ export default function useHydratedProfile() {
     industry: '',
     linkedin_profile: '',
   });
+
+  const [profileId, setProfileId] = useState(null); // <-- add this
   const [userEmail, setUserEmail] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [profileError, setProfileError] = useState(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchProfile = async () => {
+  const { user, loadingUser, userError } = useAuthenticatedUser();
+
+  const fetchProfile = async () => {
+    if (loadingUser || !user) return;
+  
+    if (userError) {
+      setProfileError(userError);
+      setLoadingProfile(false);
+      return;
+    }
+  
+
       const token = localStorage.getItem('accessToken');
-      const userId = getCurrentUserId();
+      const userId = user.id;
+      const email = user.email;
 
-      if (!token || !userId) {
-        setError('No valid session. Please log in.');
-        setLoading(false);
-        return;
-      }
+      setUserEmail(email);
 
       try {
         const res = await axios.get(`${base_url}api/userProfile/student_profile/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        const profiles = res.data.results.filter(
+        const profiles = res.data.results || [];
+
+        const matchedProfile = profiles.find(
           (item) =>
-            (item.student?.id && item.student.id === userId) ||
-            (item.student?.email && item.student.email.toLowerCase() === userId.toLowerCase()) ||
-            (item.username && item.username.toLowerCase() === userId.toLowerCase())
+            item.student?.id === userId ||
+            item.student?.email?.toLowerCase() === email.toLowerCase() ||
+            item.username?.toLowerCase() === email.toLowerCase()
         );
 
-        if (profiles.length > 1) {
-          setError('Multiple profiles found. Please contact support.');
-          setLoading(false);
-          return;
-        }
+        if (!matchedProfile) {
+          setProfileError('Profile not found. Please create a profile.');
+          setProfileId(null);
+        } else {
+          const profile = matchedProfile;
 
-        if (profiles.length === 1) {
-          const profile = profiles[0];
-          const email = profile.student?.email || profile.email || profile.username || '';
-          setUserEmail(email);
+          setProfileId(profile.studentId || profile.id); // <-- store profile ID here
 
           setFormData({
             fullName: [profile.student?.first_name ?? '', profile.student?.last_name ?? '']
@@ -74,23 +83,34 @@ export default function useHydratedProfile() {
             industry: profile.industry || '',
             linkedin_profile: profile.linkedin_profile || '',
           });
-        } else {
-          setError('Profile not found. Please create a profile.');
         }
       } catch (err) {
-        const responseMessage = err.response?.data?.detail || err.message;
-        setError(
+        const message = err.response?.data?.detail || err.message;
+        setProfileError(
           err.response?.status === 401
             ? 'Session expired. Please log in again.'
-            : responseMessage || 'Failed to fetch profile.'
+            : message || 'Failed to fetch profile.'
         );
+        setProfileId(null);
       } finally {
-        setLoading(false);
+        setLoadingProfile(false);
       }
     };
 
-    fetchProfile();
-  }, []);
+    useEffect(() => {
+        fetchProfile(); // useEffect just calls it once initially
+      }, [user, loadingUser, userError]);
 
-  return { formData, setFormData, userEmail, loading, error, setError };
+  return {
+    formData,
+    setFormData,
+    userEmail,
+    profileId,        // <-- return profile ID
+    loading: loadingUser || loadingProfile,
+    error: profileError,
+    setError: setProfileError,
+    refetchProfile: fetchProfile,
+  };
 }
+
+

@@ -58,6 +58,11 @@ const Navbar = () => {
         </div>
 
         <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5">
+        <div className="py-1">
+            <MenuItem>
+              <Link to="/learner-profile" className="block px-4 py-2 text-sm text-gray-700">Learner Profile</Link>
+            </MenuItem>
+          </div>
           <div className="py-1">
             <MenuItem>
               <Link to="/system-info" className="block px-4 py-2 text-sm text-gray-700">System Information</Link>
@@ -66,11 +71,7 @@ const Navbar = () => {
               <Link to="/student-bg-info" className="block px-4 py-2 text-sm text-gray-700">Student Background Info</Link>
             </MenuItem>
           </div>
-          <div className="py-1">
-            <MenuItem>
-              <Link to="/learner-profile" className="block px-4 py-2 text-sm text-gray-700">Learner Profile</Link>
-            </MenuItem>
-          </div>
+        
           <div className="py-1">
             <MenuItem>
               <button onClick={logout} className="flex px-4 py-2 text-sm bg-red-500 rounded-lg justify-center items-center mx-auto my-3 text-white">Log Out</button>

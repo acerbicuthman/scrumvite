@@ -7,7 +7,10 @@ import Profile4 from '../../assets/Profile_images/profile_img_1.png';
 import Profile5 from '../../assets/Profile_images/profile_img_2.png';
 import { Link } from 'react-router';
 
+
 const StudentDashboard = () => {
+  const user = localStorage.getItem("user")
+  console.log("user", user)
   return (
     <div className="flex flex-col mt-20 md:flex-row h-screen overflow-hidden bg-gray-50">
 

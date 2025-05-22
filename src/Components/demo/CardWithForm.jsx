@@ -101,6 +101,7 @@ export function CardWithForm() {
     e.preventDefault();
     setError(null);
     setSuccess("");
+    
   
     const token = localStorage.getItem("accessToken");
     const userId = getCurrentUserId();
