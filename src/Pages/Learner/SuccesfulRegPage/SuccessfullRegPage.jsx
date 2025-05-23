@@ -24,8 +24,8 @@ const SuccessfulReg = () => {
 
   
   const handleAutoLogin = async () => {
-    const storedEmail = tempCredentials?.email;
-    const storedPassword = tempCredentials?.password;
+    const storedEmail = tempCredentials?.email || localStorage.getItem("tempEmail");
+    const storedPassword = tempCredentials?.password || localStorage.getItem("tempPassword");
   
     if (!storedEmail || !storedPassword) {
       setMessage("Email verified, but login credentials are missing. Please log in manually.");
@@ -33,7 +33,7 @@ const SuccessfulReg = () => {
       return;
     }
   
-    setAutoLoggingIn(true); 
+    setAutoLoggingIn(true);
   
     try {
       const res = await axios.post(`${base_url}api/auth/login/`, {
@@ -42,23 +42,31 @@ const SuccessfulReg = () => {
       });
   
       const { token: accessToken, refresh: refreshToken, user } = res.data;
-      await login(accessToken, refreshToken, user);
-      // Clear temp credentials from context after use
-      // setTempCredentials(null);
   
-      // setMessage("Email verified. Logging you in...");
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('user', JSON.stringify(user));
+  
+      await login(accessToken, refreshToken, user);
+  
+      // ✅ Clean up credentials after successful login
+      setTempCredentials(null);
+      localStorage.removeItem("tempEmail");
+      localStorage.removeItem("tempPassword");
   
       setTimeout(() => {
         navigate("/student-dashboard");
       }, 1000);
+  
     } catch (loginError) {
       console.error("Auto-login failed:", loginError.response?.data || loginError.message);
       setMessage("Email verified, but login failed. Please log in manually.");
       setErrorType("login-failed");
     } finally {
-      setAutoLoggingIn(false); 
+      setAutoLoggingIn(false);
     }
   };
+  
   
   
 

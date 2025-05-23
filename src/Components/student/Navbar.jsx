@@ -6,17 +6,23 @@ import { useNavigate } from "react-router-dom";
 import Logo from '../../Pages/Landing/LandingImg/Clip path group.png';
 import UserNavImg from '../../assets/Ellipse 122.png';
 import polygon from '../../assets/Polygon 2.png';
+import useAuthenticatedUser from "../../hooks/useAuthenticatedUser";
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [navbarHeight, setNavbarHeight] = useState(0);
-  const { user, logout, isLoading } = useContext(AuthContext);
+  // const {user} = useAuthenticatedUser
+  const {user, logout, isLoading , setIsLoading, storedUser} = useContext(AuthContext);
 
   // Dynamically calculate the navbar height
+  console.log("user", user);
+
   useEffect(() => {
     const navbar = document.querySelector("header");
     if (navbar) {
       setNavbarHeight(navbar.offsetHeight);
+      setIsLoading(false)
     }
   }, []);
 
@@ -49,10 +55,10 @@ const Navbar = () => {
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-black px-3 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-800 ring-inset hover:bg-white/50">
-            <img src={UserNavImg} className="h-[50px] w-[50px] py-2 my-auto" alt="User" />
-            <div className="py-4 flex">
-              <p>{user?.name}uthman</p>
-              <div className="mx-2 py-2"><img src={polygon} alt="Polygon" /></div>
+            <img src={UserNavImg} className="h-[60px] w-[60px] py-2 my-auto object-contain" alt="User" />
+            <div className="py-3 flex">
+              <p className=" pt-2 text-xl" >{user?.first_name}</p>
+              <div className="mx-2 pt-4"><img src={polygon} alt="Polygon" /></div>
             </div>
           </MenuButton>
         </div>
@@ -148,8 +154,8 @@ const Navbar = () => {
                   <div className="-my-6 divide-y divide-gray-500/10">
                     <div className="space-y-2 py-6">
                       <Link to="/student-dashboard" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Dashboard</Link>
-                      <Link to="/system-info" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">System Info</Link>
                       <Link to="/learner-profile" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Profile</Link>
+                      <Link to="/system-info" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">System Info</Link>
                       <Link to="/student-bg-info" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Student Background</Link>
 
                     </div>

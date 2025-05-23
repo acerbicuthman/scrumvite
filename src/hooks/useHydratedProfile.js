@@ -41,8 +41,11 @@ export default function useHydratedProfile() {
       const token = localStorage.getItem('accessToken');
       const userId = user.id;
       const email = user.email;
+      
+      
 
       setUserEmail(email);
+      
 
       try {
         const res = await axios.get(`${base_url}api/userProfile/student_profile/`, {
@@ -97,14 +100,16 @@ export default function useHydratedProfile() {
       }
     };
 
+    
     useEffect(() => {
         fetchProfile(); // useEffect just calls it once initially
-      }, [user, loadingUser, userError]);
+      }, [user, loadingUser, userEmail, userError]);
 
   return {
     formData,
     setFormData,
     userEmail,
+    userId: user?.id,
     profileId,        // <-- return profile ID
     loading: loadingUser || loadingProfile,
     error: profileError,

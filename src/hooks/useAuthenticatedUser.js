@@ -25,7 +25,9 @@ export default function useAuthenticatedUser() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
+        
         setUser(response.data);
+        // console.log("object", user.email)
       } catch (err) {
         const message = err.response?.data?.detail || err.message;
         setUserError(

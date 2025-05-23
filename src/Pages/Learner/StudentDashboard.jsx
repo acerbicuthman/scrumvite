@@ -11,6 +11,9 @@ import { Link } from 'react-router';
 const StudentDashboard = () => {
   const user = localStorage.getItem("user")
   console.log("user", user)
+
+  const token = localStorage.getItem("accessToken")
+  console.log("Token", token)
   return (
     <div className="flex flex-col mt-20 md:flex-row h-screen overflow-hidden bg-gray-50">
 
@@ -46,6 +49,13 @@ const StudentDashboard = () => {
             <FaCog />
             <span>Settings</span>
           </li>
+          <Link to="/learner-profile"
+       className='block'>
+          <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
+            <FaCog />
+            <span>Learner Profile</span>
+          </li>
+          </Link>
           <Link to="/system-info" 
           className='block'>
   <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
@@ -60,13 +70,7 @@ const StudentDashboard = () => {
   <span>Student Background Info</span>
 </li>
     </Link>
-      <Link to="/learner-profile"
-       className='block'>
-          <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
-            <FaCog />
-            <span>Learner Profile</span>
-          </li>
-          </Link>
+     
         </ul>
       </div>
 

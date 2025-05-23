@@ -1,13 +1,20 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
+
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+   
     const [accessToken, setAccessToken] = useState(localStorage.getItem('accessToken') || null);
     const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refreshToken') || null);
     const [isLoading, setIsLoading] = useState(true);
     const [loggedIn, setLoggedIn] = useState(false);
+    const [user, setUser] = useState(null);
+    const storedUser = localStorage.getItem('user');
+
+    
+
     
     const [tempCredentials, setTempCredentialsState] = useState(() => {
       const stored = localStorage.getItem("tempCredentials");
@@ -25,7 +32,8 @@ export const AuthProvider = ({ children }) => {
   
     // Load user from localStorage on mount
     useEffect(() => {
-      const storedUser = localStorage.getItem('user');
+    
+
   
       if (storedUser && storedUser !== "undefined") {
         try {
@@ -92,7 +100,7 @@ export const AuthProvider = ({ children }) => {
     };
   
     return (
-      <AuthContext.Provider value={{ user, accessToken, refreshToken, login, logout, isLoading, loggedIn,  tempCredentials, setTempCredentials }}>
+      <AuthContext.Provider value={{ user, storedUser, accessToken, refreshToken, login, logout, isLoading, setIsLoading, loggedIn,  tempCredentials, setTempCredentials }}>
         {children}
       </AuthContext.Provider>
     );
