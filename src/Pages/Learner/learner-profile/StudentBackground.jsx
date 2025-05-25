@@ -1,25 +1,28 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { base_url } from '../../../library/api';
 
 const StudentBackground = () => {
-  const formRef = useRef(); // We'll use a reference to access form values directly
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [profile, setProfile] = useState(null); // To store fetched profile data
-  const [loading, setLoading] = useState(true); // State to manage loading
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [formValues, setFormValues] = useState({
+    education_level: '',
+    current_role: '',
+    industry: '',
+    linkedin_profile: ''
+  });
 
-  // Fetch the profile from the backend and populate the form fields
   const fetchProfile = async () => {
     const token = localStorage.getItem('accessToken');
     const user = JSON.parse(localStorage.getItem('user'));
     const email = user?.email;
 
     if (!token || !email) {
-      console.error('No token or email found');
       setError('Authentication data missing');
-      setLoading(false); // Stop loading if authentication data is missing
+      setLoading(false);
       return;
     }
 
@@ -28,49 +31,53 @@ const StudentBackground = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // Find the profile that matches the logged-in user's email
       const existingProfile = res.data.results.find(
         (item) => item.student?.email.toLowerCase() === email.toLowerCase()
       );
 
       if (existingProfile) {
-        setProfile(existingProfile); // Set profile data
+        setProfile(existingProfile);
+        setFormValues({
+          education_level: existingProfile.education_level || '',
+          current_role: existingProfile.current_role || '',
+          industry: existingProfile.industry || '',
+          linkedin_profile: existingProfile.linkedin_profile || ''
+        });
       } else {
-        setProfile(null); // No profile found
+        setProfile(null);
       }
-      setLoading(false); // Stop loading after data is fetched
+
+      setLoading(false);
     } catch (err) {
       console.error('Error fetching profile:', err.response?.data || err.message);
       setError('Failed to fetch profile');
-      setLoading(false); // Stop loading after error
+      setLoading(false);
     }
   };
 
-  // Call fetchProfile when component mounts
   useEffect(() => {
     fetchProfile();
   }, []);
 
-  // Handle saving the form data to the backend
   const handleSave = async (e) => {
     e.preventDefault();
-
     setError(null);
     setSuccess(null);
 
     const token = localStorage.getItem('accessToken');
-    const user = JSON.parse(localStorage.getItem('user'))
+    const user = JSON.parse(localStorage.getItem('user'));
+
     if (!token || !user) {
       setError('No token or user found. Please log in.');
       return;
     }
 
-    // Gather form data using ref
-    const profileData = new FormData();
-    profileData.append('education_level', formRef.current.education_level.value || '');
-    profileData.append('current_role', formRef.current.current_role.value || '');
-    profileData.append('industry', formRef.current.industry.value || '');
-    profileData.append('linkedin_profile', formRef.current.linkedin_profile.value || '');
+    const profileData = {
+      education_level: formValues.education_level,
+      current_role: formValues.current_role,
+      industry: formValues.industry,
+      linkedin_profile: formValues.linkedin_profile
+    };
 
     try {
       const res = await axios.get(`${base_url}api/userProfile/student_profile/`, {
@@ -81,27 +88,20 @@ const StudentBackground = () => {
         (item) => item.student?.email === user.email
       );
 
-      let response;
       if (existingProfile) {
-        // If the profile exists, patch the existing one
-        response = await axios.patch(
+        const response = await axios.patch(
           `${base_url}api/userProfile/student_profile/${existingProfile.studentId}/`,
           profileData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-      } else {
-        // If no profile exists, create a new one
-        response = await axios.post(
-          `${base_url}api/userProfile/student_profile/`,
-          profileData,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-      }
 
-      if (response.status === 200 || response.status === 201) {
-        setSuccess('Profile saved successfully');
-        setIsEditing(false); // Set form to read-only after saving
-        fetchProfile(); // Re-fetch to update displayed data from the backend
+        if (response.status === 200 || response.status === 201) {
+          setSuccess('Profile saved successfully');
+          setIsEditing(false);
+          fetchProfile(); // Re-fetch profile after save
+        }
+      } else {
+        setError('No matching profile found to update.');
       }
     } catch (err) {
       console.error('Error saving profile:', err.response?.data || err.message);
@@ -110,9 +110,9 @@ const StudentBackground = () => {
   };
 
   return (
-    <div className="h-screen flex justify-center items-center px-4">
-      <div className="md:mx-auto w-full md:w-3/4 lg:w-3/6 lg:h-3/5 my-40 justify-center items-center bg-white bg-opacity-[4%] border-white border-opacity-10 border-2 text-white">
-        <div className="my-8 p-4 md:p-1">
+    <div className="my-10  justify-center items-center px-4">
+      <div className="md:mx-auto ] w-full max-w-[800px] lg:h-3/5 my-2 justify-center items-center bg-white bg-opacity-[4%] border-white border-opacity-10 border-2 text-white">
+        <div className="my-2 p-4 md:p-1">
           <div className="flex justify-between items-center m-5">
             <h1 className="lg:text-2xl font-semibold">Professional & Education Info</h1>
             <button
@@ -128,74 +128,60 @@ const StudentBackground = () => {
           {error && <div className="text-red-500 m-5">{error}</div>}
           {success && <div className="text-green-500 m-5">{success}</div>}
 
-          {/* Show spinner while loading */}
           {loading ? (
             <div className="flex justify-center items-center my-8">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4318D1]" />
             </div>
           ) : (
-            // Show form only when the profile is fetched
-            <form ref={formRef} onSubmit={handleSave}>
+            <form onSubmit={handleSave}>
               <div className="flex-1 mx-4 my-2">
-                <label htmlFor="education_level" className="text-white/50">
-                  Education
-                </label>
-                <div>
-                  <input
-                    type="text"
-                    name="education_level"
-                    className="bg-white bg-opacity-10 w-full rounded-sm p-2"
-                    defaultValue={profile?.education_level || ''}
-                    disabled={!isEditing}
-                  />
-                </div>
+                <label htmlFor="education_level" className="text-white/50">Education</label>
+                <input
+                  type="text"
+                  name="education_level"
+                  className="bg-white bg-opacity-10 w-full rounded-sm p-2"
+                  value={formValues.education_level}
+                  onChange={(e) => setFormValues({ ...formValues, education_level: e.target.value })}
+                  disabled={!isEditing}
+                />
               </div>
 
               <div className="flex md:flex-row flex-col">
                 <div className="flex-1 m-5">
-                  <label htmlFor="current_role" className="text-white/50">
-                    Current Role
-                  </label>
-                  <div>
-                    <input
-                      type="text"
-                      name="current_role"
-                      className="bg-white bg-opacity-10 w-full rounded-sm p-2"
-                      defaultValue={profile?.current_role || ''}
-                      disabled={!isEditing}
-                    />
-                  </div>
+                  <label htmlFor="current_role" className="text-white/50">Current Role</label>
+                  <input
+                    type="text"
+                    name="current_role"
+                    className="bg-white bg-opacity-10 w-full rounded-sm p-2"
+                    value={formValues.current_role}
+                    onChange={(e) => setFormValues({ ...formValues, current_role: e.target.value })}
+                    disabled={!isEditing}
+                  />
                 </div>
 
                 <div className="flex-1 m-5">
-                  <label htmlFor="industry" className="text-white/50">
-                    Industry
-                  </label>
-                  <div>
-                    <input
-                      type="text"
-                      name="industry"
-                      className="bg-white bg-opacity-10 w-full rounded-sm p-2"
-                      defaultValue={profile?.industry || ''}
-                      disabled={!isEditing}
-                    />
-                  </div>
+                  <label htmlFor="industry" className="text-white/50">Industry</label>
+                  <input
+                    type="text"
+                    name="industry"
+                    className="bg-white bg-opacity-10 w-full rounded-sm p-2"
+                    value={formValues.industry}
+                    onChange={(e) => setFormValues({ ...formValues, industry: e.target.value })}
+                    disabled={!isEditing}
+                  />
                 </div>
               </div>
 
               <div className="flex-1 mx-4 my-2">
-                <label htmlFor="linkedin_profile" className="text-white/50">
-                  LinkedIn Profile
-                </label>
-                <div>
-                  <input
-                    type="text"
-                    name="linkedin_profile"
-                    className="bg-white bg-opacity-10 w-full rounded-sm p-2"
-                    defaultValue={profile?.linkedin_profile || ''}
-                    disabled={!isEditing}
-                  />
-                </div>
+                <label htmlFor="linkedin_profile" className="text-white/50">LinkedIn Profile</label>
+                <input
+                  type="text"
+                  name="linkedin_profile"
+                  className="bg-white bg-opacity-10 w-full rounded-sm p-2"
+                  value={formValues.linkedin_profile}
+                  onChange={(e) => setFormValues({ ...formValues, linkedin_profile: e.target.value })}
+                  disabled={!isEditing}
+                />
               </div>
 
               {isEditing && (

@@ -1,11 +1,24 @@
 import CardLearnerProfileForm from "./CardLearnerProfileForm";
+// import StudentBackground from "./StudentBackground";
+// import SystemInfo from "./SystemInfo";
 
 const Learnerprofile = () => {
   return (
-    <div className="min-h-screen flex  items-center justify-center w-full px-4 md:w-3/4 md:mx-auto md:my-10">
-    
-      
+    <div>
+
+  
+    <div className="  items-center justify-center w-full  md:mt-10">
      <CardLearnerProfileForm/>
+     
+    </div>
+    <div>
+    {/* <StudentBackground/> */}
+    </div>
+    <div>
+    {/* <SystemInfo/> */}
+    </div>
+   
+    
      
     </div>
   );

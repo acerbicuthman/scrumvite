@@ -68,6 +68,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('user', JSON.stringify(userData));
 
+
       setIsLoading(false)
     };
   

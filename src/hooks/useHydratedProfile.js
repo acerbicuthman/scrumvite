@@ -67,15 +67,15 @@ export default function useHydratedProfile() {
         } else {
           const profile = matchedProfile;
 
-          setProfileId(profile.studentId || profile.id); // <-- store profile ID here
+          setProfileId(profile.studentId); 
 
           setFormData({
             fullName: [profile.student?.first_name ?? '', profile.student?.last_name ?? '']
               .filter(Boolean)
               .join(' ')
               .trim(),
-            phone: profile.phone_number || '',
-            gender: profile.gender || '',
+            phone: profile.phone_number ?? '',
+            gender: profile.gender ?? '',
             city: profile.city || '',
             nationality: profile.nationality || '',
             country: profile.country || '',
@@ -102,8 +102,9 @@ export default function useHydratedProfile() {
 
     
     useEffect(() => {
-        fetchProfile(); // useEffect just calls it once initially
-      }, [user, loadingUser, userEmail, userError]);
+      fetchProfile();
+    }, [user, loadingUser]);
+    
 
   return {
     formData,

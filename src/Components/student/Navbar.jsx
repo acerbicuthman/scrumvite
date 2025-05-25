@@ -69,14 +69,14 @@ const Navbar = () => {
               <Link to="/learner-profile" className="block px-4 py-2 text-sm text-gray-700">Learner Profile</Link>
             </MenuItem>
           </div>
-          <div className="py-1">
+          {/* <div className="py-1">
             <MenuItem>
               <Link to="/system-info" className="block px-4 py-2 text-sm text-gray-700">System Information</Link>
             </MenuItem>
             <MenuItem>
               <Link to="/student-bg-info" className="block px-4 py-2 text-sm text-gray-700">Student Background Info</Link>
             </MenuItem>
-          </div>
+          </div> */}
         
           <div className="py-1">
             <MenuItem>
@@ -155,8 +155,8 @@ const Navbar = () => {
                     <div className="space-y-2 py-6">
                       <Link to="/student-dashboard" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Dashboard</Link>
                       <Link to="/learner-profile" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Profile</Link>
-                      <Link to="/system-info" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">System Info</Link>
-                      <Link to="/student-bg-info" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Student Background</Link>
+                      {/* <Link to="/system-info" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">System Info</Link>
+                      <Link to="/student-bg-info" onClick={toggleMenu} className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Student Background</Link> */}
 
                     </div>
                   </div>

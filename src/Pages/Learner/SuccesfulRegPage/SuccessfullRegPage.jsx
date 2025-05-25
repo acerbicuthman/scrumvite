@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Congrats from '../../../assets/congratulations.gif';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { base_url } from '../../../library/api';
-import { AuthContext, useAuth } from '../../../context/Authcontext';
+import { useAuth } from '../../../context/Authcontext';
 import { BeatLoader } from 'react-spinners';
 
 const SuccessfulReg = () => {
@@ -14,50 +14,85 @@ const SuccessfulReg = () => {
   const [resendMsg, setResendMsg] = useState('');
   const [autoLoggingIn, setAutoLoggingIn] = useState(false);
 
-
-
   const location = useLocation();
   const navigate = useNavigate();
   const verificationKey = new URLSearchParams(location.search).get('key');
- 
-  const { login, tempCredentials, setTempCredentials } = useAuth();
 
-  
+  const { login, tempCredentials, setTempCredentials, user } = useAuth();
+  const email = tempCredentials?.email || localStorage.getItem("tempEmail");
+
+  // ✅ Account type-based redirect if user already logged in
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (user && accessToken) {
+      const accountType = user?.account_type?.toLowerCase();
+      switch (accountType) {
+        case 'admin':
+          navigate('/admin-dashboard');
+          break;
+        case 'teacher':
+          navigate('/teacher-dashboard');
+          break;
+        case 'student':
+        default:
+          navigate('/student-dashboard');
+          break;
+      }
+    }
+  }, [user, navigate]);
+
   const handleAutoLogin = async () => {
-    const storedEmail = tempCredentials?.email || localStorage.getItem("tempEmail");
     const storedPassword = tempCredentials?.password || localStorage.getItem("tempPassword");
-  
-    if (!storedEmail || !storedPassword) {
+
+    if (!email || !storedPassword) {
       setMessage("Email verified, but login credentials are missing. Please log in manually.");
       setErrorType("login-failed");
       return;
     }
-  
+
     setAutoLoggingIn(true);
-  
+
     try {
       const res = await axios.post(`${base_url}api/auth/login/`, {
-        email: storedEmail,
+        email: email,
         password: storedPassword,
       });
-  
-      const { token: accessToken, refresh: refreshToken, user } = res.data;
-  
+
+      const { access: accessToken, refresh: refreshToken, user } = res.data;
+
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('user', JSON.stringify(user));
-  
+
       await login(accessToken, refreshToken, user);
-  
-      // ✅ Clean up credentials after successful login
+
+console.log("Post-login: ", {
+  accessToken: localStorage.getItem("accessToken"),
+  refreshToken: localStorage.getItem("refreshToken"),
+  user: localStorage.getItem("user"),
+});
+
+
       setTempCredentials(null);
       localStorage.removeItem("tempEmail");
       localStorage.removeItem("tempPassword");
-  
+
       setTimeout(() => {
-        navigate("/student-dashboard");
+        const accountType = user?.account_type?.toLowerCase();
+        switch (accountType) {
+          case 'admin':
+            navigate('/admin-dashboard');
+            break;
+          case 'teacher':
+            navigate('/teacher-dashboard');
+            break;
+          case 'student':
+          default:
+            navigate('/student-dashboard');
+            break;
+        }
       }, 1000);
-  
+
     } catch (loginError) {
       console.error("Auto-login failed:", loginError.response?.data || loginError.message);
       setMessage("Email verified, but login failed. Please log in manually.");
@@ -66,9 +101,6 @@ const SuccessfulReg = () => {
       setAutoLoggingIn(false);
     }
   };
-  
-  
-  
 
   const handleResendVerification = async () => {
     if (!email) {
@@ -97,18 +129,17 @@ const SuccessfulReg = () => {
     const verifyEmail = async () => {
       setIsLoading(true);
       try {
-        await axios.post(`${base_url}api/auth/registration/verify-email/`, {
+        const response = await axios.post(`${base_url}api/auth/registration/verify-email/`, {
           key: verificationKey,
         });
-        console.log(`${base_url}api/auth/registration/verify-email/`);
-        console.log("key", verificationKey);
 
+        console.log("Response", response.data)
         setMessage("Your email has been successfully verified.");
         await handleAutoLogin();
       } catch (err) {
         const status = err.response?.status;
         const data = err.response?.data;
-      
+
         if (status === 404 || data?.detail === "Not found.") {
           setMessage("This verification link has expired.");
           setErrorType("expired");
@@ -125,7 +156,6 @@ const SuccessfulReg = () => {
           setMessage("An unexpected error occurred during verification. Please try again later.");
           setErrorType("server");
         }
-      
       } finally {
         setIsLoading(false);
       }
@@ -152,20 +182,18 @@ const SuccessfulReg = () => {
             {errorType ? "Verification Status" : "Congratulations!"}
           </h1>
           <p className="opacity-50 text-center text-sm md:text-base mb-6">
-  {(isLoading || autoLoggingIn) ? (
-    <>
-      <BeatLoader color="#000" size={10} />
-      <span className="block mt-2">
-        {isLoading ? 'Verifying your email...' : 'Logging you in...'}
-      </span>
-    </>
-  ) : (
-    message
-  )}
-</p>
+            {(isLoading || autoLoggingIn) ? (
+              <>
+                <BeatLoader color="#000" size={10} />
+                <span className="block mt-2">
+                  {isLoading ? 'Verifying your email...' : 'Logging you in...'}
+                </span>
+              </>
+            ) : (
+              message
+            )}
+          </p>
 
-
-          {/* Resend Button for Expired Tokens */}
           {!isLoading && errorType === "expired" && (
             <div className="flex flex-col items-center gap-3 w-full">
               <button
@@ -181,8 +209,7 @@ const SuccessfulReg = () => {
             </div>
           )}
 
-          {/* Always show login button when not loading */}
-          {!isLoading && (
+          {!isLoading && ["login-failed", "expired", "invalid", "generic", "server", "missing"].includes(errorType) && (
             <button
               type="button"
               onClick={() => navigate('/signin')}

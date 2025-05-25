@@ -1,19 +1,38 @@
-import React from 'react';
-import { FaHome, FaCalendarAlt, FaBook, FaChartBar, FaUsers, FaCog, FaLaptop } from 'react-icons/fa';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  FaHome, FaCalendarAlt, FaBook, FaChartBar, FaUsers, FaCog, FaLaptop
+} from 'react-icons/fa';
+
+import { useAuth } from '../../context/Authcontext';
+
 import Profile1 from '../../assets/Profile_images/profile_img.png';
 import Profile2 from '../../assets/Profile_images/profile_img2.png';
 import Profile3 from '../../assets/Profile_images/profile_img3.png';
 import Profile4 from '../../assets/Profile_images/profile_img_1.png';
 import Profile5 from '../../assets/Profile_images/profile_img_2.png';
-import { Link } from 'react-router';
-
 
 const StudentDashboard = () => {
-  const user = localStorage.getItem("user")
-  console.log("user", user)
+  const { user, accessToken, isLoading } = useAuth();
+  const navigate = useNavigate();
+  // const userProfile = user?.profile;
 
-  const token = localStorage.getItem("accessToken")
-  console.log("Token", token)
+  // Redirect to profile setup if profile is missing
+  // useEffect(() => {
+  //   if (!isLoading && (!userProfile || userProfile === null)) {
+  //     prompt(`You need to fill up your profile here ${<Link to ="/learner-profile"></Link>}`)
+  //   }
+  // }, [userProfile, isLoading, navigate]);
+
+  // Show loading or unauthorized message
+  if (isLoading) {
+    return <div className="text-white p-10">Loading your dashboard...</div>;
+  }
+
+  if (!accessToken || !user) {
+    return <div className="text-white p-10">You are not authorized. Please log in.</div>;
+  }
+
   return (
     <div className="flex flex-col mt-20 md:flex-row h-screen overflow-hidden bg-gray-50">
 
@@ -21,56 +40,38 @@ const StudentDashboard = () => {
       <div className="hidden md:flex flex-col w-1/4 bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-500 text-white px-6 py-8">
         <h1 className="text-2xl font-semibold mb-8">Scrum LMS</h1>
         <ul className="space-y-6">
-          <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
-            <FaHome />
-            <span>Dashboard</span>
-          </li>
-          <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
-            <FaCalendarAlt />
-            <span>Schedule</span>
-          </li>
-          <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
-            <FaBook />
-            <span>My Courses</span>
-          </li>
-          <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
-            <FaChartBar />
-            <span>Reports</span>
-          </li>
-          <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
-            <FaUsers />
-            <span>Teams</span>
-          </li>
-          <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
-            <FaLaptop />
-            <span>Library</span>
-          </li>
-          <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
-            <FaCog />
-            <span>Settings</span>
-          </li>
-          <Link to="/learner-profile"
-       className='block'>
-          <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
-            <FaCog />
-            <span>Learner Profile</span>
-          </li>
+          {[
+            { icon: <FaHome />, text: 'Dashboard' },
+            { icon: <FaCalendarAlt />, text: 'Schedule' },
+            { icon: <FaBook />, text: 'My Courses' },
+            { icon: <FaChartBar />, text: 'Reports' },
+            { icon: <FaUsers />, text: 'Teams' },
+            { icon: <FaLaptop />, text: 'Library' },
+            { icon: <FaCog />, text: 'Settings' }
+          ].map(({ icon, text }, index) => (
+            <li key={index} className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
+              {icon}
+              <span>{text}</span>
+            </li>
+          ))}
+          <Link to="/learner-profile" className="block">
+            <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
+              <FaCog />
+              <span>Learner Profile</span>
+            </li>
           </Link>
-          <Link to="/system-info" 
-          className='block'>
-  <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
-    <FaCog />
-    <span>System Information</span>
-  </li>
-</Link>
-    <Link to="/student-bg-info "
-     className='block'>
-<li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
-  <FaCog />
-  <span>Student Background Info</span>
-</li>
-    </Link>
-     
+          {/* <Link to="/system-info" className="block">
+            <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
+              <FaCog />
+              <span>System Information</span>
+            </li>
+          </Link>
+          <Link to="/student-bg-info" className="block">
+            <li className="flex items-center space-x-3 cursor-pointer hover:bg-blue-700 px-3 py-2 rounded-md">
+              <FaCog />
+              <span>Student Background Info</span>
+            </li>
+          </Link> */}
         </ul>
       </div>
 
