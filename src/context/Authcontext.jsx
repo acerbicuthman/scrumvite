@@ -54,6 +54,29 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false); // Done loading
     }, []);
   
+    useEffect(() => {
+      const checkStorageIntegrity = () => {
+        const stored = localStorage.getItem('user');
+        if (!stored || stored === "undefined") {
+          if (user !== null) {
+            console.warn("User signed out externally — clearing auth context.");
+            logout(); // Triggers reset and redirect
+          }
+        }
+      };
+    
+      // Run once every few seconds or on tab focus
+      const interval = setInterval(checkStorageIntegrity, 2000);
+    
+      // Also check when user refocuses the tab
+      window.addEventListener("focus", checkStorageIntegrity);
+    
+      return () => {
+        clearInterval(interval);
+        window.removeEventListener("focus", checkStorageIntegrity);
+      };
+    }, [user]);
+    
     // Login function to store tokens and user data
     const login = async (accessToken, refreshToken, userData) => {
         setIsLoading(true);

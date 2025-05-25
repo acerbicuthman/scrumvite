@@ -146,7 +146,7 @@ const SignIn = () => {
       <BeatLoader color="white" size={12} />
     </div>
   ) : (
-    <div className="flex flex-col md:flex-row min-h-screen w-full bg-black text-white">
+    <div className="flex flex-col md:flex-row min-h-screen w-full bg-black text-white overflow-scroll">
       {/* Left - Image SlideShow */}
       <div className="hidden md:flex w-1/2 items-center justify-center mt-">
         <div className="w-full mx-auto items-center justify-center ">

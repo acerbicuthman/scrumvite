@@ -331,7 +331,9 @@ const CardLearnerProfileForm = () => {
 
 {localError && <p className="text-red-500 mt-4 text-center h-10">{localError}</p>}
         {success && <p className="text-green-500 mt-4 text-center">{success}</p>}
-        <div className="flex justify-end gap-4 mt-10 py-4">
+
+
+        <div className="flex justify-center gap-4 mt-10 py-4">
         {isEditing && (
   <>
     <button type="submit" form="profile-form"
