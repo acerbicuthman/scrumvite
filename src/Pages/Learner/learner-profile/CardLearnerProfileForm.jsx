@@ -7,26 +7,33 @@ import useHydratedProfile from "../../../hooks/useHydratedProfile";
 import { FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import SystemInfo from "./SystemInfo";
+import { useAuth } from "../../../context/Authcontext";
 // import useAuthenticatedUser from "../../../hooks/useAuthenticatedUser";
 
 const CardLearnerProfileForm = () => {
   const isUsingExistingImage = useRef(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(true);
   const [localError, setLocalError] = useState(null);
   const [success, setSuccess] = useState("");
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const {user} = useAuth()
 
+  const mailGoogle = user?.email
+ 
+console.log("Google mail", mailGoogle)
   const { userEmail, userId, profileId } = useHydratedProfile();
-  // const {user} = useAuthenticatedUser()
-  // console.log("OBjectUser", user.results)
+  const googleEmail = localStorage.getItem("userEmail")
+  const email = mailGoogle || userEmail || googleEmail || "";
+
+
   const token = localStorage.getItem("accessToken");
-  const safeUserId = userEmail ? userEmail.replace(/[@.]/g, "_") : null;
+  const safeUserId = email ? email.replace(/[@.]/g, "_") : null;
 
   const [formData, setFormData] = useState({
     fullName: "",
-    email: userEmail || "",
+    email: email || mailGoogle || "",
     phone: "",
     gender: "",
     city: "",
@@ -39,6 +46,8 @@ const CardLearnerProfileForm = () => {
     industry: "",
     linkedin_profile: "",
   });
+
+
 
   // Fetch profile if profileId exists
   useEffect(() => {
@@ -62,7 +71,7 @@ const CardLearnerProfileForm = () => {
 
         setFormData({
           fullName: `${result.student.first_name} ${result.student.last_name}`,
-          email: result.student.email,
+          email: result.student.email || email ,
           phone: result.phone_number || "",
           gender: result.gender || "",
           city: result.city || "",
@@ -167,9 +176,9 @@ const CardLearnerProfileForm = () => {
         id: userId,
         first_name: firstName,
         last_name: lastName || "",
-        email: userEmail,
+        email: email,
       },
-      username: userEmail,
+      username: email,
       profile_picture: formData.profilePicture || "",
       phone_number: formData.phone || "",
       gender: formData.gender || "male",
@@ -221,7 +230,7 @@ const CardLearnerProfileForm = () => {
 
   const renderInputField = (id, label, type = "text", disabled = false) => (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium mb-1 capitalize">
+      <label htmlFor={id} className="block text-sm font-medium mb-1 capitalize text-white/50">
         {label || id.replace("_", " ")}
       </label>
       <input
@@ -260,7 +269,7 @@ const CardLearnerProfileForm = () => {
 
         
         <h2 className="text-3xl font-semibold m-5">
-          {localError ? "Create Profile" : "Profile"}
+          {localError ? "Create Profile" : "Update Profile"}
         </h2>
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-[400px] aspect-square">
@@ -270,7 +279,7 @@ const CardLearnerProfileForm = () => {
                 disabled={!isEditing}
               />
             </div>
-            <div className="w-full space-y-4 md:mt-0 mt-10">
+            <div className="w-full space-y-4 md:mt-0 mt-10 ">
               {renderInputField("fullName", "Full Name")}
               {renderInputField("email", "Email", "text", true)}
               {renderInputField("phone", "Phone")}
@@ -310,7 +319,7 @@ const CardLearnerProfileForm = () => {
       <div className='md:mx-auto w-full max-w-[800px] my-2 bg-white bg-opacity-[4%] border-white border-opacity-10 border-2 text-white p-4'>
         <h3 className="text-xl font-semibold mb-4">Education & Professional Details</h3>
 <div className="mt-10  pt-3">
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-white/50">
     {["education_level", "current_role", "industry", "linkedin_profile"].map((field) => (
       <div key={field}>{renderInputField(field)}</div>
     ))}
@@ -337,7 +346,7 @@ const CardLearnerProfileForm = () => {
         {isEditing && (
   <>
     <button type="submit" form="profile-form"
-     className="px-4 py-2 bg-[#4318D1] text-white rounded"
+     className="px-10 py-2 bg-[#4318D1] text-white rounded"
     >Save</button>
     <button type="button" onClick={handleCancel}>Cancel</button>
   </>
@@ -345,7 +354,7 @@ const CardLearnerProfileForm = () => {
 
 {!isEditing && (
   <button type="button" onClick={handleEditClick}
-  className="px-4 py-2 bg-[#4318D1] text-white rounded">
+  className="px-10 py-2 bg-[#4318D1] text-white rounded">
     <FaEdit className="inline mr-2" /> Edit
   </button>
 )}

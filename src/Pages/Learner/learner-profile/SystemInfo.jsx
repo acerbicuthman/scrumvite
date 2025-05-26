@@ -78,12 +78,14 @@ const SystemInfo = () => {
   }, [profileId, token]);
 
   return (
+    
     <div className='px-4'>
       <div className='md:mx-auto w-full max-w-[800px] my-2 bg-white bg-opacity-[4%] border-white border-opacity-10 border-2 text-white'>
         <div className='my-2 p-4 md:p-1'>
           <h1 className='text-2xl font-semibold m-5'>System Information</h1>
 
           {systemInfo ? (
+          
             <div className='flex lg:flex-row flex-col'>
               {/* Left Column */}
               <div className='flex-1 m-5'>
@@ -126,12 +128,22 @@ const SystemInfo = () => {
                     readOnly
                   />
                 </div>
+                
+              </div>
+              <div>
+                
               </div>
             </div>
+
           ) : (
             <p className='text-white/50 m-5'>Loading system information...</p>
           )}
+
         </div>
+      </div>
+      <div>
+      <p className='text-white/50 md:text-base text-[11px] text-nowrap '>* This information is system-generated and cannot be modified</p>
+
       </div>
     </div>
   );

@@ -298,7 +298,7 @@ const SignIn = () => {
            <span className="text-white opacity-50"> Don’t have an account?{" "}</span>
             <span
               className="text-[#4045E1] underline cursor-pointer"
-              onClick={() => navigate("/signup")}
+              onClick={() => navigate("/")}
             >
               Sign Up
             </span>

@@ -11,12 +11,6 @@ const Learnerprofile = () => {
      <CardLearnerProfileForm/>
      
     </div>
-    <div>
-    {/* <StudentBackground/> */}
-    </div>
-    <div>
-    {/* <SystemInfo/> */}
-    </div>
    
     
      

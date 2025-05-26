@@ -70,9 +70,22 @@ const Navbar = () => {
         <div>
           <MenuButton className="inline-flex w-full  justify-center gap-x-1.5  bg-black px-3 text-sm font-semibold text-white shadow-xs  hover:bg-white/50 hover:border-l-indigo-300 hover:border-r-indigo-300
  border-0 border-l border-r border-l-white border-r-white
-">
+">    
+          {user?.profile?.profile_picture ? (
           <ProfileImage
-           imageUrl={user?.profile.profile_picture} />
+           imageUrl={user?.profile.profile_picture} />):(
+            <img 
+            src={UserNavImg}
+            alt="Default Profile"
+            style={{
+              width: '50px',
+              height: '50px',
+              objectFit: 'cover',
+              borderRadius: '50%',
+              padding: "8px",
+              marginTop: "5px"
+            }}
+            />)}
             <div className="py-3 flex">
               <p className=" pt-2 text-xl" >{user?.first_name}</p>
              

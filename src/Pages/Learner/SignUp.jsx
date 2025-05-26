@@ -461,7 +461,7 @@ const SignUp = () => {
           </div> 
 
           <div className="md:hidden  ">
-            <div className="flex"> <LinkedInLogin /> <p className="my-auto">Sign in WIth Google</p></div>
+            <div className="flex"> <LinkedInLogin /> <p className="my-auto">Sign in WIth LinkedIn</p></div>
           </div>
         </div>
         

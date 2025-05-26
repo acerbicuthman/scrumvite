@@ -1,44 +1,60 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/Authcontext";
-import { base_url } from "../../library/api";
 import { useGoogleLogin } from "@react-oauth/google";
-import google from "../../assets/googleIcon.png";
+import { useAuth } from "../../context/Authcontext";
+import { base_url } from "../../library/api";
+import googleIcon from "../../assets/googleIcon.png";
 
-const GoogleAuth = ({ buttonText = "Continue with Google" }) => {
-  const { login } = useContext(AuthContext);
+const GoogleAuth = () => {
+  const { login } = useAuth();
   const navigate = useNavigate();
+  const account_type =
+  location.state?.account_type || localStorage.getItem("account_type");
+
 
   const loginWithGoogle = useGoogleLogin({
     onSuccess: async (response) => {
       try {
-        const { access_token } = response;
+        const accessTokenFromGoogle = response.access_token;
 
-        if (!access_token) throw new Error("Access token is missing.");
-
-        const res = await fetch(`${base_url}api/auth/google/`, {
-          method: "POST",
+        // Fetch Google user info (email, etc.)
+        const googleUserRes = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
           headers: {
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessTokenFromGoogle}`,
           },
-          body: JSON.stringify({ access_token }),
         });
 
-        const data = await res.json();
+        if (!googleUserRes.ok) throw new Error("Failed to fetch Google user info");
 
-        if (res.ok && data.access && data.user) {
-          await login(data.access, data.refresh, data.user);
-          navigate("/student-dashboard");
+        const googleUser = await googleUserRes.json();
+
+        // Authenticate with your backend
+        const backendRes = await fetch(`${base_url}api/auth/google/`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ access_token: accessTokenFromGoogle }),
+          account_type: account_type, 
+        });
+
+        const backendData = await backendRes.json();
+
+        if (backendRes.ok && backendData.access && backendData.user) {
+          // Merge backend user data with Google email
+          const userWithEmail = { ...backendData.user, email: googleUser.email };
+
+          // Login using context
+          await login(backendData.access, backendData.refresh, userWithEmail);
+
+          // Redirect after successful login
+          navigate(account_type === "tutor" ? "/educator-dashboard" : "/student-dashboard");
+;
         } else {
-          console.error("Invalid login response:", data);
-          throw new Error("Failed to authenticate user.");
+          throw new Error("Backend authentication failed");
         }
-      } catch (err) {
-        console.error("Error logging in:", err);
+      } catch (error) {
+        console.error("Google login error:", error);
+        // TODO: Show user-friendly error notification
       }
-    },
-    onError: (err) => {
-      console.error("Google Login Failed", err);
     },
   });
 
@@ -47,26 +63,27 @@ const GoogleAuth = ({ buttonText = "Continue with Google" }) => {
       {/* Desktop / Medium+ screens */}
       <div className="text-center my-2 rounded-lg hidden md:block">
         <button
-          onClick={loginWithGoogle}
-          className="flex items-center border-opacity-10 md:px-6 lg:px-8 py-2.5 rounded-lg border-black border-2  hover:bg-gray-700 transition"
+          onClick={() => loginWithGoogle()}
+          className="flex items-center border-opacity-10 md:px-6 lg:px-8 py-2.5 rounded-lg border-black border-2 hover:bg-gray-700 transition"
         >
           <img
-            src={google}
+            src={googleIcon}
             alt="Google"
             className="w-8 h-8 mr-2 lg:-ml-5 md:-ml-3"
           />
-          <span className="text-lg text-nowrap"> Google</span>
+          <span className="text-lg whitespace-nowrap">Google</span>
         </button>
       </div>
 
       {/* Small screens only */}
       <div className="md:hidden flex justify-center my-3">
         <button
-          onClick={loginWithGoogle}
+          onClick={() => loginWithGoogle()}
           className="rounded-full hover:bg-gray-100 transition"
+          aria-label="Login with Google"
         >
           <img
-            src={google}
+            src={googleIcon}
             alt="Google"
             className="w-12 h-12 border-2 rounded-full border-black"
           />

@@ -19,7 +19,7 @@ const ProfileImgUpload = ({ defaultImage, onImageChange, disabled }) => {
   };
 
   return (
-    <div className="  md:mx-5 md:h-full flex flex-col items-center justify-center border-2 border-dashed border-white/50 rounded-md "
+    <div className="  md:mx-5 h-full flex flex-col items-center justify-center border-2 border-dashed border-white/50 rounded-md "
     onClick={handleClick}>
       {defaultImage ? (
         <img
