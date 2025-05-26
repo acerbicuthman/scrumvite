@@ -8,6 +8,7 @@ import { FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import SystemInfo from "./SystemInfo";
 import { useAuth } from "../../../context/Authcontext";
+import CountryForm from "../../../library/CountryForm";
 // import useAuthenticatedUser from "../../../hooks/useAuthenticatedUser";
 
 const CardLearnerProfileForm = () => {
@@ -298,21 +299,26 @@ console.log("Google mail", mailGoogle)
                 disabled={!isEditing}
                 className="bg-white bg-opacity-10 w-full rounded-sm p-2 text-white"
               >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="" className="bg-white bg-opacity-10 ">Select Gender</option>
+                <option value="male" className="bg-white bg-opacity-10 ">Male</option>
+                <option value="female" className="bg-white bg-opacity-10 ">Female</option>
+                <option value="other" className="bg-white bg-opacity-10 ">Other</option>
               </select>
             </div>
             {renderInputField("dob", "Date of Birth", "date")}
 {[
   "city",
   "nationality",
-  "country",
 ].map((field) => (
   <div key={field}>{renderInputField(field)}</div>
 ))}
 </div>
+  <div>
+   <CountryForm 
+   value={formData.country}
+   onChange={(val)=> setFormData((prev) => ({...prev, country: val}))}
+   disabled={!isEditing}/>
+   </div>
 </div>
 </div>
 <div className='px-4 mt-10'>
