@@ -36,6 +36,7 @@ import Learnerprofile from "./Pages/Learner/learner-profile/Learnerprofile";
 import SystemInfo from "./Pages/Learner/learner-profile/SystemInfo";
 import StudentBackground from "./Pages/Learner/learner-profile/StudentBackground";
 import Logout from "./Pages/Logout";  // Make sure to import the Logout component
+import TutorProfileCard from "./Pages/Educator/Tutor-profile/TutorProfileCard";
 
 
 // Protected Route
@@ -105,9 +106,11 @@ const App = () => {
             <Route index element={<Dashboard />} />
             <Route path="tutorSignUp" element={<TutorSignUp />} />
             <Route path="tutor-signin" element={<TutorSignIn />} />
+            <Route path="tutor-profile" element={<TutorProfileCard/>}/>
             <Route path="add-course" element={<AddCourse />} />
             <Route path="my-courses" element={<MyCourses />} />
             <Route path="students-enrolled" element={<StudentsEnrolled />} />
+            
           </Route>
         </Routes>
       </AuthProvider>

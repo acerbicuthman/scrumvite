@@ -24,29 +24,29 @@ const CardLearnerProfileForm = () => {
   const mailGoogle = user?.email
  
 console.log("Google mail", mailGoogle)
-  const { userEmail, userId, profileId } = useHydratedProfile();
+  const { userEmail, userId, profileId, formData, setFormData } = useHydratedProfile();
   const googleEmail = localStorage.getItem("userEmail")
-  const email = mailGoogle || userEmail || googleEmail || "";
+  const email = mailGoogle || userEmail || googleEmail;
 
 
   const token = localStorage.getItem("accessToken");
   const safeUserId = email ? email.replace(/[@.]/g, "_") : null;
 
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: email || mailGoogle || "",
-    phone: "",
-    gender: "",
-    city: "",
-    nationality: "",
-    country: "",
-    dob: "",
-    profilePicture: null,
-    education_level: "",
-    current_role: "",
-    industry: "",
-    linkedin_profile: "",
-  });
+  // const [formData, setFormData] = useState({
+  //   fullName: "",
+  //   email: email || mailGoogle || "",
+  //   phone: "",
+  //   gender: "",
+  //   city: "",
+  //   nationality: "",
+  //   country: "",
+  //   dob: "",
+  //   profilePicture: null,
+  //   education_level: "",
+  //   current_role: "",
+  //   industry: "",
+  //   linkedin_profile: "",
+  // });
 
 
 
@@ -70,21 +70,21 @@ console.log("Google mail", mailGoogle)
         const result = response.data;
         console.log("object", result)
 
-        setFormData({
-          fullName: `${result.student.first_name} ${result.student.last_name}`,
-          email: result.student.email || email ,
-          phone: result.phone_number || "",
-          gender: result.gender || "",
-          city: result.city || "",
-          nationality: result.nationality || "",
-          country: result.country || "",
-          dob: result.date_of_birth || "",
-          profilePicture: result.profile_picture || "",
-          education_level: result.education_level || "",
-          current_role: result.current_role || "",
-          industry: result.industry || "",
-          linkedin_profile: result.linkedin_profile || "",
-        });
+        // setFormData({
+        //   fullName: `${result.student.first_name} ${result.student.last_name}`,
+        //   email: result.student.email || email ,
+        //   phone: result.phone_number || "",
+        //   gender: result.gender || "",
+        //   city: result.city || "",
+        //   nationality: result.nationality || "",
+        //   country: result.country || "",
+        //   dob: result.date_of_birth || "",
+        //   profilePicture: result.profile_picture || "",
+        //   education_level: result.education_level || "",
+        //   current_role: result.current_role || "",
+        //   industry: result.industry || "",
+        //   linkedin_profile: result.linkedin_profile || "",
+        // });
       } catch (error) {
         console.error("Error fetching profile:", error);
         setLocalError("Failed to fetch profile.");
@@ -163,7 +163,6 @@ console.log("Google mail", mailGoogle)
   };
 
   const handleSaveProfile = async (e) => {
-    console.log("❗handleSaveProfile triggered", e?.type);
     e.preventDefault();
     setSaving(true);
     setLocalError(null);
@@ -196,7 +195,7 @@ console.log("Google mail", mailGoogle)
     };
 
     if (profileId) {
-      // ✅ PATCH existing profile
+      //  PATCH existing profile
       const patchProfile = await axios.patch(
         `${base_url}api/userProfile/student_profile/${profileId}/`,
         profileData,
@@ -211,7 +210,7 @@ console.log("Google mail", mailGoogle)
       setSuccess("Profile updated successfully!");
       setIsEditing(false);
     } else {
-      // ✅ POST a new profile
+      // POST a new profile
       const response = await axios.post(
         `${base_url}api/userProfile/student_profile/`,
         profileData,
@@ -255,7 +254,7 @@ console.log("Google mail", mailGoogle)
     localError &&
     localError !== "Profile not found. Please create a profile."
   ) {
-    return <div className="text-red-600 text-xl text-center mt-28">{localError}</div>;
+    return <div className="text-red-600 text-xl text-center mt-28 h-screen">{localError}</div>;
   }
 
   return (
@@ -277,10 +276,12 @@ console.log("Google mail", mailGoogle)
               <ImageUploadBox
                 onImageChange={handleImageChange}
                 defaultImage={formData.profilePicture}
+                onImageDeleted={() => setFormData(prev => ({ ...prev, profilePicture: '' }))}
+                userId={safeUserId}
                 disabled={!isEditing}
               />
             </div>
-            <div className="w-full space-y-4 md:mt-0 mt-10 ">
+            <div className="w-full space-y-4 md:mt-0 mt-2 ">
               {renderInputField("fullName", "Full Name")}
               {renderInputField("email", "Email", "text", true)}
               {renderInputField("phone", "Phone")}
@@ -309,6 +310,7 @@ console.log("Google mail", mailGoogle)
 {[
   "city",
   "nationality",
+
 ].map((field) => (
   <div key={field}>{renderInputField(field)}</div>
 ))}
@@ -344,7 +346,7 @@ console.log("Google mail", mailGoogle)
   <SystemInfo/>
 </div>
 
-{localError && <p className="text-red-500 mt-4 text-center h-10">{localError}</p>}
+{localError && <p className="text-red-500 mt-4 text-center justify-center items-center">{localError}</p>}
         {success && <p className="text-green-500 mt-4 text-center">{success}</p>}
 
 

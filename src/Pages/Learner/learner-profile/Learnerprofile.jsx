@@ -7,7 +7,7 @@ const Learnerprofile = () => {
     <div>
 
   
-    <div className="  items-center justify-center w-full  md:mt-10">
+    <div className="  items-center justify-center w-full  ">
      <CardLearnerProfileForm/>
      
     </div>

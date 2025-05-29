@@ -25,10 +25,10 @@ function CountryForm({value, onChange, disabled}) {
 
 
   return (
-    <div className='py-4 w-1/2'>
+    <div className='py-4 md:w-1/2'>
         <label htmlFor="country" className='text-white/50'>Country</label>
         <select id="country"
-        l     className="bg-white bg-opacity-10 w-full rounded-sm p-2 text-white"
+             className="bg-white bg-opacity-10 w-full rounded-sm p-2 text-white"
         value={value} 
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}>

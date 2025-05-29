@@ -5,8 +5,18 @@ import { useNavigate } from 'react-router';
 import useAuthenticatedUser from './useAuthenticatedUser';
 
 export default function useHydratedProfile() {
+  const navigate = useNavigate();
+
+  const { user, loadingUser, userError } = useAuthenticatedUser();
+  const email = user?.email;
+  console.log("email", email)
+      
+
+      // setUserEmail(email);
+
   const [formData, setFormData] = useState({
     fullName: '',
+    email: email,
     phone: '',
     gender: '',
     city: '',
@@ -20,13 +30,21 @@ export default function useHydratedProfile() {
     linkedin_profile: '',
   });
 
+
   const [profileId, setProfileId] = useState(null); // <-- add this
   const [userEmail, setUserEmail] = useState('');
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [profileError, setProfileError] = useState(null);
-  const navigate = useNavigate();
 
-  const { user, loadingUser, userError } = useAuthenticatedUser();
+
+  useEffect(() => {
+    if (user?.email){
+      setFormData((prev) => ({...prev, 
+        email: user.email,}
+        ))
+        setUserEmail(user.email)
+    }
+  }, [user])
 
   const fetchProfile = async () => {
     if (loadingUser || !user) return;
@@ -40,11 +58,7 @@ export default function useHydratedProfile() {
 
       const token = localStorage.getItem('accessToken');
       const userId = user.id;
-      const email = user.email;
-      
-      
-
-      setUserEmail(email);
+    
       
 
       try {
@@ -61,11 +75,14 @@ export default function useHydratedProfile() {
             item.username?.toLowerCase() === email.toLowerCase()
         );
 
+       
+
         if (!matchedProfile) {
           setProfileError('Profile not found. Please create a profile.');
           setProfileId(null);
         } else {
           const profile = matchedProfile;
+          console.log('Matched Profile:', profile.studentId);
 
           setProfileId(profile.studentId); 
 
@@ -74,6 +91,7 @@ export default function useHydratedProfile() {
               .filter(Boolean)
               .join(' ')
               .trim(),
+              email: profile.email ?? user.email ?? '',
             phone: profile.phone_number ?? '',
             gender: profile.gender ?? '',
             city: profile.city || '',
@@ -102,8 +120,9 @@ export default function useHydratedProfile() {
 
     
     useEffect(() => {
-      fetchProfile();
-    }, [user, loadingUser]);
+      if(!loadingUser && user){
+      fetchProfile();}
+    }, [loadingUser, user]);
     
 
   return {
