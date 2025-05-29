@@ -239,7 +239,8 @@ console.log("Google mail", mailGoogle)
         value={formData[id] || ""}
         onChange={handleChange}
         readOnly={!isEditing || disabled}
-        className="bg-white bg-opacity-10 w-full rounded-sm p-2"
+        placeholder={`Enter ${label || id.replace(/_/g, '')}`}
+        className="bg-white bg-opacity-10 w-full rounded-sm p-2 placeholder-white/50"
       />
     </div>
   );

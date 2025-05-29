@@ -2,13 +2,101 @@ import React from 'react'
 import { useEffect, useState, useRef } from 'react'
 import { supabase } from '../../../SupabaseFile'
 import ProfileImgUpload from '../../../Pages/Learner/learner-profile/ProfileImgUpload'
-import useHydratedProfile from '../../../hooks/useHydratedProfile'
 import CountryForm from '../../../library/CountryForm'
+import { useAuth } from '../../../context/Authcontext'
 
 const TutorProfileCard = () => {
-  const [isEditing, setIsEditing] = useState(true)
-  const { formData, setFormData, userEmail, userId,  profileId } = useHydratedProfile()
 
+  const [isEditing, setIsEditing] = useState(true);
+  const [localError, setLocalError] = useState(null);
+  const [success, setSuccess] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(false);
+  // const navigate = useNavigate();
+  const {user} = useAuth()
+
+  const mailGoogle = user?.email
+  //THE FORM DATA HERE
+// const [formData, setFormData] ={ }
+
+  const googleEmail = localStorage.getItem("userEmail")
+  const email = mailGoogle || googleEmail;
+
+
+  const token = localStorage.getItem("accessToken");
+  const safeUserId = email ? email.replace(/[@.]/g, "_") : null;
+
+  useEffect(() => {
+    // if (!profileId || !token) return;
+
+    const fetchProfile = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          //THE ENDPOINT HERE/`,
+          // {
+          //   headers: {
+          //     Authorization: `Bearer ${token}`,
+          //     "Content-Type": "application/json"
+          //   },
+          // }
+        );
+
+        const result = response.data;
+        console.log("object", result)
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+        setLocalError("Failed to fetch profile.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setLocalError(null);
+    setSuccess("");
+  };
+  const handleSaveProfile = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    setLocalError(null);
+    setSuccess("");
+
+    // const [firstName, ...rest] = formData.fullName.trim().split(" ");
+    // const lastName = rest.join(" ").trim();
+
+    const profileData = {
+      //The Updated Form data HERE 
+    }
+
+    if ("---------PROFILE EXIST-------------") {
+      //  PATCH existing profile
+      const patchProfile = await axios.patch(
+        //`THE ENDPOINT HERE/`,
+       
+      );
+      console.log("PatchProfile", patchProfile.data);
+      setSuccess("Profile updated successfully!");
+      setIsEditing(false);
+    } else {
+      // POST a new profile
+      const response = await axios.post(
+        //`THE ENDPOINT HERE`,
+      );
+      console.log("Response Data:", response.data.results);
+      setSuccess("Profile created successfully!");
+      setIsEditing(false);
+    }
+    
+  };
 
 
 
@@ -76,24 +164,44 @@ const TutorProfileCard = () => {
       <input
         id={id}
         type={type}
-        value={formData[id] || ""}
+        // value={formData[id] || ""}
         onChange={handleChange}
         readOnly={!isEditing || disabled}
-        className="bg-white bg-opacity-10 w-full rounded-sm p-2"
+        placeholder={`Enter ${label || id.replace(/_/g, '')}`}
+        className="bg-white bg-opacity-10 w-full rounded-sm p-2 placeholder-white/50"
       />
     </div>
   );
+  if (loading) {
+    return  <div className="flex justify-center items-center my-8 h-screen">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4318D1]" />
+  </div>;
+  }
+
+  if (
+    localError &&
+    localError !== "Profile not found. Please create a profile."
+  ) {
+    return <div className="text-red-600 text-xl text-center mt-28 h-screen">{localError}</div>;
+  }
   return (
     <div className="w-full max-w-[800px] mx-auto mt-10 md:mt-20 p-4 md:p-6 bg-black bg-opacity-10 text-white rounded-xl shadow-md">
     <div className="bg-[#0A0A0A] md:p-8 px-4 rounded-md">
 
-      <form action="">
+    <form onSubmit={handleSaveProfile} id="profile-form">
       <div className='px-4 mt-10'>
           <div className="p-4  md:mx-auto w-full max-w-[800px] my-2 bg-white bg-opacity-[4%] border-white border-opacity-10 border-2 text-white">
-           <h2 className="text-3xl font-semibold m-5">Update Tutor Profile</h2>
+           <h2 className="text-3xl font-semibold m-5">
+           {localError ? "Create Profile" : "Update Tutor Profile"}</h2>
            <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-[400px] aspect-square">
-              <ProfileImgUpload/>
+              <ProfileImgUpload
+              onImageChange={handleImageChange}
+              // defaultImage={formData.profilePicture}
+              onImageDeleted={() => setFormData(prev => ({ ...prev, profilePicture: '' }))}
+              userId={safeUserId}
+              disabled={!isEditing}
+              />
               </div>
               <div className="w-full space-y-4 md:mt-0 mt-2 ">
               {renderInputField("fullName", "Full Name")}
@@ -108,7 +216,7 @@ const TutorProfileCard = () => {
               </label>
               <select
                 id="gender"
-                value={formData.gender}
+                // value={formData.gender}
                 onChange={handleChange}
                 disabled={!isEditing}
                 className="bg-white bg-opacity-10 w-full rounded-sm p-2 text-white"
@@ -129,7 +237,8 @@ const TutorProfileCard = () => {
 ))}
 </div>
 <div>
-  <CountryForm value={formData.country}
+  <CountryForm 
+  // value={formData.country}
    onChange={(val)=> setFormData((prev) => ({...prev, country: val}))}
    disabled={!isEditing}/>
 </div>
@@ -214,6 +323,11 @@ const TutorProfileCard = () => {
             <button className='mx-auto flex justify-center bg-[#4318D1] mt-10 py-2 px-10'>Save</button>
       </form>
       </div>
+      <div>
+        fhbdjnkms,
+      </div>
+      {localError && <p className="text-red-500 mt-4 text-center justify-center items-center">{localError}</p>}
+        {success && <p className="text-green-500 mt-4 text-center">{success}</p>}
       </div>
   )
 }

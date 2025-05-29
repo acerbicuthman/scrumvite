@@ -27,7 +27,7 @@ export default function useHydratedProfile() {
     education_level: '',
     current_role: '',
     industry: '',
-    linkedin_profile: '',
+    linkedin_profile: ''
   });
 
 
