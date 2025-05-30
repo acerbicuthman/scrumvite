@@ -139,8 +139,10 @@ const TutorSignUp = () => {
       setpassword1("");
       setpassword2("");
       setCheckBoxValid(false);
+      setIsModalOpen(true);
   
-      s // navigate("/emailverification");
+      // navigate("/emailverification");
+
     } catch (error) {
       if (error.response && error.response.data) {
         const data = error.response.data;

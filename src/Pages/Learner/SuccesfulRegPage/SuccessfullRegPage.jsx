@@ -18,28 +18,8 @@ const SuccessfulReg = () => {
   const navigate = useNavigate();
   const verificationKey = new URLSearchParams(location.search).get('key');
 
-  const { login, tempCredentials, setTempCredentials, user } = useAuth();
+  const { login, tempCredentials, setTempCredentials } = useAuth();
   const email = tempCredentials?.email || localStorage.getItem("tempEmail");
-
-  // ✅ Account type-based redirect if user already logged in
-  useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (user && accessToken) {
-      const accountType = user?.account_type?.toLowerCase();
-      switch (accountType) {
-        case 'admin':
-          navigate('/admin-dashboard');
-          break;
-        case 'teacher':
-          navigate('/teacher-dashboard');
-          break;
-        case 'student':
-        default:
-          navigate('/student-dashboard');
-          break;
-      }
-    }
-  }, [user, navigate]);
 
   const handleAutoLogin = async () => {
     const storedPassword = tempCredentials?.password || localStorage.getItem("tempPassword");
@@ -66,32 +46,28 @@ const SuccessfulReg = () => {
 
       await login(accessToken, refreshToken, user);
 
-console.log("Post-login: ", {
-  accessToken: localStorage.getItem("accessToken"),
-  refreshToken: localStorage.getItem("refreshToken"),
-  user: localStorage.getItem("user"),
-});
-
-
+      // Clean up temp credentials
       setTempCredentials(null);
       localStorage.removeItem("tempEmail");
       localStorage.removeItem("tempPassword");
 
-      setTimeout(() => {
-        const accountType = user?.account_type?.toLowerCase();
-        switch (accountType) {
-          case 'admin':
-            navigate('/admin-dashboard');
-            break;
-          case 'tutor':
-            navigate('/educator/tutor-dashboard');
-            break;
-          case 'student':
-          default:
-            navigate('/student-dashboard');
-            break;
-        }
-      }, 1000);
+      // Redirect after login
+      const accountType = user?.account_type?.toLowerCase();
+      switch (accountType) {
+        case 'admin':
+          navigate('/admin-dashboard');
+          break;
+        case 'teacher':
+          navigate('/teacher-dashboard');
+          break;
+        case 'tutor':
+          navigate('/educator/tutor-dashboard');
+          break;
+        case 'student':
+        default:
+          navigate('/student-dashboard');
+          break;
+      }
 
     } catch (loginError) {
       console.error("Auto-login failed:", loginError.response?.data || loginError.message);
@@ -133,7 +109,6 @@ console.log("Post-login: ", {
           key: verificationKey,
         });
 
-        console.log("Response", response.data)
         setMessage("Your email has been successfully verified.");
         await handleAutoLogin();
       } catch (err) {
@@ -178,7 +153,7 @@ console.log("Post-login: ", {
             alt="Congratulations"
             className="h-48 md:h-60 object-contain mb-6"
           />
-          <h1 className="text-2xl md:text-3xl font-bold  mb-4 text-center">
+          <h1 className="text-2xl md:text-3xl font-bold mb-4 text-center">
             {errorType ? "Verification Status" : "Congratulations!"}
           </h1>
           <p className="opacity-50 text-center text-sm md:text-base mb-6">
