@@ -391,6 +391,7 @@ export default function useHydratedProfileTutor() {
     return {
 
         formData,
+        user,
         setFormData,
         profile,
         profileId,

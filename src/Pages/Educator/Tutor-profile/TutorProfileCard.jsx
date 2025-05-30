@@ -12,6 +12,7 @@ const TutorProfileCard = () => {
   const {
     formData,
     setFormData,
+    user,
     profile,
     loading,
     loadingCertifications,
@@ -27,6 +28,7 @@ const TutorProfileCard = () => {
   } = useHydratedProfileTutor();
 
   const localError = error;
+  const safeUserId = user?.id;
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -202,7 +204,7 @@ const TutorProfileCard = () => {
                   </label>
                   <select
                     id="gender"
-                    // value={formData.gender}
+                    value={formData.gender}
                     onChange={handleChange}
                     disabled={!isEditing}
                     className="bg-white bg-opacity-10 w-full rounded-sm p-2 text-white"
@@ -224,7 +226,7 @@ const TutorProfileCard = () => {
               </div>
               <div>
                 <CountryForm
-                  // value={formData.country}
+                  value={formData.country}
                   onChange={(val) => setFormData((prev) => ({ ...prev, country: val }))}
                   disabled={!isEditing} />
               </div>
