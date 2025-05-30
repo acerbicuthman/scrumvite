@@ -3,6 +3,7 @@ import axios from 'axios';
 import { base_url } from '../library/api';
 // import { useNavigate } from 'react-router';
 import useAuthenticatedUser from './useAuthenticatedUser';
+import { supabase } from '../SupabaseFile';
 
 export default function useHydratedProfileTutor() {
     // const navigate = useNavigate();
@@ -34,9 +35,11 @@ export default function useHydratedProfileTutor() {
         // skills: "", 
         // professional_bio: "", 
 
+        // Certification form fields (handled separately via Certification model)
         name_of_certificate: "",
         issuing_organization: "",
         date_obtained: "",
+        certificate_picture: "", // URL for the uploaded certificate image
     });
 
     const [profile, setProfile] = useState(null);
@@ -50,6 +53,7 @@ export default function useHydratedProfileTutor() {
     const [certifications, setCertifications] = useState([]);
     const [loadingCertifications, setLoadingCertifications] = useState(false);
     const [savingCertification, setSavingCertification] = useState(false);
+    const [uploadingCertificateImage, setUploadingCertificateImage] = useState(false);
 
 
     useEffect(() => {
@@ -137,6 +141,7 @@ export default function useHydratedProfileTutor() {
                     name_of_certificate: "",
                     issuing_organization: "",
                     date_obtained: "",
+                    certificate_picture: "",
                 });
                 setProfileError(null);
             }
@@ -154,6 +159,131 @@ export default function useHydratedProfileTutor() {
             setProfile(null);
         } finally {
             setLoadingProfile(false);
+        }
+    };
+
+    // Profile image upload function
+    const handleProfileImageUpload = async (file) => {
+        if (!file || !file.type.startsWith("image/")) {
+            setProfileError("Please upload a valid image file.");
+            return { success: false, message: "Invalid file type" };
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            setProfileError("Image must be under 5MB.");
+            return { success: false, message: "File too large" };
+        }
+
+        const userId = user?.id;
+        if (!userId) {
+            setProfileError("No valid user ID for image upload.");
+            return { success: false, message: "No user ID" };
+        }
+
+        const safeUserId = userId.toString().replace(/[@.]/g, "_");
+        const fileName = `user_${safeUserId}/${Date.now()}_${file.name}`;
+
+        try {
+            // Delete old profile picture if exists
+            if (formData.profilePicture) {
+                const oldFileName = formData.profilePicture.split("/").pop();
+                if (oldFileName) {
+                    await supabase.storage
+                        .from("img-profile")
+                        .remove([`user_${safeUserId}/${oldFileName}`]);
+                }
+            }
+
+            // Upload new image
+            const { error: uploadError } = await supabase.storage
+                .from("img-profile")
+                .upload(fileName, file, {
+                    cacheControl: "3600",
+                    upsert: true,
+                    contentType: file.type,
+                });
+
+            if (uploadError) {
+                setProfileError("Image upload failed: " + uploadError.message);
+                return { success: false, message: uploadError.message };
+            }
+
+            const { data: urlData } = supabase.storage
+                .from("img-profile")
+                .getPublicUrl(fileName);
+
+            if (!urlData?.publicUrl) {
+                setProfileError("Failed to retrieve uploaded image URL.");
+                return { success: false, message: "Failed to get URL" };
+            }
+
+            setFormData((prev) => ({ ...prev, profilePicture: urlData.publicUrl }));
+            setProfileError(null);
+            return { success: true, url: urlData.publicUrl };
+
+        } catch (err) {
+            console.error("Profile image upload error:", err);
+            setProfileError("Unexpected error during image upload.");
+            return { success: false, message: "Unexpected error" };
+        }
+    };
+
+    // Certificate image upload function
+    const handleCertificateImageUpload = async (file) => {
+        if (!file || !file.type.startsWith("image/")) {
+            setProfileError("Please upload a valid image file.");
+            return { success: false, message: "Invalid file type" };
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            setProfileError("Image must be under 5MB.");
+            return { success: false, message: "File too large" };
+        }
+
+        const userId = user?.id;
+        if (!userId) {
+            setProfileError("No valid user ID for image upload.");
+            return { success: false, message: "No user ID" };
+        }
+
+        const safeUserId = userId.toString().replace(/[@.]/g, "_");
+        const fileName = `user_${safeUserId}/certificates/${Date.now()}_${file.name}`;
+
+        setUploadingCertificateImage(true);
+
+        try {
+            const { error: uploadError } = await supabase.storage
+                .from("img-profile")
+                .upload(fileName, file, {
+                    cacheControl: "3600",
+                    upsert: true,
+                    contentType: file.type,
+                });
+
+            if (uploadError) {
+                setProfileError("Certificate image upload failed: " + uploadError.message);
+                return { success: false, message: uploadError.message };
+            }
+
+            const { data: urlData } = supabase.storage
+                .from("img-profile")
+                .getPublicUrl(fileName);
+
+            if (!urlData?.publicUrl) {
+                setProfileError("Failed to retrieve uploaded certificate image URL.");
+                return { success: false, message: "Failed to get URL" };
+            }
+
+            setFormData((prev) => ({ ...prev, certificate_picture: urlData.publicUrl }));
+            setProfileError(null);
+            return { success: true, url: urlData.publicUrl };
+
+        } catch (err) {
+            console.error("Certificate image upload error:", err);
+            setProfileError("Unexpected error during certificate image upload.");
+            return { success: false, message: "Unexpected error" };
+        } finally {
+            setUploadingCertificateImage(false);
         }
     };
 
@@ -192,12 +322,16 @@ export default function useHydratedProfileTutor() {
         setSavingCertification(true);
 
         try {
+            const dataToSend = {
+                ...certificationData,
+                tutor_profile: profile.id
+            };
+
+            console.log("Sending certification data:", dataToSend);
+
             const response = await axios.post(
                 `${base_url}api/userProfile/certification/`,
-                {
-                    ...certificationData,
-                    tutor_profile: profile.id
-                },
+                dataToSend,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -215,7 +349,8 @@ export default function useHydratedProfileTutor() {
                 ...prev,
                 name_of_certificate: "",
                 issuing_organization: "",
-                date_obtained: ""
+                date_obtained: "",
+                certificate_picture: ""
             }));
 
             return { success: true, message: "Certification added successfully!" };
@@ -267,6 +402,7 @@ export default function useHydratedProfileTutor() {
             name: formData.name_of_certificate,
             issuing_organization: formData.issuing_organization,
             date_obtained: formData.date_obtained || null,
+            certificate_picture: formData.certificate_picture || "",
         };
 
 
@@ -402,6 +538,7 @@ export default function useHydratedProfileTutor() {
         loadingCertifications,
         savingCertification,
         saving,
+        uploadingCertificateImage,
 
         error: profileError,
         setError: setProfileError,
@@ -409,6 +546,8 @@ export default function useHydratedProfileTutor() {
         refetchProfile: fetchProfile,
         handleSaveProfile,
         handleChange,
+        handleProfileImageUpload,
+        handleCertificateImageUpload,
 
         certifications,
         setCertifications,
