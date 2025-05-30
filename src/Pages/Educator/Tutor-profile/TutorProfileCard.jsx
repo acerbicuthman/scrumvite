@@ -5,10 +5,78 @@ import ProfileImgUpload from '../../../Pages/Learner/learner-profile/ProfileImgU
 import CountryForm from '../../../library/CountryForm'
 import useHydratedProfileTutor from '../../../hooks/useHydratedProfileTutor'
 
+
+const CertificateImageUpload = ({ onImageChange, defaultImage, disabled, uploadingImage }) => {
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      onImageChange(file);
+    } else {
+      console.error('Invalid file: Please select an image');
+    }
+  };
+
+  const handleClick = () => {
+    if (!disabled && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  return (
+    <div className="w-full max-w-[200px] mx-auto">
+      <div
+        onClick={handleClick}
+        className="h-[120px] w-full flex flex-col items-center justify-center border-2 border-dashed border-white/50 rounded-md relative cursor-pointer hover:border-white/70 transition-colors"
+      >
+        {defaultImage ? (
+          <img
+            src={defaultImage}
+            alt="Certificate"
+            className="w-full h-full object-cover rounded-md"
+          />
+        ) : (
+          <div className="text-center p-4">
+            <p className="text-white/50 text-sm">
+              {uploadingImage ? "Uploading..." : "Upload Certificate Image"}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {defaultImage && !disabled && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            // Clear the image
+            if (onImageChange) {
+              onImageChange(null);
+            }
+          }}
+          className="mt-2 text-xs text-red-500 underline w-full text-center"
+        >
+          Remove Image
+        </button>
+      )}
+
+      <input
+        type="file"
+        accept="image/*"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        disabled={disabled || uploadingImage}
+        className="hidden"
+      />
+    </div>
+  );
+};
+
 const TutorProfileCard = () => {
   const [isEditing, setIsEditing] = useState(true);
   const [success, setSuccess] = useState("");
-  
+
   const {
     formData,
     setFormData,
@@ -18,13 +86,16 @@ const TutorProfileCard = () => {
     loadingCertifications,
     savingCertification,
     saving,
+    uploadingCertificateImage,
     error,
     setError,
     handleSaveProfile,
     handleChange,
+    handleProfileImageUpload,
+    handleCertificateImageUpload,
     certifications,
     handleAddCertification,
-    deleteCertification
+    deleteCertification,
   } = useHydratedProfileTutor();
 
   const localError = error;
@@ -70,54 +141,26 @@ const TutorProfileCard = () => {
 
 
   const handleImageChange = async (file) => {
-    setError(null);
-    if (!file || !file.type.startsWith("image/")) {
-      return setError("Please upload a valid image file.");
+    const result = await handleProfileImageUpload(file);
+    if (result.success) {
+      setSuccess("Profile image uploaded successfully!");
     }
-    if (file.size > 5 * 1024 * 1024) {
-      return setError("Image must be under 5MB.");
+    // Error handling is already done in the hook
+  };
+
+  const handleCertificateImageChange = async (file) => {
+    if (!file) {
+      // Handle image removal
+      setFormData((prev) => ({ ...prev, certificate_picture: "" }));
+      setSuccess("Certificate image removed!");
+      return;
     }
-    if (!safeUserId) {
-      return setError("No valid user ID for image upload.");
+
+    const result = await handleCertificateImageUpload(file);
+    if (result.success) {
+      setSuccess("Certificate image uploaded successfully!");
     }
-
-    const fileName = `user_${safeUserId}/${Date.now()}_${file.name}`;
-
-    try {
-      if (formData.profilePicture) {
-        const oldFileName = formData.profilePicture.split("/").pop();
-        if (oldFileName) {
-          await supabase.storage
-            .from("img-profile")
-            .remove([`user_${safeUserId}/${oldFileName}`]);
-        }
-      }
-
-      const { error: uploadError } = await supabase.storage
-        .from("img-profile")
-        .upload(fileName, file, {
-          cacheControl: "3600",
-          upsert: true,
-          contentType: file.type,
-        });
-
-      if (uploadError) {
-        return setError("Image upload failed: " + uploadError.message);
-      }
-
-      const { data: urlData } = supabase.storage
-        .from("img-profile")
-        .getPublicUrl(fileName);
-
-      if (!urlData?.publicUrl) {
-        return setError("Failed to retrieve uploaded image URL.");
-      }
-
-      setFormData((prev) => ({ ...prev, profilePicture: urlData.publicUrl }));
-    } catch (err) {
-      console.error("Image upload error:", err);
-      setError("Unexpected error during image upload.");
-    }
+    // Error handling is already done in the hook
   };
 
 
@@ -185,7 +228,7 @@ const TutorProfileCard = () => {
                 <div className="w-full md:w-[400px] aspect-square">
                   <ProfileImgUpload
                     onImageChange={handleImageChange}
-                    // defaultImage={formData.profilePicture}
+                    defaultImage={formData.profilePicture}
                     onImageDeleted={() => setFormData(prev => ({ ...prev, profilePicture: '' }))}
                     userId={safeUserId}
                     disabled={!isEditing}
@@ -280,14 +323,26 @@ const TutorProfileCard = () => {
                     <div className="space-y-3">
                       {certifications.map((cert) => (
                         <div key={cert.id} className="bg-white/10 p-4 rounded-lg flex justify-between items-start">
-                          <div className="flex-1">
-                            <h5 className="font-medium text-white">{cert.name}</h5>
-                            {cert.issuing_organization && (
-                              <p className="text-white/70 text-sm">Issued by: {cert.issuing_organization}</p>
+                          <div className="flex-1 flex gap-4">
+                            {/* Certificate Image */}
+                            {cert.certificate_picture && (
+                              <div className="flex-shrink-0">
+                                <img
+                                  src={cert.certificate_picture}
+                                  alt={cert.name}
+                                  className="w-20 h-20 object-cover rounded-md border border-white/20"
+                                />
+                              </div>
                             )}
-                            {cert.date_obtained && (
-                              <p className="text-white/70 text-sm">Date: {new Date(cert.date_obtained).toLocaleDateString()}</p>
-                            )}
+                            <div className="flex-1">
+                              <h5 className="font-medium text-white">{cert.name}</h5>
+                              {cert.issuing_organization && (
+                                <p className="text-white/70 text-sm">Issued by: {cert.issuing_organization}</p>
+                              )}
+                              {cert.date_obtained && (
+                                <p className="text-white/70 text-sm">Date: {new Date(cert.date_obtained).toLocaleDateString()}</p>
+                              )}
+                            </div>
                           </div>
                           <button
                             type="button"
@@ -324,7 +379,17 @@ const TutorProfileCard = () => {
                     </div>
                   </div>
                   <div className='mt-10 pt-3'>
-                    <button className='p-4 bg-white/10 md:mx-0 mx-auto flex'>Upload Certificate</button>
+                    <div className="flex flex-col items-center">
+                      <label className="block text-sm font-medium mb-2 text-white/50">
+                        Certificate Image
+                      </label>
+                      <CertificateImageUpload
+                        onImageChange={handleCertificateImageChange}
+                        defaultImage={formData.certificate_picture}
+                        disabled={!isEditing}
+                        uploadingImage={uploadingCertificateImage}
+                      />
+                    </div>
                   </div>
                   <button
                     type="button"
