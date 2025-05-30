@@ -68,7 +68,14 @@ const SignIn = () => {
       localStorage.setItem("user", JSON.stringify(user));
 
       // Navigate to landing page
-      navigate("/student-dashboard");
+        if (user.account_type === "learner"){
+          navigate("/student-dashboard");
+        } else{
+          navigate("/educator/tutor-dashboard")
+        }
+
+     
+  
     } catch (error) {
       console.error("Login failed:", error);
 

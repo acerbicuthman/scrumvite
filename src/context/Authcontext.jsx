@@ -78,18 +78,30 @@ export const AuthProvider = ({ children }) => {
     }, [user]);
     
     // Login function to store tokens and user data
-    const login = async (accessToken, refreshToken, userData) => {
+    const login = async (accessToken, refreshToken, userData, newProfilePictureUrl) => {
         setIsLoading(true);
         await new Promise(resolve => setTimeout(resolve, 500))
 
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
-      setUser(userData);
+
+      const updatedUser = {
+        ...userData,
+          profile:{
+          ...userData.profile,
+          profile_picture: newProfilePictureUrl
+        }
+       
+      }
+      setUser(updatedUser)     
       setLoggedIn(true);
   
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+
+
+      
 
 
       setIsLoading(false)

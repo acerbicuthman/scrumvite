@@ -83,8 +83,8 @@ console.log("Post-login: ", {
           case 'admin':
             navigate('/admin-dashboard');
             break;
-          case 'teacher':
-            navigate('/teacher-dashboard');
+          case 'tutor':
+            navigate('/educator/tutor-dashboard');
             break;
           case 'student':
           default:

@@ -14,6 +14,7 @@ const Navbar = () => {
   const [navbarHeight, setNavbarHeight] = useState(0);
   // const {user} = useAuthenticatedUser
   const {user, logout, isLoading , setIsLoading, storedUser} = useContext(AuthContext);
+  console.log("UserImg", user?.profile)
 
   // Dynamically calculate the navbar height
   // console.log(user?.profile?.profile_picture);
@@ -49,8 +50,16 @@ const Navbar = () => {
   // Define links for signed-in users
   const signedInLinks = (
     <div className="hidden lg:flex lg:gap-x-12 justify-left items-start">
-      <Link to="/student-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Home</Link>
+      {user?.account_type === "tutor" && (
+        <div className="space-x-6">
+  <Link to="/educator/tutor-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Home</Link>
+  <Link to="/educator/tutor-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Dashboard</Link>
+</div>
+      )}
+      {user?.account_type === "student" && (
       <Link to="/student-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Dashboard</Link>
+
+      )}
     </div>
   );
 
@@ -96,18 +105,20 @@ const Navbar = () => {
 
         <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5">
         <div className="py-1">
+          {user?.account_type === "tutor" && (
             <MenuItem>
-              <Link to="/learner-profile" className="block px-4 py-2 text-sm text-gray-700">Learner Profile</Link>
+            <Link to="/educator/tutor-profile"  className="block px-4 py-2 text-sm text-gray-700">Tutor Profile
+            </Link>
             </MenuItem>
+          )}
+          {user?.account_type === "student" && (
+  <MenuItem>
+            
+  <Link to="/learner-profile" className="block px-4 py-2 text-sm text-gray-700">Learner Profile</Link>
+</MenuItem>
+          )}
+          
           </div>
-          {/* <div className="py-1">
-            <MenuItem>
-              <Link to="/system-info" className="block px-4 py-2 text-sm text-gray-700">System Information</Link>
-            </MenuItem>
-            <MenuItem>
-              <Link to="/student-bg-info" className="block px-4 py-2 text-sm text-gray-700">Student Background Info</Link>
-            </MenuItem>
-          </div> */}
         
           <div className="py-1">
             <MenuItem>
@@ -132,10 +143,19 @@ const Navbar = () => {
       <header className="fixed w-full bg-black p-2 inset-x-0 top-0 z-50 shadow-md">
         <nav className="flex items-center justify-between lg:px-8" aria-label="Global">
           <div className="flex lg:flex-col">
-            <Link to="/" className="mr-20 p-2">
+
+            {user?.account_type === "tutor" && (
+               <Link to="/educator/tutor-dashboard" className="mr-20 p-2">
+
+               <img src={Logo} alt="ScrumVite" className="h-[40px] rounded-full hover:scale-105 transition-transform duration-300" />
+             </Link>
+            )}
+            {user?.account_type === "student" && (
+            <Link to="/student-dashboard" className="mr-20 p-2">
 
               <img src={Logo} alt="ScrumVite" className="h-[40px] rounded-full hover:scale-105 transition-transform duration-300" />
             </Link>
+            )}
           </div>
 
           {/* Mobile Menu Toggle */}
