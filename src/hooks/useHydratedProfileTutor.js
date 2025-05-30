@@ -35,11 +35,10 @@ export default function useHydratedProfileTutor() {
         // skills: "", 
         // professional_bio: "", 
 
-        // Certification form fields (handled separately via Certification model)
         name_of_certificate: "",
         issuing_organization: "",
         date_obtained: "",
-        certificate_picture: "", // URL for the uploaded certificate image
+        certificate_picture: "",
     });
 
     const [profile, setProfile] = useState(null);
