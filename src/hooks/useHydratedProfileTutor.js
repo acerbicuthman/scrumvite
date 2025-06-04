@@ -214,6 +214,8 @@ export default function useHydratedProfileTutor() {
 
             setFormData((prev) => ({ ...prev, profilePicture: urlData.publicUrl }));
             setProfileError(null);
+        
+
             return { success: true, url: urlData.publicUrl };
 
         } catch (err) {
@@ -271,7 +273,9 @@ export default function useHydratedProfileTutor() {
 
             setFormData((prev) => ({ ...prev, certificate_picture: urlData.publicUrl }));
             setProfileError(null);
+
             return { success: true, url: urlData.publicUrl };
+            
 
         } catch (err) {
             console.error("Certificate image upload error:", err);

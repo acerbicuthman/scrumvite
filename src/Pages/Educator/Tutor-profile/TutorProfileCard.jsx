@@ -438,6 +438,17 @@ const TutorProfileCard = () => {
             {saving ? "Saving..." : "Save"}
           </button>
         </form>
+        <div className='flex flex-1 justify-center mx-auto mt-10'>
+          {!isEditing ? (
+    <button 
+    className=' bg-[#4318D1] py-2 px-10 '
+     onClick={handleEditClick}>Edit</button>
+          ) : 
+          <button 
+          className=' bg-[#4318D1] py-2 px-10 '
+          onClick={handleCancel}>Cancel</button>}
+
+      </div>
       </div>
       {localError && <p className="text-red-500 mt-4 text-center justify-center items-center">{localError}</p>}
       {success && <p className="text-green-500 mt-4 text-center">{success}</p>}

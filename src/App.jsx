@@ -25,7 +25,7 @@ import ForgetPassword from "./Pages/Learner/password/ForgetPassword";
 import NotFound from "./Pages/NotFound";
 import ResetPassword from "./Pages/Learner/password/ResetPassword";
 import CheckYourEmail from "./Pages/Learner/CheckYourEmail";
-import StudentDashboard from "./Pages/Learner/StudentDashboard";
+import StudentDashboard from "./Pages/Learner/Learner-Dashboard/StudentDashboard";
 import ChangePassword from "./Pages/Learner/password/ChangePassword";
 // import OAuthSuccess from "./Pages/OAuthSuccess";
 import TutorSignUp from "./Pages/Educator/TutorSignUp";
@@ -35,10 +35,9 @@ import TutorSignIn from "./Pages/Educator/TutorSignIn";
 import Learnerprofile from "./Pages/Learner/learner-profile/Learnerprofile";
 import SystemInfo from "./Pages/Learner/learner-profile/SystemInfo";
 import StudentBackground from "./Pages/Learner/learner-profile/StudentBackground";
-import Logout from "./Pages/Logout";  // Make sure to import the Logout component
+import Logout from "./Pages/Logout"; // Make sure to import the Logout component
 import TutorProfileCard from "./Pages/Educator/Tutor-profile/TutorProfileCard";
 import TutorDashboard from "./Pages/Educator/TutorDashboard";
-
 
 // Protected Route
 const ProtectedRoute = ({ children }) => {
@@ -70,7 +69,10 @@ const App = () => {
             <Route path="/role-selection" element={<ScrumLanding />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
-            <Route path="/success_email_verification" element={<SuccessfulEmailVerification />} />
+            <Route
+              path="/success_email_verification"
+              element={<SuccessfulEmailVerification />}
+            />
             <Route path="/check-your-email" element={<CheckYourEmail />} />
             <Route path="/expired_link_page" element={<ExpiredLink />} />
             <Route path="/verify" element={<SuccessfulReg />} />
@@ -87,7 +89,6 @@ const App = () => {
             <Route path="/learner-profile" element={<Learnerprofile />} />
             <Route path="/system-info" element={<SystemInfo />} />
             <Route path="/student-bg-info" element={<StudentBackground />} />
-
             {/* Protected Routes */}
             <Route
               path="/student-dashboard"
@@ -97,9 +98,8 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-
-            <Route path="/logout" element={<Logout />} /> {/* Add this route for logout */}
-
+            <Route path="/logout" element={<Logout />} />{" "}
+            {/* Add this route for logout */}
             <Route path="*" element={<NotFound />} />
           </Route>
 
@@ -107,12 +107,11 @@ const App = () => {
             <Route index element={<Dashboard />} />
             <Route path="tutorSignUp" element={<TutorSignUp />} />
             <Route path="tutor-signin" element={<TutorSignIn />} />
-            <Route path="tutor-dashboard" element={<TutorDashboard/>}/>
-            <Route path="tutor-profile" element={<TutorProfileCard/>}/>
+            <Route path="tutor-dashboard" element={<TutorDashboard />} />
+            <Route path="tutor-profile" element={<TutorProfileCard />} />
             <Route path="add-course" element={<AddCourse />} />
             <Route path="my-courses" element={<MyCourses />} />
             <Route path="students-enrolled" element={<StudentsEnrolled />} />
-            
           </Route>
         </Routes>
       </AuthProvider>

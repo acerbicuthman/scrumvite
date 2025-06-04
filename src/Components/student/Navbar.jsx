@@ -7,17 +7,26 @@ import Logo from '../../Pages/Landing/LandingImg/Clip path group.png';
 import UserNavImg from '../../assets/Ellipse 122.png';
 import polygon from '../../assets/Polygon 2.png';
 import useAuthenticatedUser from "../../hooks/useAuthenticatedUser";
+import useHydratedProfileTutor from "../../hooks/useHydratedProfileTutor";
+import { PiUserDuotone } from "react-icons/pi";
+import useHydratedProfile from "../../hooks/useHydratedProfile";
+
 
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [navbarHeight, setNavbarHeight] = useState(0);
-  // const {user} = useAuthenticatedUser
-  const {user, logout, isLoading , setIsLoading, storedUser} = useContext(AuthContext);
-  console.log("UserImg", user?.profile)
+  // const {user: learnerAuthUser, setUser} = useAuthenticatedUser
+  const { formData,setFormData} = useHydratedProfile()
+  const {user, setUser, logout, isLoading , setIsLoading, storedUser} = useContext(AuthContext);
+  const {profile, profileId,} = useHydratedProfileTutor()
+  const [profileImage, setProfileImage] = useState(null)
+  const {user: AuthUser} = useAuthenticatedUser()
+  const NavBarImg = AuthUser?.profile?.profile_picture
+
+  console.log("learnerID Learner Profile", user?.account_type)
 
   // Dynamically calculate the navbar height
-  // console.log(user?.profile?.profile_picture);
   
   function ProfileImage ({imageUrl}) {
     return (
@@ -28,8 +37,13 @@ const Navbar = () => {
     )
   }
 
-
-
+  useEffect(() => {
+    if(formData?.profilePicture || NavBarImg){
+      setProfileImage(formData.profilePicture || NavBarImg)
+    }else if (profile?.profile_picture || NavBarImg){
+      setProfileImage(profile.profile_picture || NavBarImg)
+    }
+  }, [formData, profile])
 
   useEffect(() => {
 
@@ -49,16 +63,21 @@ const Navbar = () => {
 
   // Define links for signed-in users
   const signedInLinks = (
-    <div className="hidden lg:flex lg:gap-x-12 justify-left items-start">
+    <div className="hidden lg:flex flex-1 lg:gap-x-12 justify-center mx-auto items-center">
       {user?.account_type === "tutor" && (
         <div className="space-x-6">
   <Link to="/educator/tutor-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Home</Link>
   <Link to="/educator/tutor-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Dashboard</Link>
 </div>
       )}
-      {user?.account_type === "student" && (
-      <Link to="/student-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Dashboard</Link>
+      {user?.account_type === "learner" && (
+        <div className="space-x-6">
+          <Link to="/student-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Home</Link>
 
+      <Link to="/student-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Find Tutors</Link>
+      <Link to="/student-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Courses</Link>
+      <Link to="/student-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Achievements</Link>
+      </div>
       )}
     </div>
   );
@@ -80,21 +99,20 @@ const Navbar = () => {
           <MenuButton className="inline-flex w-full  justify-center gap-x-1.5  bg-black px-3 text-sm font-semibold text-white shadow-xs  hover:bg-white/50 hover:border-l-indigo-300 hover:border-r-indigo-300
  border-0 border-l border-r border-l-white border-r-white
 ">    
-          {user?.profile?.profile_picture ? (
+          {profileImage ? (
           <ProfileImage
-           imageUrl={user?.profile.profile_picture} />):(
-            <img 
-            src={UserNavImg}
-            alt="Default Profile"
+          alt="Default Profile"
+           imageUrl={profileImage} />):(
+            <PiUserDuotone 
             style={{
-              width: '50px',
-              height: '50px',
-              objectFit: 'cover',
-              borderRadius: '50%',
-              padding: "8px",
-              marginTop: "5px"
-            }}
-            />)}
+                width: '50px',
+                height: '50px',
+                objectFit: 'cover',
+                borderRadius: '50%',
+                padding: "8px",
+                marginTop: "5px"
+              }}/> 
+            )}
             <div className="py-3 flex">
               <p className=" pt-2 text-xl" >{user?.first_name}</p>
              
@@ -111,7 +129,7 @@ const Navbar = () => {
             </Link>
             </MenuItem>
           )}
-          {user?.account_type === "student" && (
+          {user?.account_type === "learner" && (
   <MenuItem>
             
   <Link to="/learner-profile" className="block px-4 py-2 text-sm text-gray-700">Learner Profile</Link>
@@ -143,6 +161,7 @@ const Navbar = () => {
       <header className="fixed w-full bg-black p-2 inset-x-0 top-0 z-50 shadow-md">
         <nav className="flex items-center justify-between lg:px-8" aria-label="Global">
           <div className="flex lg:flex-col">
+            
 
             {user?.account_type === "tutor" && (
                <Link to="/educator/tutor-dashboard" className="mr-20 p-2">
@@ -150,12 +169,17 @@ const Navbar = () => {
                <img src={Logo} alt="ScrumVite" className="h-[40px] rounded-full hover:scale-105 transition-transform duration-300" />
              </Link>
             )}
-            {user?.account_type === "student" && (
+            {user?.account_type === "learner" && (
             <Link to="/student-dashboard" className="mr-20 p-2">
 
               <img src={Logo} alt="ScrumVite" className="h-[40px] rounded-full hover:scale-105 transition-transform duration-300" />
             </Link>
             )}
+            {!user && (
+            <Link to="/" className="mr-20 p-2">
+
+              <img src={Logo} alt="ScrumVite" className="h-[40px] rounded-full hover:scale-105 transition-transform duration-300" />
+            </Link>)}
           </div>
 
           {/* Mobile Menu Toggle */}
