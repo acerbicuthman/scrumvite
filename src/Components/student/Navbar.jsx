@@ -40,8 +40,8 @@ const Navbar = () => {
   useEffect(() => {
     if(formData?.profilePicture || NavBarImg){
       setProfileImage(formData.profilePicture || NavBarImg)
-    }else if (profile?.profile_picture){
-      setProfileImage(profile.profile_picture)
+    }else if (profile?.profile_picture || NavBarImg){
+      setProfileImage(profile.profile_picture || NavBarImg)
     }
   }, [formData, profile])
 
