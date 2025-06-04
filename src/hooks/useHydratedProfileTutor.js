@@ -30,11 +30,9 @@ export default function useHydratedProfileTutor() {
         years_of_experience: "",
         specialization: "",
         preferred_learner_level: "",
+        professional_bio: "",
 
-
-        // skills: "", 
-        // professional_bio: "", 
-
+        // Certification form fields (handled separately via Certification model)
         name_of_certificate: "",
         issuing_organization: "",
         date_obtained: "",
@@ -132,11 +130,9 @@ export default function useHydratedProfileTutor() {
                     years_of_experience: tutorProfile.years_of_experience || "",
                     specialization: tutorProfile.specialization || "",
                     preferred_learner_level: tutorProfile.preferred_learner_level || "",
+                    professional_bio: tutorProfile.professional_bio || "",
 
-
-                    // skills: "", 
-                    // professional_bio: "", 
-
+                    // Certification form fields
                     name_of_certificate: "",
                     issuing_organization: "",
                     date_obtained: "",
@@ -438,6 +434,7 @@ export default function useHydratedProfileTutor() {
             years_of_experience: formData.years_of_experience || "",
             specialization: formData.specialization || "",
             preferred_learner_level: formData.preferred_learner_level || "",
+            professional_bio: formData.professional_bio || "",
         };
 
         const token = localStorage.getItem('accessToken');
