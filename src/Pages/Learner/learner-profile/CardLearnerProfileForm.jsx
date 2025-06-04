@@ -23,8 +23,9 @@ const CardLearnerProfileForm = () => {
 
   const mailGoogle = user?.email
  
-console.log("Google mail", mailGoogle)
-  const { userEmail, userId, profileId, formData, setFormData } = useHydratedProfile();
+  const { userEmail, userId, profileId, formData, setFormData, handleImageChange } = useHydratedProfile();
+
+  console.log("GBIG USER", userId)
   const googleEmail = localStorage.getItem("userEmail")
   const email = mailGoogle || userEmail || googleEmail;
 
@@ -32,21 +33,6 @@ console.log("Google mail", mailGoogle)
   const token = localStorage.getItem("accessToken");
   const safeUserId = email ? email.replace(/[@.]/g, "_") : null;
 
-  // const [formData, setFormData] = useState({
-  //   fullName: "",
-  //   email: email || mailGoogle || "",
-  //   phone: "",
-  //   gender: "",
-  //   city: "",
-  //   nationality: "",
-  //   country: "",
-  //   dob: "",
-  //   profilePicture: null,
-  //   education_level: "",
-  //   current_role: "",
-  //   industry: "",
-  //   linkedin_profile: "",
-  // });
 
 
 
@@ -69,22 +55,6 @@ console.log("Google mail", mailGoogle)
 
         const result = response.data;
         console.log("object", result)
-
-        // setFormData({
-        //   fullName: `${result.student.first_name} ${result.student.last_name}`,
-        //   email: result.student.email || email ,
-        //   phone: result.phone_number || "",
-        //   gender: result.gender || "",
-        //   city: result.city || "",
-        //   nationality: result.nationality || "",
-        //   country: result.country || "",
-        //   dob: result.date_of_birth || "",
-        //   profilePicture: result.profile_picture || "",
-        //   education_level: result.education_level || "",
-        //   current_role: result.current_role || "",
-        //   industry: result.industry || "",
-        //   linkedin_profile: result.linkedin_profile || "",
-        // });
       } catch (error) {
         console.error("Error fetching profile:", error);
         setLocalError("Failed to fetch profile.");
@@ -111,56 +81,56 @@ console.log("Google mail", mailGoogle)
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleImageChange = async (file) => {
-    setLocalError(null);
-    if (!file || !file.type.startsWith("image/")) {
-      return setLocalError("Please upload a valid image file.");
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      return setLocalError("Image must be under 5MB.");
-    }
-    if (!safeUserId) {
-      return setLocalError("No valid user ID for image upload.");
-    }
+  // const handleImageChange = async (file) => {
+  //   setLocalError(null);
+  //   if (!file || !file.type.startsWith("image/")) {
+  //     return setLocalError("Please upload a valid image file.");
+  //   }
+  //   if (file.size > 5 * 1024 * 1024) {
+  //     return setLocalError("Image must be under 5MB.");
+  //   }
+  //   if (!safeUserId) {
+  //     return setLocalError("No valid user ID for image upload.");
+  //   }
 
-    const fileName = `user_${safeUserId}/${Date.now()}_${file.name}`;
+  //   const fileName = `user_${safeUserId}/${Date.now()}_${file.name}`;
 
-    try {
-      if (formData.profilePicture) {
-        const oldFileName = formData.profilePicture.split("/").pop();
-        if (oldFileName) {
-          await supabase.storage
-            .from("img-profile")
-            .remove([`user_${safeUserId}/${oldFileName}`]);
-        }
-      }
+  //   try {
+  //     if (formData.profilePicture) {
+  //       const oldFileName = formData.profilePicture.split("/").pop();
+  //       if (oldFileName) {
+  //         await supabase.storage
+  //           .from("img-profile")
+  //           .remove([`user_${safeUserId}/${oldFileName}`]);
+  //       }
+  //     }
 
-      const { error: uploadError } = await supabase.storage
-        .from("img-profile")
-        .upload(fileName, file, {
-          cacheControl: "3600",
-          upsert: true,
-          contentType: file.type,
-        });
+  //     const { error: uploadError } = await supabase.storage
+  //       .from("img-profile")
+  //       .upload(fileName, file, {
+  //         cacheControl: "3600",
+  //         upsert: true,
+  //         contentType: file.type,
+  //       });
 
-      if (uploadError) {
-        return setLocalError("Image upload failed: " + uploadError.message);
-      }
+  //     if (uploadError) {
+  //       return setLocalError("Image upload failed: " + uploadError.message);
+  //     }
 
-      const { data: urlData } = supabase.storage
-        .from("img-profile")
-        .getPublicUrl(fileName);
+  //     const { data: urlData } = supabase.storage
+  //       .from("img-profile")
+  //       .getPublicUrl(fileName);
 
-      if (!urlData?.publicUrl) {
-        return setLocalError("Failed to retrieve uploaded image URL.");
-      }
+  //     if (!urlData?.publicUrl) {
+  //       return setLocalError("Failed to retrieve uploaded image URL.");
+  //     }
 
-      setFormData((prev) => ({ ...prev, profilePicture: urlData.publicUrl }));
-    } catch (err) {
-      console.error("Image upload error:", err);
-      setLocalError("Unexpected error during image upload.");
-    }
-  };
+  //     setFormData((prev) => ({ ...prev, profilePicture: urlData.publicUrl }));
+  //   } catch (err) {
+  //     console.error("Image upload error:", err);
+  //     setLocalError("Unexpected error during image upload.");
+  //   }
+  // };
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
@@ -274,13 +244,13 @@ console.log("Google mail", mailGoogle)
         </h2>
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-[400px] aspect-square">
-              <ImageUploadBox
-                onImageChange={handleImageChange}
-                defaultImage={formData.profilePicture}
-                onImageDeleted={() => setFormData(prev => ({ ...prev, profilePicture: '' }))}
-                userId={safeUserId}
-                disabled={!isEditing}
-              />
+            <ImageUploadBox
+  onImageChange={handleImageChange}
+  defaultImage={formData.profilePicture}
+  onImageDeleted={() => setFormData(prev => ({ ...prev, profilePicture: '' }))}
+  userId={userId}            // pass userId from hook, no need to get it elsewhere
+  disabled={!isEditing}
+/>
             </div>
             <div className="w-full space-y-4 md:mt-0 mt-2 ">
               {renderInputField("fullName", "Full Name")}

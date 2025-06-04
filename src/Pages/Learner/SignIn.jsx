@@ -18,6 +18,8 @@ import {
 } from "@react-oauth/google";
 import LinkedInLogin from "../SocialMediaLogIn/Linkedin";
 import GoogleAuth from "../SocialMediaLogIn/GoogleAuth";
+import useHydratedProfile from "../../hooks/useHydratedProfile";
+import useHydratedProfileTutor from "../../hooks/useHydratedProfileTutor";
 
 const SignIn = () => {
   const { login, isLoading, loggedIn } = useContext(AuthContext);
@@ -27,7 +29,11 @@ const SignIn = () => {
   const [localLoading, setLocalLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [userData, setUserData] = useState(null);
+  const { refetchProfile: fetchLearnerProfile } = useHydratedProfile();
+const { refetchProfile: fetchTutorProfile } = useHydratedProfileTutor();
 
+fetchLearnerProfile();
+fetchTutorProfile()
   const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
@@ -42,6 +48,7 @@ const SignIn = () => {
     e.preventDefault();
     setLocalLoading(true);
     console.log(localLoading);
+ 
     const data = { email, password };
 
     try {
@@ -69,8 +76,12 @@ const SignIn = () => {
 
       // Navigate to landing page
         if (user.account_type === "learner"){
+          const profile = await fetchLearnerProfile();
+         
           navigate("/student-dashboard");
         } else{
+          const profile = await fetchTutorProfile();
+      
           navigate("/educator/tutor-dashboard")
         }
 

@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
     }, [user]);
     
     // Login function to store tokens and user data
-    const login = async (accessToken, refreshToken, userData, newProfilePictureUrl) => {
+    const login = async (accessToken, refreshToken, userData, imageUrl) => {
         setIsLoading(true);
         await new Promise(resolve => setTimeout(resolve, 500))
 
@@ -89,7 +89,7 @@ export const AuthProvider = ({ children }) => {
         ...userData,
           profile:{
           ...userData.profile,
-          profile_picture: newProfilePictureUrl
+          profile_picture: imageUrl
         }
        
       }
@@ -99,11 +99,6 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('user', JSON.stringify(updatedUser));
-
-
-      
-
-
       setIsLoading(false)
     };
   
@@ -136,7 +131,7 @@ export const AuthProvider = ({ children }) => {
     };
   
     return (
-      <AuthContext.Provider value={{ user, storedUser, accessToken, refreshToken, login, logout, isLoading, setIsLoading, loggedIn,  tempCredentials, setTempCredentials }}>
+      <AuthContext.Provider value={{ user, setUser, storedUser, accessToken, refreshToken, login, logout, isLoading, setIsLoading, loggedIn,  tempCredentials, setTempCredentials }}>
         {children}
       </AuthContext.Provider>
     );
