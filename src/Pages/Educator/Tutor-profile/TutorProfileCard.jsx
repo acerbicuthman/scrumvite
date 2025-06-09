@@ -278,6 +278,20 @@ const TutorProfileCard = () => {
           </div>
           <div className='px-4 mt-10'>
             <div className='md:mx-auto w-full max-w-[800px] my-2 bg-white bg-opacity-[4%] border-white border-opacity-10 border-2 text-white p-4'>
+              <div className='flex'> <h3 className="text-xl  font-semibold mb-4">Professional Bio</h3>
+
+              </div>
+              <textarea
+                id="professional_bio"
+                value={formData.professional_bio || ""}
+                onChange={handleChange}
+                readOnly={!isEditing}
+                className='h-[243px] w-full bg-white/10 p-3 '
+                placeholder='Write a short bio about yourself' ></textarea>
+            </div>
+          </div>
+          <div className='px-4 mt-10'>
+            <div className='md:mx-auto w-full max-w-[800px] my-2 bg-white bg-opacity-[4%] border-white border-opacity-10 border-2 text-white p-4'>
               <h3 className="text-xl font-semibold mb-4">Education & Professional Details</h3>
               <div className="mt-10  pt-3">
                 <div className="grid grid-cols-1 md:grid-cols-1 gap-6 text-white/50">
@@ -414,20 +428,6 @@ const TutorProfileCard = () => {
                     ))}
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className='pt-3 mt-10'>
-              <div className='md:mx-auto w-full max-w-[800px] my-2 bg-white bg-opacity-[4%] border-white border-opacity-10 border-2 text-white p-4'>
-                <div className='flex'> <h3 className="text-xl  font-semibold mb-4">Professional Bio</h3>
-
-                </div>
-                <textarea
-                  id="professional_bio"
-                  value={formData.professional_bio || ""}
-                  onChange={handleChange}
-                  readOnly={!isEditing}
-                  className='h-[243px] w-full bg-white/10 p-3 '
-                  placeholder='Write a short bio about yourself' ></textarea>
               </div>
             </div>
           </div>
