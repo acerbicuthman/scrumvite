@@ -6,7 +6,6 @@ import { AuthContext } from "../../context/Authcontext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "../../Styles.css";
-// import image from "../../assets/Frame 1984078024.png";
 import { BeatLoader } from "react-spinners";
 import {
   useGoogleLogin,
@@ -14,7 +13,7 @@ import {
 import LinkedInLogin from "../SocialMediaLogIn/Linkedin";
 import GoogleAuth from "../SocialMediaLogIn/GoogleAuth";
 import TutorSignUpCoverImg from '../Educator/Tutur-images/Rectangle 39.png'
-import Book from '../Educator/Tutur-images/Untitled design (2) 1.png'
+
 
 const TutorSignIn = () => {
     const { login, isLoading, loggedIn } = useContext(AuthContext);

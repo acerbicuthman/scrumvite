@@ -34,13 +34,13 @@ const StudentDashboard = () => {
 
   return (
 
-    <div className="mt-20 flex bg-[#121221] ">
+    <div className="mt-20 flex bg-[#121221] overflow-x-hidden ">
       {/* Sidebar */}
-      <div className=" h-screen shadow-[4px_0_12px_rgba(0,0,0,0.3)]">
+      {/* <div className=" h-screen shadow-[4px_0_12px_rgba(0,0,0,0.3)]"> */}
       <AsidesNav collapsed={collapsed} setCollapse={setCollapse}/>
-      </div>
+      {/* </div> */}
       {/* Main Content */}
-    <div className={`transition-all duration-300 ${collapsed ? `w-[calc(100%-100pxx)]`: `w-[calc(100%-98px)]`}`}>
+    <div className={`transition-all duration-300 ${collapsed ? `md:w-[calc(100%-90px)]`: `md:w-[calc(100%-100px)]`}`}>
     <MainContent/>
     </div>
     

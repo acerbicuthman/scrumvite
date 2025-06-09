@@ -6,7 +6,7 @@ const ScrollToTop = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    window.history.scrollRestoration = 'manual' // Disable browser scroll restoration
+    window.history.scrollRestoration = 'manual' 
   }, [pathname])
 
   return null

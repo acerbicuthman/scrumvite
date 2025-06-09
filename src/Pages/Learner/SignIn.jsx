@@ -8,7 +8,7 @@ import axios from "axios";
 import { AuthContext } from "../../context/Authcontext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import "./signin.css";
+import "../Learner/learner-css/signin.css";
 import image from "../../assets/Mask group (1).png";
 import { BeatLoader } from "react-spinners";
 import {

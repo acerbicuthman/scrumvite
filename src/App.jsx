@@ -5,8 +5,8 @@ import { AuthContext, AuthProvider } from "./context/Authcontext";
 import SignUp from "./Pages/Learner/SignUp";
 import SuccessfulReg from "./Pages/Learner/SuccesfulRegPage/SuccessfullRegPage";
 import Landing from "./Pages/Landing/Landing";
-import CourseList from "./Pages/Learner/CourseList";
-import CourseDetails from "./Pages/Learner/CourseDetails";
+import CourseList from "./Pages/Learner/Courses/CourseList";
+import CourseDetails from "./Pages/Learner/Courses/CourseDetails";
 import MyEnrollment from "./Pages/Learner/MyEnrollment";
 import Loading from "./Components/student/Loading";
 import Educator from "./Pages/Educator/Educator";
@@ -38,6 +38,12 @@ import StudentBackground from "./Pages/Learner/learner-profile/StudentBackground
 import Logout from "./Pages/Logout"; // Make sure to import the Logout component
 import TutorProfileCard from "./Pages/Educator/Tutor-profile/TutorProfileCard";
 import TutorDashboard from "./Pages/Educator/TutorDashboard";
+import ProgressTracker from "./Pages/Learner/Progress-Tracker/ProgressTracker";
+import Notifications from "./Pages/Learner/Notifications/Notifications";
+import ChatDashboard from "./Pages/Learner/Chat_Dashboard/ChatDashboard";
+import Achievements from "./Pages/Learner/Achievements/Achievements";
+import SupportCenter from "./Pages/Support-Center/SupportCenter";
+import CourseDashboard from "./Pages/Learner/Courses/CourseDashboard";
 
 // Protected Route
 const ProtectedRoute = ({ children }) => {
@@ -81,14 +87,25 @@ const App = () => {
             <Route path="/change-password" element={<ChangePassword />} />
             <Route path="/course-list" element={<CourseList />} />
             <Route path="/course-list/input" element={<CourseList />} />
+            <Route path="/progress-tracker" element={<ProgressTracker/>}/>
+            <Route path="/notifications" element={<Notifications/>}/>
+            <Route path="/achievements" element={<Achievements/>}/>
+            <Route path="/chat-dashboard" element={<ChatDashboard/>}/>
+            <Route path="/support-center" element={<SupportCenter/>}/>
+            <Route path="/course-dashboard" element={<CourseDashboard/>}/>
             <Route path="/course/:id" element={<CourseDetails />} />
             <Route path="/myenrollment" element={<MyEnrollment />} />
             <Route path="/loading/:path" element={<Loading />} />
             <Route path="/" element={<LinkedInLogin />} />
             <Route path="/linkedin/callback" element={<LinkedInCallback />} />
-            <Route path="/learner-profile" element={<Learnerprofile />} />
-            <Route path="/system-info" element={<SystemInfo />} />
-            <Route path="/student-bg-info" element={<StudentBackground />} />
+            <Route
+              path="/learner-profile"
+              element={
+                <ProtectedRoute>
+                  <Learnerprofile />
+                </ProtectedRoute>
+              }
+            />
             {/* Protected Routes */}
             <Route
               path="/student-dashboard"

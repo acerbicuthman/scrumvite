@@ -75,8 +75,8 @@ const Navbar = () => {
           <Link to="/student-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Home</Link>
 
       <Link to="/student-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Find Tutors</Link>
-      <Link to="/student-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Courses</Link>
-      <Link to="/student-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Achievements</Link>
+      <Link to="/course-list" className="text-sm font-semibold text-white hover:text-indigo-600">Courses</Link>
+      <Link to="/achievements" className="text-sm font-semibold text-white hover:text-indigo-600">Achievements</Link>
       </div>
       )}
     </div>

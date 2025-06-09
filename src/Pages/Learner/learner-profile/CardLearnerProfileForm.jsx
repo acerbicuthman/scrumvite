@@ -25,7 +25,7 @@ const CardLearnerProfileForm = () => {
  
   const { userEmail, userId, profileId, formData, setFormData, handleImageChange } = useHydratedProfile();
 
-  console.log("GBIG USER", userId)
+  console.log("GBIG USER", profileId)
   const googleEmail = localStorage.getItem("userEmail")
   const email = mailGoogle || userEmail || googleEmail;
 
@@ -80,57 +80,6 @@ const CardLearnerProfileForm = () => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
-
-  // const handleImageChange = async (file) => {
-  //   setLocalError(null);
-  //   if (!file || !file.type.startsWith("image/")) {
-  //     return setLocalError("Please upload a valid image file.");
-  //   }
-  //   if (file.size > 5 * 1024 * 1024) {
-  //     return setLocalError("Image must be under 5MB.");
-  //   }
-  //   if (!safeUserId) {
-  //     return setLocalError("No valid user ID for image upload.");
-  //   }
-
-  //   const fileName = `user_${safeUserId}/${Date.now()}_${file.name}`;
-
-  //   try {
-  //     if (formData.profilePicture) {
-  //       const oldFileName = formData.profilePicture.split("/").pop();
-  //       if (oldFileName) {
-  //         await supabase.storage
-  //           .from("img-profile")
-  //           .remove([`user_${safeUserId}/${oldFileName}`]);
-  //       }
-  //     }
-
-  //     const { error: uploadError } = await supabase.storage
-  //       .from("img-profile")
-  //       .upload(fileName, file, {
-  //         cacheControl: "3600",
-  //         upsert: true,
-  //         contentType: file.type,
-  //       });
-
-  //     if (uploadError) {
-  //       return setLocalError("Image upload failed: " + uploadError.message);
-  //     }
-
-  //     const { data: urlData } = supabase.storage
-  //       .from("img-profile")
-  //       .getPublicUrl(fileName);
-
-  //     if (!urlData?.publicUrl) {
-  //       return setLocalError("Failed to retrieve uploaded image URL.");
-  //     }
-
-  //     setFormData((prev) => ({ ...prev, profilePicture: urlData.publicUrl }));
-  //   } catch (err) {
-  //     console.error("Image upload error:", err);
-  //     setLocalError("Unexpected error during image upload.");
-  //   }
-  // };
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
