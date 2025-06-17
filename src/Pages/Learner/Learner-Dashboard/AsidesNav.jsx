@@ -53,7 +53,7 @@ const AsidesNav = ({collapsed, setCollapse}) => {
         )}
       
       {!collapsed &&
-      (<div>
+      (<div  className="hidden md:text-base ">
       <h2>{first_name} {last_name}</h2>
       <p className="text-[#9696C4]">{account_type }</p>
       </div>)

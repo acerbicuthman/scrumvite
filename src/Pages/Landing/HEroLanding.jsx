@@ -10,7 +10,7 @@ const HEroLanding = () => {
   const handleNavigateType = (type) => {
     localStorage.setItem("account_type", type);
     if (type === "tutor"){
-      navigate("/educator/tutorSignUp",
+      navigate("/tutorSignUp",
       {
         state: { account_type: type }
       });

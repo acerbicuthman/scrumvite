@@ -24,7 +24,7 @@ const Navbar = () => {
   const {user: AuthUser} = useAuthenticatedUser()
   const NavBarImg = AuthUser?.profile?.profile_picture
 
-  console.log("learnerID Learner Profile", user?.account_type)
+  // console.log("learnerID Learner Profile", user?.account_type)
 
   // Dynamically calculate the navbar height
   
@@ -67,7 +67,10 @@ const Navbar = () => {
       {user?.account_type === "tutor" && (
         <div className="space-x-6">
   <Link to="/educator/tutor-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Home</Link>
-  <Link to="/educator/tutor-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Dashboard</Link>
+  <Link to="/educator/assignments" className="text-sm font-semibold text-white hover:text-indigo-600">Assignments</Link>
+  <Link to="/educator/assignments" className="text-sm font-semibold text-white hover:text-indigo-600">Grades</Link>
+  <Link to="/educator/assignments" className="text-sm font-semibold text-white hover:text-indigo-600">Calendar</Link>
+  <Link to="/educator/tutor-dashboard" className="text-sm font-semibold text-white hover:text-indigo-600">Reources</Link>
 </div>
       )}
       {user?.account_type === "learner" && (
@@ -124,10 +127,20 @@ const Navbar = () => {
         <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5">
         <div className="py-1">
           {user?.account_type === "tutor" && (
-            <MenuItem>
-            <Link to="/educator/tutor-profile"  className="block px-4 py-2 text-sm text-gray-700">Tutor Profile
-            </Link>
-            </MenuItem>
+            <div>
+           <MenuItem>
+           <Link to="/educator/tutor-profile" className="block px-4 py-2 text-sm text-gray-700">
+             Tutor Profile
+           </Link>
+         </MenuItem>
+         
+         <MenuItem>
+           <Link to="/educator/assignments" className="block px-4 py-2 text-sm text-gray-700">
+             Assignments
+           </Link>
+         </MenuItem>
+         </div>
+           
           )}
           {user?.account_type === "learner" && (
   <MenuItem>

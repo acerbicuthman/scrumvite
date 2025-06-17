@@ -10,7 +10,8 @@ export default function useHydratedProfileTutor() {
     const { user, loadingUser, userError } = useAuthenticatedUser();
     const email = user?.email;
 
-    console.log("tutor email", email);
+    // console.log("tutor email", email);
+
 
     const [formData, setFormData] = useState({
 
@@ -84,7 +85,7 @@ export default function useHydratedProfileTutor() {
             });
 
             const result = response.data;
-            console.log("Tutor Profile Data", result);
+            // console.log("Tutor Profile Data", result);
 
             const profiles = result.results || [];
 

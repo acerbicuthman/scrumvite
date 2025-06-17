@@ -16,7 +16,7 @@ const MainContent = () => {
   return (
     <div className='text-white bg-[#121221]  w-full px-4 mt-4   pb-10'>
         <div className='md:text-left text-center py-3'>
-        <h1 className='text-4xl py-4'>Welcome back, {first_name} {last_name}</h1>
+        <h1 className='md:text-4xl text-xl py-4 my-2'>Welcome back, {first_name} {last_name}</h1>
         <p className='text-lg font-semibold'>My Courses</p>
         </div>
         

@@ -32,8 +32,7 @@ const SignIn = () => {
   const { refetchProfile: fetchLearnerProfile } = useHydratedProfile();
 const { refetchProfile: fetchTutorProfile } = useHydratedProfileTutor();
 
-fetchLearnerProfile();
-fetchTutorProfile()
+
   const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
@@ -76,11 +75,11 @@ fetchTutorProfile()
 
       // Navigate to landing page
         if (user.account_type === "learner"){
-          const profile = await fetchLearnerProfile();
+         await fetchLearnerProfile();
          
           navigate("/student-dashboard");
         } else{
-          const profile = await fetchTutorProfile();
+           await fetchTutorProfile();
       
           navigate("/educator/tutor-dashboard")
         }

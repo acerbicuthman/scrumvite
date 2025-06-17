@@ -10,7 +10,7 @@ import CourseDetails from "./Pages/Learner/Courses/CourseDetails";
 import MyEnrollment from "./Pages/Learner/MyEnrollment";
 import Loading from "./Components/student/Loading";
 import Educator from "./Pages/Educator/Educator";
-import Dashboard from "./Pages/Educator/Dashboard";
+import Dashboard from "./Pages/Educator/Dashboard/MainContentTutor";
 import StudentsEnrolled from "./Pages/Educator/StudentsEnrolled";
 import AddCourse from "./Pages/Educator/AddCourse";
 import MyCourses from "./Pages/Educator/MyCourses";
@@ -37,13 +37,21 @@ import SystemInfo from "./Pages/Learner/learner-profile/SystemInfo";
 import StudentBackground from "./Pages/Learner/learner-profile/StudentBackground";
 import Logout from "./Pages/Logout"; // Make sure to import the Logout component
 import TutorProfileCard from "./Pages/Educator/Tutor-profile/TutorProfileCard";
-import TutorDashboard from "./Pages/Educator/TutorDashboard";
+import TutorDashboard from "./Pages/Educator/Dashboard/TutorDashboard";
 import ProgressTracker from "./Pages/Learner/Progress-Tracker/ProgressTracker";
 import Notifications from "./Pages/Learner/Notifications/Notifications";
 import ChatDashboard from "./Pages/Learner/Chat_Dashboard/ChatDashboard";
 import Achievements from "./Pages/Learner/Achievements/Achievements";
 import SupportCenter from "./Pages/Support-Center/SupportCenter";
 import CourseDashboard from "./Pages/Learner/Courses/CourseDashboard";
+import CreateCourse from "./Pages/Educator/Courses-Tutor/CreateCourse";
+import CreatingCourse from "./Pages/Educator/Courses-Tutor/CreatingCourse";
+import MyStudents from "./Pages/Educator/MyStudents";
+import Assignment from "./Pages/Educator/Assignment/Assignment";
+import Announcements from "./Pages/Educator/Announcements/Announcements";
+import Payouts from "./Pages/Educator/Payouts/Payouts";
+import Certificate from "./Pages/Learner/Achievements/Certificate";
+import CertCustomization from "./Pages/Educator/Certificate/CertCustomization";
 
 // Protected Route
 const ProtectedRoute = ({ children }) => {
@@ -73,6 +81,7 @@ const App = () => {
           <Route element={<Layout />}>
             <Route path="/" element={<Landing />} />
             <Route path="/role-selection" element={<ScrumLanding />} />
+            <Route path="/tutorSignUp" element={<TutorSignUp />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
             <Route
@@ -122,10 +131,17 @@ const App = () => {
 
           <Route path="/educator" element={<Educator />}>
             <Route index element={<Dashboard />} />
-            <Route path="tutorSignUp" element={<TutorSignUp />} />
+            {/* <Route path="tutorSignUp" element={<TutorSignUp />} /> */}
             <Route path="tutor-signin" element={<TutorSignIn />} />
             <Route path="tutor-dashboard" element={<TutorDashboard />} />
             <Route path="tutor-profile" element={<TutorProfileCard />} />
+            <Route path="create-course" element={<CreateCourse/>}/>
+            <Route path="course-module" element={<CreatingCourse/>}/>
+            <Route path="assignments" element={<Assignment/>}/>
+            <Route path="my-students" element={<MyStudents/>}/>
+            <Route path="announcements" element={<Announcements/>}/>
+            <Route path="payouts" element={<Payouts/>}/>
+            <Route path="certificate-customization" element={<CertCustomization/>}/>
             <Route path="add-course" element={<AddCourse />} />
             <Route path="my-courses" element={<MyCourses />} />
             <Route path="students-enrolled" element={<StudentsEnrolled />} />

@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo, useCallback, Suspense } from "react";
 import ImageUploadBox from "./ProfileImgUpload";
-import axios from "axios";
+import axiosInstance from "../../../context/axiosInstance";
 import { base_url } from "../../../library/api";
 import { supabase } from "../../../SupabaseFile";
 import useHydratedProfile from "../../../hooks/useHydratedProfile";
@@ -9,87 +9,52 @@ import { useNavigate } from "react-router";
 import SystemInfo from "./SystemInfo";
 import { useAuth } from "../../../context/Authcontext";
 import CountryForm from "../../../library/CountryForm";
-// import useAuthenticatedUser from "../../../hooks/useAuthenticatedUser";
 
 const CardLearnerProfileForm = () => {
-  const isUsingExistingImage = useRef(false);
   const [isEditing, setIsEditing] = useState(true);
-  const [localError, setLocalError] = useState(null);
   const [success, setSuccess] = useState("");
   const [saving, setSaving] = useState(false);
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const {user} = useAuth()
+  const { user } = useAuth();
 
-  const mailGoogle = user?.email
- 
-  const { userEmail, userId, profileId, formData, setFormData, handleImageChange } = useHydratedProfile();
+  const email = user?.email || localStorage.getItem("userEmail") || "";
+  // const token = localStorage.getItem("accessToken");
+  const safeUserId = email?.replace(/[@.]/g, "_") ?? null;
 
-  console.log("GBIG USER", profileId)
-  const googleEmail = localStorage.getItem("userEmail")
-  const email = mailGoogle || userEmail || googleEmail;
+  const {
+    formData,
+    setFormData,
+    userId,
+    profileId,
+    loading,
+    error,
+    localError,
+    setLocalError,
+    handleImageChange,
+    refetchProfile
+  } = useHydratedProfile();
 
-
-  const token = localStorage.getItem("accessToken");
-  const safeUserId = email ? email.replace(/[@.]/g, "_") : null;
-
-
-
-
-  // Fetch profile if profileId exists
-  useEffect(() => {
-    if (!profileId || !token) return;
-
-    const fetchProfile = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${base_url}api/userProfile/student_profile/${profileId}/`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json"
-            },
-          }
-        );
-
-        const result = response.data;
-        console.log("object", result)
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-        setLocalError("Failed to fetch profile.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, [profileId, token]);
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
+  const handleEditClick = () => setIsEditing(true);
   const handleCancel = () => {
     setIsEditing(false);
     setLocalError(null);
     setSuccess("");
   };
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
-  };
+  }, [setFormData]);
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();
-    setSaving(true);
+    setSaving(false);
     setLocalError(null);
     setSuccess("");
-
+  
     const [firstName, ...rest] = formData.fullName.trim().split(" ");
     const lastName = rest.join(" ").trim();
-
+  
     const profileData = {
       student: {
         id: userId,
@@ -112,42 +77,34 @@ const CardLearnerProfileForm = () => {
       linkedin_profile: formData.linkedin_profile || "",
       updated_at: new Date().toISOString(),
     };
-
-    if (profileId) {
-      //  PATCH existing profile
-      const patchProfile = await axios.patch(
-        `${base_url}api/userProfile/student_profile/${profileId}/`,
-        profileData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("PatchProfile", patchProfile.data);
-      setSuccess("Profile updated successfully!");
+  
+    try {
+      const requestFn = profileId
+        ? axiosInstance.patch(
+            "api/userProfile/student_profile/patch_update_student_profile/",
+            profileData
+          )
+        : axiosInstance.post(
+            "api/userProfile/student_profile/",
+            profileData
+          );
+  
+      await requestFn;
+      setSuccess(profileId ? "Profile updated successfully!" : "Profile created successfully!");
+      refetchProfile();
       setIsEditing(false);
-    } else {
-      // POST a new profile
-      const response = await axios.post(
-        `${base_url}api/userProfile/student_profile/`,
-        profileData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("Response Data:", response.data.results);
-      setSuccess("Profile created successfully!");
-      setIsEditing(false);
+    } catch (err) {
+      console.error("Profile save error:", err?.response || err);
+      setLocalError("Error saving profile. Please try again.");
     }
     
+     finally {
+      setSaving(false);
+    }
   };
+  
 
-  const renderInputField = (id, label, type = "text", disabled = false) => (
+  const renderInputField = useCallback((id, label, type = "text", disabled = false) => (
     <div>
       <label htmlFor={id} className="block text-sm font-medium mb-1 capitalize text-white/50">
         {label || id.replace("_", " ")}
@@ -162,113 +119,92 @@ const CardLearnerProfileForm = () => {
         className="bg-white bg-opacity-10 w-full rounded-sm p-2 placeholder-white/50"
       />
     </div>
-  );
+  ), [formData, isEditing, handleChange]);
 
-  if (loading) {
-    return  <div className="flex justify-center items-center my-8 h-screen">
-    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4318D1]" />
-  </div>;
+  if (loading || !formData || !userId) {
+    return <div className="flex justify-center items-center my-8 h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4318D1]" />
+    </div>;
   }
 
-  if (
-    localError &&
-    localError !== "Profile not found. Please create a profile."
-  ) {
+  if (localError && localError !== "Profile not found. Please create a profile.") {
     return <div className="text-red-600 text-xl text-center mt-28 h-screen">{localError}</div>;
   }
 
   return (
     <div className="w-full max-w-[800px] mx-auto mt-10 md:mt-20 p-4 md:p-6 bg-black bg-opacity-10 text-white rounded-xl shadow-md">
       <div className="bg-[#0A0A0A] md:p-8 px-4 rounded-md">
-       
-       
-
         <form onSubmit={handleSaveProfile} id="profile-form">
-        <div className='px-4 mt-10'>
-          <div className="p-4  md:mx-auto w-full max-w-[800px] my-2 bg-white bg-opacity-[4%] border-white border-opacity-10 border-2 text-white">
-
-        
-        <h2 className="text-3xl font-semibold m-5">
-          {localError ? "Create Profile" : "Update Profile"}
-        </h2>
-          <div className="flex flex-col md:flex-row gap-6">
-            <div className="w-full md:w-[400px] aspect-square">
-            <ImageUploadBox
-  onImageChange={handleImageChange}
-  defaultImage={formData.profilePicture}
-  onImageDeleted={() => setFormData(prev => ({ ...prev, profilePicture: '' }))}
-  userId={userId}            // pass userId from hook, no need to get it elsewhere
-  disabled={!isEditing}
-/>
-            </div>
-            <div className="w-full space-y-4 md:mt-0 mt-2 ">
-              {renderInputField("fullName", "Full Name")}
-              {renderInputField("email", "Email", "text", true)}
-              {renderInputField("phone", "Phone")}
+          <div className='px-4 mt-10'>
+            <div className="p-4 md:mx-auto w-full max-w-[800px] my-2 bg-white bg-opacity-[4%] border-white border-opacity-10 border-2 text-white">
+              <h2 className="text-3xl font-semibold m-5">
+                {localError ? "Create Profile" : "Update Profile"}
+              </h2>
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="w-full md:w-[400px] aspect-square">
+                  <ImageUploadBox
+                    onImageChange={handleImageChange}
+                    defaultImage={formData.profilePicture}
+                    onImageDeleted={() => setFormData(prev => ({ ...prev, profilePicture: '' }))}
+                    userId={userId}
+                    disabled={!isEditing}
+                  />
+                </div>
+                <div className="w-full space-y-4 md:mt-0 mt-2 ">
+                  {renderInputField("fullName", "Full Name")}
+                  {renderInputField("email", "Email", "text", true)}
+                  {renderInputField("phone", "Phone")}
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                <div>
+                  <label htmlFor="gender" className="block text-sm font-medium mb-1">Gender</label>
+                  <select
+                    id="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    disabled={!isEditing}
+                    className="bg-white/10 bg-opacity-10 w-full rounded-sm p-2 text-white"
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                {renderInputField("dob", "Date of Birth", "date")}
+                {renderInputField("city")}
+                {renderInputField("nationality")}
+              </div>
+              <div className="mt-4">
+                <CountryForm 
+                  value={formData.country}
+                  onChange={(val) => setFormData(prev => ({ ...prev, country: val }))}
+                  disabled={!isEditing} />
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-            <div>
-              <label htmlFor="gender" className="block text-sm font-medium mb-1">
-                Gender
-              </label>
-              <select
-                id="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                disabled={!isEditing}
-                className="bg-white bg-opacity-10 w-full rounded-sm p-2 text-white"
-              >
-                <option value="" className="bg-white bg-opacity-10 ">Select Gender</option>
-                <option value="male" className="bg-white bg-opacity-10 ">Male</option>
-                <option value="female" className="bg-white bg-opacity-10 ">Female</option>
-                <option value="other" className="bg-white bg-opacity-10 ">Other</option>
-              </select>
+          <div className='px-4 mt-10'>
+            <div className='md:mx-auto w-full max-w-[800px] my-2 bg-white bg-opacity-[4%] border-white border-opacity-10 border-2 text-white p-4'>
+              <h3 className="text-xl font-semibold mb-4">Education & Professional Details</h3>
+              <div className="mt-10 pt-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-white">
+                  {["education_level", "current_role", "industry", "linkedin_profile"].map((field) => (
+                    <div key={field}>{renderInputField(field)}</div>
+                  ))}
+                </div>
+              </div>
             </div>
-            {renderInputField("dob", "Date of Birth", "date")}
-{[
-  "city",
-  "nationality",
-
-].map((field) => (
-  <div key={field}>{renderInputField(field)}</div>
-))}
-</div>
-  <div>
-   <CountryForm 
-   value={formData.country}
-   onChange={(val)=> setFormData((prev) => ({...prev, country: val}))}
-   disabled={!isEditing}/>
-   </div>
-</div>
-</div>
-<div className='px-4 mt-10'>
-      <div className='md:mx-auto w-full max-w-[800px] my-2 bg-white bg-opacity-[4%] border-white border-opacity-10 border-2 text-white p-4'>
-        <h3 className="text-xl font-semibold mb-4">Education & Professional Details</h3>
-<div className="mt-10  pt-3">
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-white/50">
-    {["education_level", "current_role", "industry", "linkedin_profile"].map((field) => (
-      <div key={field}>{renderInputField(field)}</div>
-    ))}
-  </div>
-
-</div>
-</div>
-
-</div>
+          </div>
         </form>
 
-      
+        <div className="my-10">
+          <SystemInfo />
+        </div>
 
-
-<div className="my-10">
-  <SystemInfo/>
-</div>
-
-{localError && <p className="text-red-500 mt-4 text-center justify-center items-center">{localError}</p>}
+        {localError && <p className="text-red-500 mt-4 text-center justify-center items-center">{localError}</p>}
         {success && <p className="text-green-500 mt-4 text-center">{success}</p>}
-
 
         <div className="flex justify-center gap-4 mt-10 py-4">
         {isEditing && (

@@ -1,53 +1,71 @@
-import axios from 'axios';
-import { base_url } from '../library/api';
+import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: base_url,
+  baseURL: "https://scrum-lms-backend.onrender.com/", 
 });
 
-// Add access token to every request
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+let isRefreshing = false;
+let refreshSubscribers = [];
 
-// Handle expired tokens
+function subscribeTokenRefresh(cb) {
+  refreshSubscribers.push(cb);
+}
+
+function onRefreshed(token) {
+  refreshSubscribers.forEach((cb) => cb(token));
+  refreshSubscribers = [];
+}
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (err) => Promise.reject(err)
+);
+
 axiosInstance.interceptors.response.use(
-  (res) => res,
-  async (err) => {
-    const originalRequest = err.config;
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
     if (
-      err.response?.status === 401 &&
+      error.response?.status === 401 &&
       !originalRequest._retry
     ) {
       originalRequest._retry = true;
 
-      try {
-        const refresh = localStorage.getItem('refreshToken');
-        const res = await axios.post(`${base_url}api/token/refresh/`, {
-          refresh,
-        });
+      if (!isRefreshing) {
+        isRefreshing = true;
+        try {
+          const res = await axios.post("https://scrum-lms-backend.onrender.com/api/token/refresh/", {
+            refresh: localStorage.getItem("refreshToken"),
+          });
 
-        const newAccess = res.data.access;
-
-        localStorage.setItem('accessToken', newAccess);
-        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newAccess}`; // ✅ GLOBAL
-        originalRequest.headers.Authorization = `Bearer ${newAccess}`; // ✅ REQUEST
-
-        return axiosInstance(originalRequest); // ✅ RETURN
-      } catch (refreshError) {
-        console.error('Refresh token failed', refreshError);
-        localStorage.clear();
-        window.location.href = '/signin';
-        return Promise.reject(refreshError); // ✅ RETURN ERROR
+          const newAccessToken = res.data.access;
+          localStorage.setItem("accessToken", newAccessToken);
+          onRefreshed(newAccessToken);
+        } catch (err) {
+          localStorage.clear();
+          window.location.href = "/login"; // Or use navigate("/login") if inside a component
+          return Promise.reject(err);
+        } finally {
+          isRefreshing = false;
+        }
       }
+
+      return new Promise((resolve) => {
+        subscribeTokenRefresh((token) => {
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+          resolve(axiosInstance(originalRequest));
+        });
+      });
     }
 
-    return Promise.reject(err);
+    return Promise.reject(error);
   }
 );
 
