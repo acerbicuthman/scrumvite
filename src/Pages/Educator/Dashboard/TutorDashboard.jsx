@@ -6,9 +6,9 @@ import MainContentTutor from './MainContentTutor';
 export default function TutorDashboard() {
   const [collapsed, setCollapse] = useState(false)
   return (
-    <div className="flex min-h-screen bg-[] mt-20 text-white">
+    <div className="flex min-h-screen bg-[#121221] mt-20 text-white">
       {/* Sidebar */}
-      <aside className="  shadow-md  hidden md:block">
+      <aside className="  shadow-md block">
         <AsideTutor collapsed={collapsed} setCollapse={setCollapse} />
       </aside>
 

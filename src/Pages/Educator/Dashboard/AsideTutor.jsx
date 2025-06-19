@@ -29,7 +29,7 @@ const AsideTutor = ({collapsed, setCollapse}) => {
       { icon: <img src={playBtn} alt="" />, text: "Courses", link: '/educator/create-course' },
       { icon: <img src={studentsIcon} alt="" />, text: "Students", link: '/educator/my-students' },
       { icon: <img src={messageIcon} alt="messages"/>, text: "Messages", link: '/' },
-      { icon: <img src={stackedCoin} alt="" />, text: "Payout", link: '/' },
+      { icon: <img src={stackedCoin} alt="" />, text: "Payout", link: '/educator/payouts' },
       { icon: <IoMdNotificationsOutline size={25} />, text: "Notifications", link: '/educator/notifications' },
       { icon: <img src={AnnouncementsIcon} alt="" />, text: "Announcements", link: '/educator/announcements' },
       { icon: <img src={settings} alt="Settings" />, text: "Settings", link: '' },

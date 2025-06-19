@@ -1,3 +1,4 @@
+// useCourseModuleManager.js
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { base_url } from '../library/api';
@@ -9,7 +10,9 @@ const useCourseModuleManager = () => {
   const [courses, setCourses] = useState([]);
   const [selectedCourseId, setSelectedCourseId] = useState('');
   const [modules, setModules] = useState([]);
-  const [selectedModuleId, setSelectedModuleId] = useState(null); // ✅ NEW
+  const [selectedModuleId, setSelectedModuleId] = useState(null); 
+  const [loadingCourses, setLoadingCourses] = useState(true); // NEW
+
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -17,29 +20,8 @@ const useCourseModuleManager = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    if (!selectedCourseId) return;
-
-    const fetchModules = async () => {
-      try {
-        const res = await axios.get(`${base_url}api/courses/${selectedCourseId}/modules/`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        console.log("Fetched modules:", res.data); 
-        setModules(res.data.results);
-        if (res.data.length > 0) {
-          setSelectedModuleId(res.data[0].id); // ✅ Optionally default select first
-        }
-      } catch (err) {
-        console.error('Failed to fetch modules', err);
-        setErrorMessage("ailed to fetch modules")
-      }
-    };
-
-    fetchModules();
-  }, [selectedCourseId]);
-
-  useEffect(() => {
     const fetchCourses = async () => {
+        setLoadingCourses(true); 
       try {
         const res = await axios.get(`${base_url}api/courses/my_courses/`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -51,17 +33,38 @@ const useCourseModuleManager = () => {
       } catch (err) {
         console.error('Error fetching courses', err.response?.data || err.message);
         setErrorMessage('Error fetching courses');
+      }finally {
+        setLoadingCourses(false); 
       }
     };
 
     fetchCourses();
   }, [token]);
 
-  const createModule = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (!selectedCourseId) return;
 
+    const fetchModules = async () => {
+      try {
+        const res = await axios.get(`${base_url}api/courses/${selectedCourseId}/modules/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setModules(res.data.results);
+        if (res.data.results.length > 0) {
+          setSelectedModuleId(res.data.results[0].id); 
+        }
+      } catch (err) {
+        console.error('Failed to fetch modules', err);
+        setErrorMessage("Failed to fetch modules");
+      }
+    };
+
+    fetchModules();
+  }, [selectedCourseId]);
+
+  const submitModuleWithMaterials = async ({ materialsPayload }) => {
     if (!selectedCourseId) {
-      alert('Please select a course.');
+      setErrorMessage('Please select a course.');
       return;
     }
 
@@ -72,13 +75,23 @@ const useCourseModuleManager = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setMessage('Module created successfully!');
+      const newModuleId = res.data.id;
+      setModules(prev => [...prev, res.data]);
+      setSelectedModuleId(newModuleId);
+
+      for (const material of materialsPayload) {
+        await axios.post(
+          `${base_url}api/courses/${selectedCourseId}/modules/${newModuleId}/materials/`,
+          material,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      }
+
       setTitle('');
       setDescription('');
-      setModules(prev => [...prev, res.data]);
-      setSelectedModuleId(res.data.id); 
+      setMessage('Module and materials submitted successfully!');
     } catch (error) {
-      const errorMsg = error.response?.data?.detail || error.message || 'Something went wrong';
+      const errorMsg = error.response?.data?.detail || error.message || 'Submission failed';
       setErrorMessage(`Error: ${errorMsg}`);
     }
   };
@@ -98,8 +111,10 @@ const useCourseModuleManager = () => {
     setDescription,
     message,
     errorMessage,
-    createModule,
-    token
+    submitModuleWithMaterials,
+    token,
+    loadingCourses, 
+    setLoadingCourses
   };
 };
 

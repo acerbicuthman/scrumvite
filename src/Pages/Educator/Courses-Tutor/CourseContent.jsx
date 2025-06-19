@@ -175,9 +175,9 @@ const CourseContent = () => {
                 name="category" id="category"  className='bg-[#1C1C30] w-full md:w-1/2 h-10 '>
                 <option value="">--Select category---</option>
                     <option value="1">1</option>
-                    <option value="2">2</option>
+                    {/* <option value="2">2</option>
                     <option value="3">UI</option>
-                    <option value="4">Cyber Security</option>
+                    <option value="4">Cyber Security</option> */}
                 </select>
                 </div>
                

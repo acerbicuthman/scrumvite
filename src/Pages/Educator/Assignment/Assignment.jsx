@@ -3,6 +3,7 @@ import AsideTutor from '../Dashboard/AsideTutor';
 import axios from 'axios';
 import { base_url } from '../../../library/api';
 import useCourseModuleManager from '../../../hooks/useCourseModuleManager';
+import QuizBuilder from './QuizBuilder';
 
 const Assignment = () => {
   const [files, setFiles] = useState([]);
@@ -72,23 +73,7 @@ const Assignment = () => {
     setAssignmentData({ ...assignmentData, [e.target.name]: e.target.value });
   };
 
-  const handleOptionChange = (qIndex, optIndex, value) => {
-    const updated = [...questionData];
-    updated[qIndex].options[optIndex].option_text = value;
-    setQuestionData(updated);
-  };
 
-  const handleCorrectToggle = (qIndex, optIndex) => {
-    const updated = [...questionData];
-    updated[qIndex].options[optIndex].is_correct = !updated[qIndex].options[optIndex].is_correct;
-    setQuestionData(updated);
-  };
-
-  const handleQuestionTextChange = (qIndex, value) => {
-    const updated = [...questionData];
-    updated[qIndex].question_text = value;
-    setQuestionData(updated);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -124,15 +109,10 @@ const Assignment = () => {
       setUploadedFiles(files.map((f) => f.name));
 
       // Submit each question
-      for (const question of questionData) {
-        await axios.post(`${base_url}api/assignments/${assignment_pk}/questions/`, question, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-      }
+    //   for (const question of questionData)
+    
 
-      alert('✅ Assignment and questions submitted!');
+      alert('✅ Assignment submitted successfully!');
       setFiles([]);
       setUploadedFiles([]);
       setAssignmentData({
@@ -235,70 +215,15 @@ const Assignment = () => {
               className="bg-[#1C1C30] w-full h-32 px-4 py-2 rounded border border-[#363863]"
             />
           </div>
-
-          <div className="mt-10">
-            <h2 className="text-xl font-semibold mb-4">Quiz Builder</h2>
-
-            {questionData.map((question, qIndex) => (
-              <div key={qIndex} className="mb-8 p-4 border border-[#363863] rounded-lg">
-                <label className="block mb-1">Question {qIndex + 1}</label>
-                <textarea
-                  className="w-full bg-[#1C1C30] p-2 mb-2 rounded border border-[#363863]"
-                  value={question.question_text}
-                  onChange={(e) => handleQuestionTextChange(qIndex, e.target.value)}
-                />
-                {question.options.map((opt, optIndex) => (
-                  <div key={optIndex} className="flex items-center mb-2">
-                    <input
-                      type="text"
-                      className="flex-1 bg-[#1C1C30] p-2 mr-2 rounded border border-[#363863]"
-                      value={opt.option_text}
-                      onChange={(e) => handleOptionChange(qIndex, optIndex, e.target.value)}
-                    />
-                    <label className="flex items-center text-sm">
-                      <input
-                        type="checkbox"
-                        checked={opt.is_correct}
-                        onChange={() => handleCorrectToggle(qIndex, optIndex)}
-                        className="mr-1"
-                      />
-                      Correct
-                    </label>
-                  </div>
-                ))}
-              </div>
-            ))}
-
-            <button
-              type="button"
-              className="bg-[#4045E0] px-4 py-2 rounded"
-              onClick={() => setQuestionData([
-                ...questionData,
-                {
-                  question_text: '',
-                  question_type: 'multiple_choice',
-                  points: 10,
-                  order: questionData.length + 1,
-                  explanation: '',
-                  options: [
-                    { option_text: '', is_correct: false, order: 1 },
-                    { option_text: '', is_correct: false, order: 2 },
-                    { option_text: '', is_correct: false, order: 3 },
-                    { option_text: '', is_correct: false, order: 4 },
-                  ],
-                }
-              ])}
-            >
-              ➕ Add Question
-            </button>
-          </div>
-
           <div className="flex justify-end mt-6">
             <button type="submit" className="bg-[#4045E0] px-6 py-3 rounded text-white">
               Submit Assignment
             </button>
           </div>
         </form>
+        <div>
+            <QuizBuilder/>
+        </div>
       </main>
     </div>
   );

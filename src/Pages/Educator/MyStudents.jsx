@@ -67,9 +67,9 @@ const MyStudents = () => {
       {student_course_details.map(
         ({ Student, Course, Progress, Submission, Feedback }, index) => (
           <tr key={index} className="border-t ">
-            <td className="p-4 whitespace-nowrap">{Student}</td>
-            <td className="p-4 whitespace-nowrap text-[#9696C4]">{Course}</td>
-            <td className="p-4 whitespace-nowrap flex gap-2">
+            <td className="p-6 whitespace-nowrap">{Student}</td>
+            <td className="p-6 whitespace-nowrap text-[#9696C4]">{Course}</td>
+            <td className="p-6 whitespace-nowrap flex gap-2">
                 <div className='w-full bg-white rounded-md h-1 mt-2'>
                     <div className="bg-blue-500 h-1 rounded-md"
                     style={{width: `${Progress}%`}}>
@@ -77,8 +77,8 @@ const MyStudents = () => {
                 </div>
                 <span className="text-sm text-white inline-block">{Progress}%</span>
               </td>
-            <td className="p-4 whitespace-nowrap text-[#9696C4] cursor-pointer">{Submission}</td>
-            <td className="p-4 whitespace-nowrap text-[#9696C4] cursor-pointer">{Feedback}</td>
+            <td className="p-6 whitespace-nowrap text-[#9696C4] cursor-pointer">{Submission}</td>
+            <td className="p-6 whitespace-nowrap text-[#9696C4] cursor-pointer">{Feedback}</td>
           </tr>
         )
       )}

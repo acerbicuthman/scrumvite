@@ -6,11 +6,18 @@ import playBtn from "../../../assets/playbutton.png";
 import { Link } from "react-router";
 
 const MainContentTutor = () => {
-  const { user } = useAuthenticatedUser();
+  const { user, loadingUser } = useAuthenticatedUser();
   const first_name = user?.profile?.tutor?.first_name;
   const last_name = user?.profile?.tutor?.last_name;
+
+  if (loadingUser){
+    return <div className="flex justify-center items-center my-8 h-screen">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4318D1]" />
+  </div>
+  }
+
   return (
-    <div className="mt-6">
+    <div className="mt-6 bg-[#121221]">
       <h1 className="text-3xl font-semibold mb-4">
         Welcome back, {first_name} {last_name}!
       </h1>
@@ -49,11 +56,14 @@ const MainContentTutor = () => {
         </div>
         <div className="mt-10">
           <h1 className="text-3xl font-semibold">Recent Activity</h1>
-          <div className="space-y-5 mt-5">
+          <div className="space-y-5 md:space-y-10 mt-5">
             <div className="flex gap-5">
-              <div>
-                <img src={studentHead} alt="" />
-                <div className=""><hr  className=" h-10 border-r-2 border-t-0 border-[#9696C4] absolute ml-2 "/></div>
+              <div >
+                <div className="flex-1 relative">
+                <img src={studentHead} alt="" className="w-[40px] h-[40px]"/>
+                </div>
+              
+                <div className=""><hr  className=" md:h-12 h-14 border-r-2 border-t-0 border-[#9696C4] absolute  md:ml-4  ml-3"/></div>
               </div>
               <div>
                 <p className="text-xl">New student enrolled in 'Advanced Python'</p>
@@ -62,8 +72,8 @@ const MainContentTutor = () => {
             </div>
             <div className="flex gap-5">
               <div>
-                <img src={fileicon} alt="" />
-                <div className=""><hr  className=" h-10 border-r-2 border-t-0 border-[#9696C4]  absolute ml-2 "/></div>
+                <img src={fileicon} alt="" className="w-[40px] h-[40px]"/>
+                <div className=""><hr  className=" md:h-12 h-14  border-r-2 border-t-0 border-[#9696C4]  absolute md:ml-4  ml-3"/></div>
 
               </div>
               <div>
@@ -73,7 +83,7 @@ const MainContentTutor = () => {
             </div>{" "}
             <div className="flex gap-5">
               <div>
-                <img src={playBtn} alt="" />
+                <img src={playBtn} alt="" className="w-[40px] h-[40px]"/>
               </div>
               <div>
                 <p className="text-xl">Course 'Machine Learning Basics' created</p>
